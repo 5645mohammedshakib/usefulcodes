@@ -42,6 +42,21 @@ timetables    = db["timetables"]
 syllabi       = db["syllabi"]
 categories    = db["categories"]
 
+# ─── Health / Keep-Alive ───────────────────────────────────────────────────────
+import flask
+@flask.Blueprint('health', __name__)
+def _dummy(): pass
+
+app_bp = flask.Blueprint('root', __name__)
+
+@app.route('/')
+def root():
+    return jsonify({"status": "ok", "app": "Student Hub API", "version": "1.0"})
+
+@app.route('/api/health')
+def health():
+    return jsonify({"status": "ok", "message": "Server is alive!"})
+
 # ─── Helpers ───────────────────────────────────────────────────────────────────
 def serialize(doc):
     """Convert MongoDB document to JSON-serialisable dict."""
