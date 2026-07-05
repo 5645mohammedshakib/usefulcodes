@@ -417,15 +417,31 @@
   async function handleLogin(e){
     e.preventDefault();hideAlert();
     const btn=document.getElementById('login-btn');
-    btn.disabled=true;btn.innerHTML='<span>Signing in…</span>';
-    try{
-      const r=await fetch(`${API}/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:document.getElementById('login-email').value,password:document.getElementById('login-password').value})});
-      const data=await r.json();
-      if(!r.ok)throw new Error(data.errors?.[0]?.msg||'Login failed');
-      token=data.token;localStorage.setItem('s_token',token);await checkAuth();
-    }catch(err){showAlert(err.message);}
-    finally{btn.disabled=false;btn.innerHTML='<i data-lucide="log-in" class="w-4 h-4"></i><span>Sign In</span>';lucide.createIcons();}
+    btn.disabled=true;
+    const maxRetries=3;
+    for(let attempt=1;attempt<=maxRetries;attempt++){
+      try{
+        if(attempt===1) btn.innerHTML='<span>Signing in…</span>';
+        else btn.innerHTML=`<span>⏳ Server starting… (${attempt}/${maxRetries})</span>`;
+        const r=await fetch(`${API}/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:document.getElementById('login-email').value,password:document.getElementById('login-password').value})});
+        const data=await r.json();
+        if(!r.ok)throw new Error(data.errors?.[0]?.msg||'Login failed');
+        token=data.token;localStorage.setItem('s_token',token);await checkAuth();
+        return;
+      }catch(err){
+        const isNetworkErr=err.message==='Failed to fetch'||err.name==='TypeError';
+        if(isNetworkErr && attempt<maxRetries){
+          showAlert(`⏳ Server waking up... please wait (${attempt}/${maxRetries})`);
+          await new Promise(r=>setTimeout(r,attempt*8000));
+        } else {
+          showAlert(isNetworkErr?'❌ Server offline. Please try again in 30 seconds.':err.message);
+          break;
+        }
+      }
+    }
+    btn.disabled=false;btn.innerHTML='<i data-lucide="log-in" class="w-4 h-4"></i><span>Sign In</span>';lucide.createIcons();
   }
+
 
   async function handleRegister(e){
     e.preventDefault();hideAlert();
