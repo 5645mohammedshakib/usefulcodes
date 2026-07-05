@@ -13,7 +13,7 @@
   <script>
     if('serviceWorker' in navigator){
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=4').then(reg => {
           reg.update();
         }).catch(err => console.error('SW registration failed:', err));
       });
@@ -247,7 +247,7 @@
         </button>
       </form>
     </div>
-    <p class="text-center text-xs text-zinc-400 mt-5">Student Hub &copy; 2026 &mdash; For Students</p>
+    <p class="text-center text-xs text-zinc-400 mt-5">Student Hub &copy; 2026 &mdash; For Students | <a href="#" onclick="forceReset(event)" class="underline hover:text-white transition-colors">Reset Cache</a></p>
   </div>
 </div>
 
@@ -680,6 +680,25 @@
   window.addEventListener('appinstalled',()=>{
     document.getElementById('pwa-banner').style.display='none';
   });
+  async function forceReset(e){
+    if(e) e.preventDefault();
+    if('serviceWorker' in navigator){
+      try {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        for(let r of regs) { await r.unregister(); }
+      } catch(err) { console.error(err); }
+    }
+    if('caches' in window){
+      try {
+        const keys = await caches.keys();
+        for(let k of keys) { await caches.delete(k); }
+      } catch(err) { console.error(err); }
+    }
+    localStorage.clear();
+    sessionStorage.clear();
+    alert('App Cache & Data Cleared! Reloading...');
+    window.location.reload(true);
+  }
 </script>
 </body>
 </html>
