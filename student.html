@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Hub — Student Portal</title>
+  <meta name="description" content="Student Hub — Access your notes, assignments, timetables, and more." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { fontFamily: { sans: ['Inter','sans-serif'] } } }
+    };
+  </script>
+  <style>
+    *{font-family:'Inter',sans-serif}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#52525b;border-radius:9px}
+    .fade-in{animation:fi .25s ease}@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .skeleton{background:#e4e4e7;border-radius:.5rem;animation:pulse 1.5s infinite}
+    .dark .skeleton{background:#27272a}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .card{background:#fff;border:1px solid #e4e4e7;border-radius:1rem;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+    .dark .card{background:#18181b;border-color:#27272a}
+    .nav-btn{width:100%;display:flex;align-items:center;gap:.75rem;padding:.625rem 1rem;border-radius:.75rem;font-size:.875rem;font-weight:600;transition:all .15s;color:#71717a}
+    .nav-btn:hover{background:#f4f4f5;color:#18181b}
+    .dark .nav-btn:hover{background:#27272a;color:#fafafa}
+    .nav-btn.active{background:#ede9fe;color:#6d28d9}
+    .dark .nav-btn.active{background:rgba(109,40,217,.2);color:#a78bfa}
+    .tag{display:inline-flex;align-items:center;background:#f4f4f5;color:#52525b;font-size:.75rem;font-weight:500;padding:.2rem .7rem;border-radius:9999px}
+    .dark .tag{background:#27272a;color:#a1a1aa}
+    .pill-dl{display:inline-flex;align-items:center;gap:.35rem;background:#ede9fe;color:#6d28d9;font-size:.75rem;font-weight:700;padding:.25rem .7rem;border-radius:.5rem;text-decoration:none}
+    .dark .pill-dl{background:rgba(109,40,217,.25);color:#c4b5fd}
+  </style>
+</head>
+<body class="bg-zinc-50 dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 min-h-screen">
+
+<!-- AUTH SCREEN -->
+<div id="auth-view" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-zinc-100 via-violet-50 to-purple-100 dark:from-zinc-950 dark:via-violet-950/30 dark:to-zinc-950">
+  <div class="w-full max-w-sm">
+    <div class="card p-8">
+      <div class="flex flex-col items-center mb-7">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-700 flex items-center justify-center shadow-lg mb-4">
+          <i data-lucide="graduation-cap" class="w-8 h-8 text-white"></i>
+        </div>
+        <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Student Hub</h1>
+        <p class="text-sm text-zinc-500 mt-1">Your Learning Portal</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex bg-zinc-100 dark:bg-zinc-800 rounded-xl p-1 mb-6">
+        <button id="tab-login"    onclick="switchTab('login')"    class="flex-1 py-1.5 text-sm font-semibold rounded-lg bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm transition-all">Sign In</button>
+        <button id="tab-register" onclick="switchTab('register')" class="flex-1 py-1.5 text-sm font-semibold rounded-lg text-zinc-500 dark:text-zinc-400 transition-all">Register</button>
+      </div>
+
+      <!-- Alert -->
+      <div id="auth-alert" class="hidden items-center gap-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/40 text-red-600 dark:text-red-400 text-sm rounded-xl px-4 py-3 mb-4">
+        <i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i>
+        <span id="auth-alert-msg"></span>
+      </div>
+
+      <!-- Login -->
+      <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+        <div>
+          <label class="text-xs font-semibold uppercase tracking-wider text-zinc-500 block mb-1.5">Username / Email</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-3 flex items-center text-zinc-400"><i data-lucide="user" class="w-4 h-4"></i></span>
+            <input id="login-email" type="text" required placeholder="your username or email" class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl pl-10 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all" />
+          </div>
+        </div>
+        <div>
+          <label class="text-xs font-semibold uppercase tracking-wider text-zinc-500 block mb-1.5">Password</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-3 flex items-center text-zinc-400"><i data-lucide="lock" class="w-4 h-4"></i></span>
+            <input id="login-password" type="password" required placeholder="••••••••" class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl pl-10 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all" />
+          </div>
+        </div>
+        <button type="submit" id="login-btn" class="w-full mt-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl px-4 py-2.5 font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow">
+          <i data-lucide="log-in" class="w-4 h-4"></i><span>Sign In</span>
+        </button>
+      </form>
+
+      <!-- Register -->
+      <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4 hidden">
+        <div>
+          <label class="text-xs font-semibold uppercase tracking-wider text-zinc-500 block mb-1.5">Full Name</label>
+          <div class="relative"><span class="absolute inset-y-0 left-3 flex items-center text-zinc-400"><i data-lucide="user" class="w-4 h-4"></i></span>
+            <input id="reg-name" type="text" required placeholder="Your full name" class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl pl-10 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all" />
+          </div>
+        </div>
+        <div>
+          <label class="text-xs font-semibold uppercase tracking-wider text-zinc-500 block mb-1.5">Email</label>
+          <div class="relative"><span class="absolute inset-y-0 left-3 flex items-center text-zinc-400"><i data-lucide="mail" class="w-4 h-4"></i></span>
+            <input id="reg-email" type="email" required placeholder="student@example.com" class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl pl-10 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all" />
+          </div>
+        </div>
+        <div>
+          <label class="text-xs font-semibold uppercase tracking-wider text-zinc-500 block mb-1.5">Username</label>
+          <div class="relative"><span class="absolute inset-y-0 left-3 flex items-center text-zinc-400"><i data-lucide="at-sign" class="w-4 h-4"></i></span>
+            <input id="reg-username" type="text" required placeholder="student123" class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl pl-10 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all" />
+          </div>
+        </div>
+        <div>
+          <label class="text-xs font-semibold uppercase tracking-wider text-zinc-500 block mb-1.5">Password</label>
+          <div class="relative"><span class="absolute inset-y-0 left-3 flex items-center text-zinc-400"><i data-lucide="lock" class="w-4 h-4"></i></span>
+            <input id="reg-password" type="password" required placeholder="Min. 6 characters" class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl pl-10 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all" />
+          </div>
+        </div>
+        <button type="submit" id="reg-btn" class="w-full mt-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl px-4 py-2.5 font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow">
+          <i data-lucide="user-plus" class="w-4 h-4"></i><span>Create Account</span>
+        </button>
+      </form>
+    </div>
+    <p class="text-center text-xs text-zinc-400 mt-5">Student Hub &copy; 2026 &mdash; For Students</p>
+  </div>
+</div>
+
+<!-- APP VIEW -->
+<div id="app-view" class="hidden min-h-screen flex flex-col md:flex-row">
+
+  <!-- Mobile top bar -->
+  <header class="md:hidden sticky top-0 z-40 bg-white/80 dark:bg-zinc-950/90 backdrop-blur border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-4 py-3">
+    <button onclick="toggleSidebar(true)" class="p-2 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all">
+      <i data-lucide="menu" class="w-5 h-5"></i>
+    </button>
+    <span class="font-bold text-base">Student Hub</span>
+    <button onclick="handleLogout()" class="p-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 text-zinc-500 hover:text-red-500 transition-all">
+      <i data-lucide="log-out" class="w-4 h-4"></i>
+    </button>
+  </header>
+
+  <!-- Sidebar overlay -->
+  <div id="sidebar-overlay" onclick="toggleSidebar(false)" class="hidden fixed inset-0 bg-black/50 z-40 md:hidden"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed md:sticky top-0 left-0 h-screen w-64 z-50 -translate-x-full md:translate-x-0 transition-transform duration-300 flex flex-col bg-white dark:bg-zinc-950 border-r border-zinc-200 dark:border-zinc-800">
+    <div class="px-5 py-5 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3">
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-700 flex items-center justify-center shadow">
+        <i data-lucide="graduation-cap" class="w-5 h-5 text-white"></i>
+      </div>
+      <div>
+        <p class="font-bold text-sm text-zinc-900 dark:text-white leading-tight">Student Hub</p>
+        <p class="text-xs text-zinc-400">Learning Portal</p>
+      </div>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
+      <button id="nav-home"          onclick="goto('home')"          class="nav-btn active"><i data-lucide="layout-dashboard" class="w-4 h-4 shrink-0"></i>Home</button>
+      <button id="nav-announcements" onclick="goto('announcements')" class="nav-btn"><i data-lucide="megaphone"       class="w-4 h-4 shrink-0"></i>Announcements</button>
+      <button id="nav-notes"         onclick="goto('notes')"         class="nav-btn"><i data-lucide="notebook-text"  class="w-4 h-4 shrink-0"></i>Study Notes</button>
+      <button id="nav-assignments"   onclick="goto('assignments')"   class="nav-btn"><i data-lucide="clipboard-list" class="w-4 h-4 shrink-0"></i>Assignments</button>
+      <button id="nav-timetable"     onclick="goto('timetable')"     class="nav-btn"><i data-lucide="calendar-days"  class="w-4 h-4 shrink-0"></i>Timetable</button>
+      <button id="nav-syllabus"      onclick="goto('syllabus')"      class="nav-btn"><i data-lucide="book-open"      class="w-4 h-4 shrink-0"></i>Syllabus</button>
+      <button id="nav-papers"        onclick="goto('papers')"        class="nav-btn"><i data-lucide="file-text"      class="w-4 h-4 shrink-0"></i>Previous Papers</button>
+    </nav>
+
+    <div class="px-4 py-4 border-t border-zinc-100 dark:border-zinc-800">
+      <div class="flex items-center gap-3 mb-3">
+        <div id="s-avatar" class="w-9 h-9 rounded-full bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center text-white font-bold text-sm shrink-0">S</div>
+        <div class="min-w-0">
+          <p id="s-name"  class="text-sm font-semibold text-zinc-900 dark:text-white truncate">Student</p>
+          <p id="s-email" class="text-xs text-zinc-400 truncate">—</p>
+        </div>
+      </div>
+      <button onclick="toggleTheme()" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all font-medium mb-1">
+        <i id="icon-sun"  data-lucide="sun"  class="w-4 h-4 hidden"></i>
+        <i id="icon-moon" data-lucide="moon" class="w-4 h-4"></i>
+        <span id="theme-label">Dark Mode</span>
+      </button>
+      <button onclick="handleLogout()" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all font-medium">
+        <i data-lucide="log-out" class="w-4 h-4"></i>Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 overflow-y-auto bg-zinc-50 dark:bg-[#09090b]">
+    <div class="max-w-5xl mx-auto px-4 py-6 space-y-6">
+
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 id="page-title" class="text-xl font-bold text-zinc-900 dark:text-white">Welcome 👋</h2>
+          <p  id="page-sub"   class="text-sm text-zinc-500 mt-0.5">Here's what's new today</p>
+        </div>
+      </div>
+
+      <!-- HOME -->
+      <section id="view-home" class="space-y-5 fade-in">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="card p-4 flex flex-col gap-2"><div class="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center"><i data-lucide="notebook-text" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i></div><p id="stat-notes" class="text-2xl font-bold text-zinc-900 dark:text-white">—</p><p class="text-xs text-zinc-500">Notes</p></div>
+          <div class="card p-4 flex flex-col gap-2"><div class="w-9 h-9 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center"><i data-lucide="clipboard-list" class="w-5 h-5 text-orange-500"></i></div><p id="stat-asgn" class="text-2xl font-bold text-zinc-900 dark:text-white">—</p><p class="text-xs text-zinc-500">Assignments</p></div>
+          <div class="card p-4 flex flex-col gap-2"><div class="w-9 h-9 rounded-xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center"><i data-lucide="megaphone" class="w-5 h-5 text-violet-600 dark:text-violet-400"></i></div><p id="stat-ann" class="text-2xl font-bold text-zinc-900 dark:text-white">—</p><p class="text-xs text-zinc-500">Announcements</p></div>
+          <div class="card p-4 flex flex-col gap-2"><div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center"><i data-lucide="file-text" class="w-5 h-5 text-emerald-600 dark:text-emerald-400"></i></div><p id="stat-papers" class="text-2xl font-bold text-zinc-900 dark:text-white">—</p><p class="text-xs text-zinc-500">Papers</p></div>
+        </div>
+
+        <div class="card p-5">
+          <div class="flex items-center gap-2 mb-4"><i data-lucide="megaphone" class="w-5 h-5 text-violet-500"></i><h3 class="font-bold text-zinc-900 dark:text-white text-base">Latest Announcements</h3></div>
+          <div id="home-ann" class="space-y-3"><div class="skeleton h-16 w-full"></div><div class="skeleton h-16 w-full mt-3"></div></div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <button onclick="goto('notes')"         class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="notebook-text" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Study Notes</p><p class="text-xs text-zinc-500">View all</p></div></button>
+          <button onclick="goto('assignments')"   class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="clipboard-list" class="w-5 h-5 text-orange-500"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Assignments</p><p class="text-xs text-zinc-500">View tasks</p></div></button>
+          <button onclick="goto('timetable')"     class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="calendar-days" class="w-5 h-5 text-teal-600 dark:text-teal-400"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Timetable</p><p class="text-xs text-zinc-500">Class schedule</p></div></button>
+          <button onclick="goto('syllabus')"      class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="book-open" class="w-5 h-5 text-pink-600 dark:text-pink-400"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Syllabus</p><p class="text-xs text-zinc-500">Course content</p></div></button>
+          <button onclick="goto('papers')"        class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="file-text" class="w-5 h-5 text-emerald-600 dark:text-emerald-400"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Past Papers</p><p class="text-xs text-zinc-500">Exam practice</p></div></button>
+          <button onclick="goto('announcements')" class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="megaphone" class="w-5 h-5 text-violet-600 dark:text-violet-400"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Announcements</p><p class="text-xs text-zinc-500">Latest updates</p></div></button>
+        </div>
+      </section>
+
+      <!-- ANNOUNCEMENTS -->
+      <section id="view-announcements" class="hidden fade-in"><div id="list-announcements" class="space-y-4"></div></section>
+
+      <!-- NOTES -->
+      <section id="view-notes" class="hidden fade-in space-y-4">
+        <div class="relative">
+          <span class="absolute inset-y-0 left-3 flex items-center text-zinc-400"><i data-lucide="search" class="w-4 h-4"></i></span>
+          <input id="notes-search" type="text" oninput="filterNotes()" placeholder="Search notes…" class="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all" />
+        </div>
+        <div id="list-notes" class="grid md:grid-cols-2 gap-4"></div>
+      </section>
+
+      <!-- ASSIGNMENTS -->
+      <section id="view-assignments" class="hidden fade-in"><div id="list-assignments" class="space-y-4"></div></section>
+
+      <!-- TIMETABLE -->
+      <section id="view-timetable" class="hidden fade-in"><div id="list-timetable" class="space-y-4"></div></section>
+
+      <!-- SYLLABUS -->
+      <section id="view-syllabus" class="hidden fade-in"><div id="list-syllabus" class="space-y-4"></div></section>
+
+      <!-- PAPERS -->
+      <section id="view-papers" class="hidden fade-in"><div id="list-papers" class="grid md:grid-cols-2 gap-4"></div></section>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  const API='http://localhost:5000/api';
+  let token=localStorage.getItem('s_token')||'';
+  let currentUser=null, allNotes=[];
+
+  window.addEventListener('DOMContentLoaded',()=>{
+    const dark=localStorage.getItem('s_dark')!==null?JSON.parse(localStorage.getItem('s_dark')):true;
+    applyTheme(dark); token?checkAuth():showAuth(); lucide.createIcons();
+  });
+
+  function applyTheme(dark){
+    document.documentElement.classList.toggle('dark',dark);
+    localStorage.setItem('s_dark',dark);
+    document.getElementById('icon-sun').classList.toggle('hidden',!dark);
+    document.getElementById('icon-moon').classList.toggle('hidden',dark);
+    const lbl=document.getElementById('theme-label');
+    if(lbl) lbl.innerText=dark?'Light Mode':'Dark Mode';
+  }
+  function toggleTheme(){applyTheme(!document.documentElement.classList.contains('dark'));}
+  function toggleSidebar(open){
+    document.getElementById('sidebar').classList.toggle('-translate-x-full',!open);
+    document.getElementById('sidebar-overlay').classList.toggle('hidden',!open);
+  }
+  function switchTab(tab){
+    const isLogin=tab==='login';
+    document.getElementById('login-form').classList.toggle('hidden',!isLogin);
+    document.getElementById('register-form').classList.toggle('hidden',isLogin);
+    const on='flex-1 py-1.5 text-sm font-semibold rounded-lg bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm transition-all';
+    const off='flex-1 py-1.5 text-sm font-semibold rounded-lg text-zinc-500 dark:text-zinc-400 transition-all';
+    document.getElementById('tab-login').className=isLogin?on:off;
+    document.getElementById('tab-register').className=!isLogin?on:off;
+    hideAlert();
+  }
+  function showAuth(){document.getElementById('auth-view').classList.remove('hidden');document.getElementById('app-view').classList.add('hidden');lucide.createIcons();}
+  function showApp(){document.getElementById('auth-view').classList.add('hidden');document.getElementById('app-view').classList.remove('hidden');goto('home');lucide.createIcons();}
+  function showAlert(msg){const el=document.getElementById('auth-alert');el.classList.remove('hidden');el.classList.add('flex');document.getElementById('auth-alert-msg').innerText=msg;lucide.createIcons();}
+  function hideAlert(){const el=document.getElementById('auth-alert');el.classList.add('hidden');el.classList.remove('flex');}
+
+  async function checkAuth(){
+    try{
+      const r=await fetch(`${API}/auth/me`,{headers:{Authorization:`Bearer ${token}`}});
+      if(!r.ok)throw new Error();
+      currentUser=await r.json();
+      document.getElementById('s-name').innerText=currentUser.name||currentUser.username||'Student';
+      document.getElementById('s-email').innerText=currentUser.email||'';
+      document.getElementById('s-avatar').innerText=(currentUser.name||'S')[0].toUpperCase();
+      showApp();
+    }catch{token='';localStorage.removeItem('s_token');showAuth();}
+  }
+
+  async function handleLogin(e){
+    e.preventDefault();hideAlert();
+    const btn=document.getElementById('login-btn');
+    btn.disabled=true;btn.innerHTML='<span>Signing in…</span>';
+    try{
+      const r=await fetch(`${API}/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:document.getElementById('login-email').value,password:document.getElementById('login-password').value})});
+      const data=await r.json();
+      if(!r.ok)throw new Error(data.errors?.[0]?.msg||'Login failed');
+      token=data.token;localStorage.setItem('s_token',token);await checkAuth();
+    }catch(err){showAlert(err.message);}
+    finally{btn.disabled=false;btn.innerHTML='<i data-lucide="log-in" class="w-4 h-4"></i><span>Sign In</span>';lucide.createIcons();}
+  }
+
+  async function handleRegister(e){
+    e.preventDefault();hideAlert();
+    const btn=document.getElementById('reg-btn');
+    btn.disabled=true;btn.innerHTML='<span>Creating…</span>';
+    try{
+      const r=await fetch(`${API}/auth/register`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:document.getElementById('reg-name').value,email:document.getElementById('reg-email').value,username:document.getElementById('reg-username').value,password:document.getElementById('reg-password').value})});
+      const data=await r.json();
+      if(!r.ok)throw new Error(data.errors?.[0]?.msg||'Registration failed');
+      token=data.token;localStorage.setItem('s_token',token);await checkAuth();
+    }catch(err){showAlert(err.message);}
+    finally{btn.disabled=false;btn.innerHTML='<i data-lucide="user-plus" class="w-4 h-4"></i><span>Create Account</span>';lucide.createIcons();}
+  }
+
+  function handleLogout(){token='';currentUser=null;localStorage.removeItem('s_token');showAuth();}
+
+  const titles={home:['Welcome \uD83D\uDC4B','Here\'s what\'s new today'],announcements:['Announcements \uD83D\uDCE2','Latest updates from institution'],notes:['Study Notes \uD83D\uDCDD','Download and read study materials'],assignments:['Assignments \uD83D\uDCCB','Your tasks and deadlines'],timetable:['Timetable \uD83D\uDDD3\uFE0F','Your weekly class schedule'],syllabus:['Syllabus \uD83D\uDCDA','Course topics and content'],papers:['Previous Papers \uD83D\uDCC4','Past exam papers for practice']};
+
+  function goto(view){
+    document.querySelectorAll('[id^="view-"]').forEach(s=>s.classList.add('hidden'));
+    document.querySelectorAll('[id^="nav-"]').forEach(b=>b.classList.remove('active'));
+    const sec=document.getElementById('view-'+view);if(sec)sec.classList.remove('hidden');
+    const nav=document.getElementById('nav-'+view);if(nav)nav.classList.add('active');
+    toggleSidebar(false);
+    document.getElementById('page-title').innerText=titles[view]?.[0]||'';
+    document.getElementById('page-sub').innerText=titles[view]?.[1]||'';
+    loadView(view);
+  }
+
+  const loaded={};
+  async function loadView(v){
+    if(v==='home'){loadHome();return;}
+    if(loaded[v])return;
+    const map={announcements:loadAnnouncements,notes:loadNotes,assignments:loadAssignments,timetable:loadTimetable,syllabus:loadSyllabus,papers:loadPapers};
+    if(map[v]){await map[v]();loaded[v]=true;}
+  }
+
+  async function apiFetch(ep){
+    const r=await fetch(`${API}${ep}`,{headers:token?{Authorization:`Bearer ${token}`}:{}});
+    if(!r.ok)throw new Error('Failed');return r.json();
+  }
+
+  async function loadHome(){
+    try{
+      const[notes,asgn,ann,papers]=await Promise.all([apiFetch('/notes'),apiFetch('/assignments'),apiFetch('/announcements'),apiFetch('/papers')]);
+      document.getElementById('stat-notes').innerText=notes.length;
+      document.getElementById('stat-asgn').innerText=asgn.length;
+      document.getElementById('stat-ann').innerText=ann.length;
+      document.getElementById('stat-papers').innerText=papers.length;
+      document.getElementById('home-ann').innerHTML=ann.slice(0,3).map(a=>`
+        <div class="flex gap-3 p-3 bg-violet-50 dark:bg-violet-900/10 border border-violet-100 dark:border-violet-800/30 rounded-xl">
+          <div class="w-8 h-8 rounded-lg bg-violet-100 dark:bg-violet-900/40 flex items-center justify-center shrink-0 mt-0.5"><i data-lucide="megaphone" class="w-4 h-4 text-violet-600 dark:text-violet-400"></i></div>
+          <div><p class="font-semibold text-sm text-zinc-900 dark:text-white">${esc(a.title)}</p><p class="text-xs text-zinc-500 mt-0.5 line-clamp-2">${esc(a.message||'')}</p></div>
+        </div>`).join('')||'<p class="text-sm text-zinc-400 text-center py-6">No announcements yet.</p>';
+      lucide.createIcons();
+    }catch{}
+  }
+
+  async function loadAnnouncements(){
+    const box=document.getElementById('list-announcements');
+    box.innerHTML='<div class="skeleton h-20 w-full"></div><div class="skeleton h-20 w-full mt-4"></div>';
+    try{
+      const data=await apiFetch('/announcements');
+      box.innerHTML=data.length?data.map(a=>`
+        <div class="card p-5 border-l-4 border-violet-500">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center shrink-0"><i data-lucide="megaphone" class="w-5 h-5 text-violet-600 dark:text-violet-400"></i></div>
+            <div class="flex-1"><p class="font-bold text-zinc-900 dark:text-white">${esc(a.title)}</p><p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1 whitespace-pre-wrap">${esc(a.message||'')}</p><p class="text-xs text-zinc-400 mt-2">${fmtDate(a.createdAt)}</p></div>
+          </div>
+        </div>`).join(''):empty('No announcements yet.');
+      lucide.createIcons();
+    }catch{box.innerHTML=errCard();}
+  }
+
+  async function loadNotes(){
+    const box=document.getElementById('list-notes');
+    box.innerHTML='<div class="skeleton h-32 w-full col-span-2"></div>';
+    try{
+      allNotes=await apiFetch('/notes');renderNotes(allNotes);
+    }catch{box.innerHTML=errCard();}
+  }
+  function filterNotes(){
+    const q=document.getElementById('notes-search').value.toLowerCase();
+    renderNotes(allNotes.filter(n=>(n.title||'').toLowerCase().includes(q)||(n.description||'').toLowerCase().includes(q)));
+  }
+  function renderNotes(data){
+    const box=document.getElementById('list-notes');
+    box.innerHTML=data.length?data.map(n=>`
+      <div class="card p-5 flex flex-col gap-3 hover:border-blue-300 dark:hover:border-blue-700 transition-all">
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center shrink-0"><i data-lucide="notebook-text" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i></div>
+          <div class="flex-1 min-w-0"><p class="font-bold text-zinc-900 dark:text-white truncate">${esc(n.title)}</p>${n.category?`<span class="tag mt-1">${esc(n.category)}</span>`:''}</div>
+        </div>
+        ${n.description?`<p class="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-3">${esc(n.description)}</p>`:''}
+        <div class="flex items-center justify-between mt-auto pt-2 border-t border-zinc-100 dark:border-zinc-800">
+          <p class="text-xs text-zinc-400">${fmtDate(n.createdAt)}</p>
+          ${n.fileUrl?`<a href="http://localhost:5000${n.fileUrl}" target="_blank" class="pill-dl"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>`:''}
+        </div>
+      </div>`).join(''):empty('No notes available yet.');
+    lucide.createIcons();
+  }
+
+  async function loadAssignments(){
+    const box=document.getElementById('list-assignments');
+    box.innerHTML='<div class="skeleton h-20 w-full"></div>';
+    try{
+      const data=await apiFetch('/assignments');
+      box.innerHTML=data.length?data.map(a=>{
+        const due=a.dueDate?new Date(a.dueDate):null;
+        const od=due&&due<new Date();
+        return `<div class="card p-5">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center shrink-0"><i data-lucide="clipboard-list" class="w-5 h-5 text-orange-500"></i></div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-start justify-between gap-2 flex-wrap">
+                <p class="font-bold text-zinc-900 dark:text-white">${esc(a.title)}</p>
+                ${due?`<span class="text-xs font-semibold px-2.5 py-0.5 rounded-full ${od?'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400':'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400'}">Due ${fmtDate(a.dueDate)}</span>`:''}
+              </div>
+              ${a.description?`<p class="text-sm text-zinc-500 mt-1">${esc(a.description)}</p>`:''}
+              ${a.fileUrl?`<a href="http://localhost:5000${a.fileUrl}" target="_blank" class="pill-dl mt-3 inline-flex"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>`:''}
+            </div>
+          </div>
+        </div>`;}).join(''):empty('No assignments posted yet.');
+      lucide.createIcons();
+    }catch{box.innerHTML=errCard();}
+  }
+
+  async function loadTimetable(){
+    const box=document.getElementById('list-timetable');
+    box.innerHTML='<div class="skeleton h-32 w-full"></div>';
+    try{
+      const data=await apiFetch('/timetable');
+      box.innerHTML=data.length?data.map(t=>`
+        <div class="card p-5">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center shrink-0"><i data-lucide="calendar-days" class="w-5 h-5 text-teal-600 dark:text-teal-400"></i></div>
+            <div><p class="font-bold text-zinc-900 dark:text-white">${esc(t.title)}</p><p class="text-xs text-zinc-400">${fmtDate(t.createdAt)}</p></div>
+          </div>
+          ${t.slots&&t.slots.length?`<div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="text-left text-xs text-zinc-400 border-b border-zinc-200 dark:border-zinc-800"><th class="pb-2 pr-4">Day</th><th class="pb-2 pr-4">Subject</th><th class="pb-2 pr-4">Time</th><th class="pb-2">Room</th></tr></thead><tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">${t.slots.map(s=>`<tr><td class="py-2 pr-4 font-medium text-zinc-900 dark:text-zinc-100">${esc(s.day||'-')}</td><td class="py-2 pr-4 text-zinc-600 dark:text-zinc-400">${esc(s.subject||'-')}</td><td class="py-2 pr-4 text-zinc-600 dark:text-zinc-400">${esc(s.time||'-')}</td><td class="py-2 text-zinc-600 dark:text-zinc-400">${esc(s.room||'-')}</td></tr>`).join('')}</tbody></table></div>`:'<p class="text-sm text-zinc-400">No slots added.</p>'}
+        </div>`).join(''):empty('No timetable posted yet.');
+      lucide.createIcons();
+    }catch{box.innerHTML=errCard();}
+  }
+
+  async function loadSyllabus(){
+    const box=document.getElementById('list-syllabus');
+    box.innerHTML='<div class="skeleton h-32 w-full"></div>';
+    try{
+      const data=await apiFetch('/syllabus');
+      box.innerHTML=data.length?data.map(s=>`
+        <div class="card p-5">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center shrink-0 mt-0.5"><i data-lucide="book-open" class="w-5 h-5 text-pink-600 dark:text-pink-400"></i></div>
+            <div class="flex-1">
+              <p class="font-bold text-zinc-900 dark:text-white">${esc(s.title)}</p>
+              ${s.subject?`<span class="tag mt-1">${esc(s.subject)}</span>`:''}
+              ${s.description?`<p class="text-sm text-zinc-500 mt-2">${esc(s.description)}</p>`:''}
+              ${s.topics&&s.topics.length?`<div class="mt-3"><p class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Topics</p><ul class="space-y-1">${s.topics.map((t,i)=>`<li class="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400"><span class="w-5 h-5 rounded-full bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 text-xs font-bold flex items-center justify-center shrink-0">${i+1}</span>${esc(t)}</li>`).join('')}</ul></div>`:''}
+            </div>
+          </div>
+        </div>`).join(''):empty('No syllabus posted yet.');
+      lucide.createIcons();
+    }catch{box.innerHTML=errCard();}
+  }
+
+  async function loadPapers(){
+    const box=document.getElementById('list-papers');
+    box.innerHTML='<div class="skeleton h-32 w-full col-span-2"></div>';
+    try{
+      const data=await apiFetch('/papers');
+      box.innerHTML=data.length?data.map(p=>`
+        <div class="card p-5 flex flex-col gap-3 hover:border-emerald-300 dark:hover:border-emerald-700 transition-all">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center shrink-0"><i data-lucide="file-text" class="w-5 h-5 text-emerald-600 dark:text-emerald-400"></i></div>
+            <div class="flex-1 min-w-0"><p class="font-bold text-zinc-900 dark:text-white">${esc(p.title)}</p><div class="flex gap-2 mt-1 flex-wrap">${p.subject?`<span class="tag">${esc(p.subject)}</span>`:''} ${p.year?`<span class="tag">${esc(p.year)}</span>`:''}</div></div>
+          </div>
+          <div class="flex items-center justify-between mt-auto pt-2 border-t border-zinc-100 dark:border-zinc-800">
+            <p class="text-xs text-zinc-400">${fmtDate(p.createdAt)}</p>
+            ${p.fileUrl?`<a href="http://localhost:5000${p.fileUrl}" target="_blank" class="pill-dl"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download Paper</a>`:'<span class="text-xs text-zinc-400">No file</span>'}
+          </div>
+        </div>`).join(''):empty('No papers uploaded yet.');
+      lucide.createIcons();
+    }catch{box.innerHTML=errCard();}
+  }
+
+  function fmtDate(d){if(!d)return '';return new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});}
+  function esc(s){const d=document.createElement('div');d.innerText=String(s||'');return d.innerHTML;}
+  function empty(msg){return `<div class="col-span-2 flex flex-col items-center justify-center py-16 gap-3 text-zinc-400"><i data-lucide="inbox" class="w-10 h-10 opacity-40"></i><p class="text-sm">${msg}</p></div>`;}
+  function errCard(){return `<div class="col-span-2 text-center py-12 text-sm text-red-400"><i data-lucide="wifi-off" class="w-6 h-6 mx-auto mb-2 opacity-60"></i><p>Cannot connect to server. Is it running?</p></div>`;}
+</script>
+</body>
+</html>
