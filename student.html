@@ -244,7 +244,7 @@
 </div>
 
 <script>
-  const API='https://hub-b09o.onrender.com/api';
+  const API='https://hub-6yrl.onrender.com/api';
   let token=localStorage.getItem('s_token')||'';
   let currentUser=null, allNotes=[];
 
@@ -401,7 +401,7 @@
         ${n.description?`<p class="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-3">${esc(n.description)}</p>`:''}
         <div class="flex items-center justify-between mt-auto pt-2 border-t border-zinc-100 dark:border-zinc-800">
           <p class="text-xs text-zinc-400">${fmtDate(n.createdAt)}</p>
-          ${n.fileUrl?`<a href="https://hub-b09o.onrender.com${n.fileUrl}" target="_blank" class="pill-dl"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>`:''}
+          ${n.fileUrl?`<a href="https://hub-6yrl.onrender.com${n.fileUrl}" target="_blank" class="pill-dl"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>`:''}
         </div>
       </div>`).join(''):empty('No notes available yet.');
     lucide.createIcons();
@@ -424,7 +424,7 @@
                 ${due?`<span class="text-xs font-semibold px-2.5 py-0.5 rounded-full ${od?'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400':'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400'}">Due ${fmtDate(a.dueDate)}</span>`:''}
               </div>
               ${a.description?`<p class="text-sm text-zinc-500 mt-1">${esc(a.description)}</p>`:''}
-              ${a.fileUrl?`<a href="https://hub-b09o.onrender.com${a.fileUrl}" target="_blank" class="pill-dl mt-3 inline-flex"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>`:''}
+              ${a.fileUrl?`<a href="https://hub-6yrl.onrender.com${a.fileUrl}" target="_blank" class="pill-dl mt-3 inline-flex"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>`:''}
             </div>
           </div>
         </div>`;}).join(''):empty('No assignments posted yet.');
@@ -483,7 +483,7 @@
           </div>
           <div class="flex items-center justify-between mt-auto pt-2 border-t border-zinc-100 dark:border-zinc-800">
             <p class="text-xs text-zinc-400">${fmtDate(p.createdAt)}</p>
-            ${p.fileUrl?`<a href="https://hub-b09o.onrender.com${p.fileUrl}" target="_blank" class="pill-dl"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download Paper</a>`:'<span class="text-xs text-zinc-400">No file</span>'}
+            ${p.fileUrl?`<a href="https://hub-6yrl.onrender.com${p.fileUrl}" target="_blank" class="pill-dl"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download Paper</a>`:'<span class="text-xs text-zinc-400">No file</span>'}
           </div>
         </div>`).join(''):empty('No papers uploaded yet.');
       lucide.createIcons();
