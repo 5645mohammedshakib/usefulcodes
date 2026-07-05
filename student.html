@@ -12,10 +12,11 @@
   <meta name="apple-mobile-web-app-title" content="Student Hub" />
   <script>
     if('serviceWorker' in navigator){
-      // Unregister all old service workers first, then register new one
-      navigator.serviceWorker.getRegistrations().then(regs=>{
-        regs.forEach(r=>r.unregister());
-      }).then(()=>navigator.serviceWorker.register('./sw.js'));
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').then(reg => {
+          reg.update();
+        }).catch(err => console.error('SW registration failed:', err));
+      });
     }
   </script>
   <script src="https://cdn.tailwindcss.com"></script>

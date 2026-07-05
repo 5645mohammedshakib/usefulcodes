@@ -1,4 +1,4 @@
-const CACHE='student-hub-v3';
+const CACHE='student-hub-v4';
 const STATIC=['./student.html','./index.html','./icon-192.png','./icon-512.png'];
 
 self.addEventListener('install',e=>{
@@ -12,11 +12,18 @@ self.addEventListener('activate',e=>{
 });
 
 self.addEventListener('fetch',e=>{
-  // Never cache API calls - always go to network
-  if(e.request.url.includes('onrender.com')||e.request.url.includes('/api/')){
-    e.respondWith(fetch(e.request));
-    return;
+  // Only handle GET requests for static assets.
+  // Never intercept POST/PUT/DELETE or API calls!
+  if (e.request.method !== 'GET' || e.request.url.includes('onrender.com') || e.request.url.includes('/api/')) {
+    return; // Let the browser handle it naturally from network
   }
-  // For static files: cache first, network fallback
-  e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));
+  
+  e.respondWith(
+    caches.match(e.request).then(cachedResponse => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+      return fetch(e.request);
+    })
+  );
 });
