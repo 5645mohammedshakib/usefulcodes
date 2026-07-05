@@ -616,5 +616,46 @@
   function empty(msg){return `<div class="col-span-2 flex flex-col items-center justify-center py-16 gap-3 text-zinc-400"><i data-lucide="inbox" class="w-10 h-10 opacity-40"></i><p class="text-sm">${msg}</p></div>`;}
   function errCard(){return `<div class="col-span-2 text-center py-12 text-sm text-red-400"><i data-lucide="wifi-off" class="w-6 h-6 mx-auto mb-2 opacity-60"></i><p>Cannot connect to server. Is it running?</p></div>`;}
 </script>
+
+<!-- PWA Install Banner -->
+<div id="pwa-banner" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;width:calc(100% - 48px);max-width:420px;background:linear-gradient(135deg,rgba(20,5,30,0.95),rgba(10,10,40,0.95));border:1px solid transparent;border-radius:1.25rem;padding:16px 20px;box-shadow:0 20px 60px rgba(0,0,0,0.6);backdrop-filter:blur(24px);animation:slideUpPWA 0.4s ease;background-clip:padding-box">
+  <div style="position:absolute;inset:0;border-radius:1.25rem;padding:1px;background:linear-gradient(90deg,#f43f5e,#f97316,#eab308,#22c55e,#06b6d4,#a855f7,#ec4899);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;animation:rainbowBorder 3s linear infinite;background-size:200% auto"></div>
+  <style>
+    @keyframes slideUpPWA{from{opacity:0;transform:translateX(-50%) translateY(30px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+    #pwa-banner .pwa-install-btn{background:linear-gradient(90deg,#f43f5e,#f97316,#eab308,#22c55e,#06b6d4,#a855f7,#ec4899);background-size:200% auto;animation:rainbowText 3s linear infinite;color:white;border:none;border-radius:.75rem;padding:10px 20px;font-weight:700;font-size:.875rem;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(244,63,94,0.4);width:100%}
+    #pwa-banner .pwa-install-btn:hover{transform:translateY(-1px);box-shadow:0 6px 25px rgba(168,85,247,0.5)}
+    #pwa-banner .pwa-dismiss-btn{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.12);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+    #pwa-banner .pwa-dismiss-btn:hover{color:white;background:rgba(255,255,255,0.12)}
+  </style>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div style="width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#f43f5e,#f97316,#eab308,#22c55e,#06b6d4,#a855f7);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:24px;box-shadow:0 4px 20px rgba(168,85,247,0.4)">🎓</div>
+    <div style="flex:1">
+      <p style="color:white;font-weight:700;font-size:.95rem;margin:0 0 3px">Install Student Hub</p>
+      <p style="color:rgba(255,255,255,0.5);font-size:.78rem;margin:0">Mobile app jaise feel karo! 📱</p>
+    </div>
+    <button class="pwa-dismiss-btn" onclick="document.getElementById('pwa-banner').style.display='none'">✕</button>
+  </div>
+  <div style="margin-top:14px">
+    <button class="pwa-install-btn" onclick="installStudentPWA()">📲 Install App — Free!</button>
+  </div>
+</div>
+<script>
+  let _studentPwaPrompt=null;
+  window.addEventListener('beforeinstallprompt',e=>{
+    e.preventDefault();
+    _studentPwaPrompt=e;
+    setTimeout(()=>{document.getElementById('pwa-banner').style.display='block';},1500);
+  });
+  async function installStudentPWA(){
+    if(!_studentPwaPrompt)return;
+    _studentPwaPrompt.prompt();
+    const{outcome}=await _studentPwaPrompt.userChoice;
+    _studentPwaPrompt=null;
+    document.getElementById('pwa-banner').style.display='none';
+  }
+  window.addEventListener('appinstalled',()=>{
+    document.getElementById('pwa-banner').style.display='none';
+  });
+</script>
 </body>
 </html>
