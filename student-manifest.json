@@ -3,6 +3,7 @@
   "short_name": "Student Hub",
   "description": "Your Learning Portal - Notes, Assignments, Timetable",
   "start_url": "./student.html",
+  "scope": "./student.html",
   "display": "standalone",
   "background_color": "#09090b",
   "theme_color": "#7c3aed",
