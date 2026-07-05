@@ -22,42 +22,163 @@
   </script>
   <style>
     *{font-family:'Inter',sans-serif}
-    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#52525b;border-radius:9px}
-    .fade-in{animation:fi .25s ease}@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-    .skeleton{background:#e4e4e7;border-radius:.5rem;animation:pulse 1.5s infinite}
-    .dark .skeleton{background:#27272a}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-    .card{background:#fff;border:1px solid #e4e4e7;border-radius:1rem;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-    .dark .card{background:#18181b;border-color:#27272a}
-    .nav-btn{width:100%;display:flex;align-items:center;gap:.75rem;padding:.625rem 1rem;border-radius:.75rem;font-size:.875rem;font-weight:600;transition:all .15s;color:#71717a}
-    .nav-btn:hover{background:#f4f4f5;color:#18181b}
-    .dark .nav-btn:hover{background:#27272a;color:#fafafa}
-    .nav-btn.active{background:#ede9fe;color:#6d28d9}
-    .dark .nav-btn.active{background:rgba(109,40,217,.2);color:#a78bfa}
-    .tag{display:inline-flex;align-items:center;background:#f4f4f5;color:#52525b;font-size:.75rem;font-weight:500;padding:.2rem .7rem;border-radius:9999px}
-    .dark .tag{background:#27272a;color:#a1a1aa}
-    .pill-dl{display:inline-flex;align-items:center;gap:.35rem;background:#ede9fe;color:#6d28d9;font-size:.75rem;font-weight:700;padding:.25rem .7rem;border-radius:.5rem;text-decoration:none}
-    .dark .pill-dl{background:rgba(109,40,217,.25);color:#c4b5fd}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:linear-gradient(to bottom,#f43f5e,#a855f7,#3b82f6);border-radius:9px}
+
+    /* === RAINBOW ANIMATED BACKGROUND === */
+    body {
+      background: #0a0a0f;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .rainbow-bg {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: linear-gradient(135deg,
+        rgba(239,68,68,0.15) 0%,
+        rgba(249,115,22,0.1) 15%,
+        rgba(234,179,8,0.1) 30%,
+        rgba(34,197,94,0.1) 45%,
+        rgba(6,182,212,0.12) 60%,
+        rgba(99,102,241,0.15) 75%,
+        rgba(168,85,247,0.15) 90%,
+        rgba(236,72,153,0.12) 100%);
+      animation: bgShift 12s ease-in-out infinite alternate;
+    }
+    @keyframes bgShift {
+      0%   { filter: hue-rotate(0deg)   brightness(1); }
+      50%  { filter: hue-rotate(60deg)  brightness(1.1); }
+      100% { filter: hue-rotate(120deg) brightness(1); }
+    }
+
+    /* === FLOATING ORBS === */
+    .orb { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.35; pointer-events: none; z-index: 0; animation: float 8s ease-in-out infinite; }
+    .orb-1 { width:350px;height:350px;background:radial-gradient(circle,#f43f5e,transparent); top:-80px;left:-80px; animation-delay:0s; }
+    .orb-2 { width:300px;height:300px;background:radial-gradient(circle,#8b5cf6,transparent); top:30%;right:-60px; animation-delay:2s; }
+    .orb-3 { width:280px;height:280px;background:radial-gradient(circle,#06b6d4,transparent); bottom:10%;left:20%; animation-delay:4s; }
+    .orb-4 { width:220px;height:220px;background:radial-gradient(circle,#f59e0b,transparent); bottom:20%;right:15%; animation-delay:6s; }
+    .orb-5 { width:200px;height:200px;background:radial-gradient(circle,#10b981,transparent); top:50%;left:40%; animation-delay:3s; }
+    @keyframes float {
+      0%,100% { transform: translateY(0px) scale(1); }
+      50%      { transform: translateY(-30px) scale(1.08); }
+    }
+
+    /* === GLASSMORPHISM === */
+    .glass {
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .glass-card {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08);
+      border-radius: 1rem;
+    }
+    .card { border-radius: 1rem; }
+    .dark .card { background: rgba(255,255,255,0.05); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
+
+    /* === RAINBOW GRADIENT TEXT === */
+    .rainbow-text {
+      background: linear-gradient(90deg, #f43f5e, #f97316, #eab308, #22c55e, #06b6d4, #6366f1, #a855f7, #ec4899);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: rainbowText 4s linear infinite;
+    }
+    @keyframes rainbowText { to { background-position: 200% center; } }
+
+    /* === RAINBOW BORDER === */
+    .rainbow-border {
+      position: relative;
+      border: none !important;
+    }
+    .rainbow-border::before {
+      content: '';
+      position: absolute; inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(90deg, #f43f5e, #f97316, #eab308, #22c55e, #06b6d4, #6366f1, #a855f7, #ec4899, #f43f5e);
+      background-size: 200% auto;
+      animation: rainbowBorder 3s linear infinite;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    @keyframes rainbowBorder { to { background-position: 200% center; } }
+
+    /* === RAINBOW BUTTON === */
+    .btn-rainbow {
+      background: linear-gradient(90deg, #f43f5e, #f97316, #eab308, #22c55e, #06b6d4, #6366f1, #a855f7, #ec4899);
+      background-size: 200% auto;
+      color: white;
+      border: none;
+      transition: all 0.3s;
+      animation: rainbowText 3s linear infinite;
+      box-shadow: 0 4px 20px rgba(139,92,246,0.4);
+    }
+    .btn-rainbow:hover { box-shadow: 0 6px 30px rgba(244,63,94,0.5); transform: translateY(-1px); }
+
+    /* === NAV === */
+    .nav-btn{width:100%;display:flex;align-items:center;gap:.75rem;padding:.625rem 1rem;border-radius:.75rem;font-size:.875rem;font-weight:600;transition:all .2s;color:rgba(255,255,255,0.5)}
+    .nav-btn:hover{background:rgba(255,255,255,0.08);color:white;transform:translateX(2px)}
+    .nav-btn.active{background:linear-gradient(90deg,rgba(244,63,94,0.2),rgba(168,85,247,0.2));color:white;border-left:3px solid transparent;border-image:linear-gradient(to bottom,#f43f5e,#a855f7) 1}
+
+    /* === TAGS === */
+    .tag{display:inline-flex;align-items:center;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);font-size:.75rem;font-weight:500;padding:.2rem .7rem;border-radius:9999px;border:1px solid rgba(255,255,255,0.1)}
+    .pill-dl{display:inline-flex;align-items:center;gap:.35rem;background:linear-gradient(90deg,rgba(244,63,94,0.3),rgba(168,85,247,0.3));color:white;font-size:.75rem;font-weight:700;padding:.25rem .7rem;border-radius:.5rem;text-decoration:none;border:1px solid rgba(255,255,255,0.2)}
+
+    /* === ANIMATIONS === */
+    .fade-in{animation:fi .3s ease}@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .skeleton{background:rgba(255,255,255,0.06);border-radius:.5rem;animation:pulse 1.5s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+    /* === INPUT === */
+    input, select, textarea {
+      background: rgba(255,255,255,0.07) !important;
+      border: 1px solid rgba(255,255,255,0.15) !important;
+      color: white !important;
+      border-radius: 0.75rem;
+    }
+    input::placeholder { color: rgba(255,255,255,0.35) !important; }
+    input:focus { border-color: rgba(168,85,247,0.6) !important; box-shadow: 0 0 0 3px rgba(168,85,247,0.15) !important; outline: none; }
+
+    /* === GLOW === */
+    .glow-purple { box-shadow: 0 0 20px rgba(168,85,247,0.3); }
+    .glow-pink   { box-shadow: 0 0 20px rgba(244,63,94,0.3); }
   </style>
+
 </head>
-<body class="bg-zinc-50 dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 min-h-screen">
+<body class="text-white min-h-screen">
+<!-- Rainbow Background -->
+<div class="rainbow-bg"></div>
+<!-- Floating Orbs -->
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="orb orb-4"></div>
+<div class="orb orb-5"></div>
 
 <!-- AUTH SCREEN -->
-<div id="auth-view" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-zinc-100 via-violet-50 to-purple-100 dark:from-zinc-950 dark:via-violet-950/30 dark:to-zinc-950">
+<div id="auth-view" class="min-h-screen flex items-center justify-center p-4 relative z-10">
   <div class="w-full max-w-sm">
-    <div class="card p-8">
+    <div class="glass rainbow-border p-8" style="border-radius:1.5rem">
       <div class="flex flex-col items-center mb-7">
-        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-700 flex items-center justify-center shadow-lg mb-4">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 glow-purple" style="background:linear-gradient(135deg,#f43f5e,#f97316,#eab308,#22c55e,#06b6d4,#a855f7);box-shadow:0 8px 32px rgba(168,85,247,0.5)">
           <i data-lucide="graduation-cap" class="w-8 h-8 text-white"></i>
         </div>
-        <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Student Hub</h1>
-        <p class="text-sm text-zinc-500 mt-1">Your Learning Portal</p>
+        <h1 class="text-2xl font-bold rainbow-text">Student Hub</h1>
+        <p class="text-sm mt-1" style="color:rgba(255,255,255,0.5)">Your Learning Portal</p>
       </div>
 
       <!-- Tabs -->
-      <div class="flex bg-zinc-100 dark:bg-zinc-800 rounded-xl p-1 mb-6">
-        <button id="tab-login"    onclick="switchTab('login')"    class="flex-1 py-1.5 text-sm font-semibold rounded-lg bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm transition-all">Sign In</button>
-        <button id="tab-register" onclick="switchTab('register')" class="flex-1 py-1.5 text-sm font-semibold rounded-lg text-zinc-500 dark:text-zinc-400 transition-all">Register</button>
+      <div class="flex rounded-xl p-1 mb-6" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1)">
+        <button id="tab-login"    onclick="switchTab('login')"    class="flex-1 py-1.5 text-sm font-semibold rounded-lg transition-all" style="background:linear-gradient(90deg,rgba(244,63,94,0.4),rgba(168,85,247,0.4));color:white;box-shadow:0 2px 10px rgba(168,85,247,0.3)">Sign In</button>
+        <button id="tab-register" onclick="switchTab('register')" class="flex-1 py-1.5 text-sm font-semibold rounded-lg transition-all" style="color:rgba(255,255,255,0.5)">Register</button>
       </div>
 
       <!-- Alert -->
@@ -82,7 +203,7 @@
             <input id="login-password" type="password" required placeholder="••••••••" class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl pl-10 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all" />
           </div>
         </div>
-        <button type="submit" id="login-btn" class="w-full mt-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl px-4 py-2.5 font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow">
+        <button type="submit" id="login-btn" class="btn-rainbow w-full mt-2 rounded-xl px-4 py-2.5 font-semibold text-sm flex items-center justify-center gap-2">
           <i data-lucide="log-in" class="w-4 h-4"></i><span>Sign In</span>
         </button>
       </form>
@@ -113,7 +234,7 @@
             <input id="reg-password" type="password" required placeholder="Min. 6 characters" class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl pl-10 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all" />
           </div>
         </div>
-        <button type="submit" id="reg-btn" class="w-full mt-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl px-4 py-2.5 font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow">
+        <button type="submit" id="reg-btn" class="btn-rainbow w-full mt-2 rounded-xl px-4 py-2.5 font-semibold text-sm flex items-center justify-center gap-2">
           <i data-lucide="user-plus" class="w-4 h-4"></i><span>Create Account</span>
         </button>
       </form>
@@ -123,14 +244,14 @@
 </div>
 
 <!-- APP VIEW -->
-<div id="app-view" class="hidden min-h-screen flex flex-col md:flex-row">
+<div id="app-view" class="hidden min-h-screen flex flex-col md:flex-row relative z-10">
 
   <!-- Mobile top bar -->
-  <header class="md:hidden sticky top-0 z-40 bg-white/80 dark:bg-zinc-950/90 backdrop-blur border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-4 py-3">
+  <header class="md:hidden sticky top-0 z-40 flex items-center justify-between px-4 py-3" style="background:rgba(10,10,15,0.8);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.1)">
     <button onclick="toggleSidebar(true)" class="p-2 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all">
       <i data-lucide="menu" class="w-5 h-5"></i>
     </button>
-    <span class="font-bold text-base">Student Hub</span>
+    <span class="font-bold text-base rainbow-text">Student Hub</span>
     <button onclick="handleLogout()" class="p-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 text-zinc-500 hover:text-red-500 transition-all">
       <i data-lucide="log-out" class="w-4 h-4"></i>
     </button>
@@ -140,13 +261,13 @@
   <div id="sidebar-overlay" onclick="toggleSidebar(false)" class="hidden fixed inset-0 bg-black/50 z-40 md:hidden"></div>
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed md:sticky top-0 left-0 h-screen w-64 z-50 -translate-x-full md:translate-x-0 transition-transform duration-300 flex flex-col bg-white dark:bg-zinc-950 border-r border-zinc-200 dark:border-zinc-800">
-    <div class="px-5 py-5 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3">
-      <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-700 flex items-center justify-center shadow">
+  <aside id="sidebar" class="fixed md:sticky top-0 left-0 h-screen w-64 z-50 -translate-x-full md:translate-x-0 transition-transform duration-300 flex flex-col" style="background:rgba(10,10,15,0.85);backdrop-filter:blur(24px);border-right:1px solid rgba(255,255,255,0.08)">
+    <div class="px-5 py-5 flex items-center gap-3" style="border-bottom:1px solid rgba(255,255,255,0.08)">
+      <div class="w-10 h-10 rounded-2xl flex items-center justify-center shadow" style="background:linear-gradient(135deg,#f43f5e,#f97316,#eab308,#22c55e,#06b6d4,#a855f7)">
         <i data-lucide="graduation-cap" class="w-5 h-5 text-white"></i>
       </div>
       <div>
-        <p class="font-bold text-sm text-zinc-900 dark:text-white leading-tight">Student Hub</p>
+        <p class="font-bold text-sm leading-tight rainbow-text">Student Hub</p>
         <p class="text-xs text-zinc-400">Learning Portal</p>
       </div>
     </div>
