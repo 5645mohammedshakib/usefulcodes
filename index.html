@@ -1,0 +1,2072 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Hub - Admin Panel</title>
+    <!-- Tailwind CSS Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: '#f5f3ff',
+                100: '#ede9fe',
+                200: '#ddd6fe',
+                300: '#c4b5fd',
+                400: '#a78bfa',
+                500: '#8b5cf6',
+                600: '#7c3aed',
+                700: '#6d28d9',
+                800: '#5b21b6',
+                900: '#4c1d95',
+                950: '#2e1065',
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              display: ['Outfit', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            }
+          }
+        }
+      }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      .font-display {
+        font-family: 'Outfit', sans-serif;
+      }
+      .font-mono {
+        font-family: 'JetBrains Mono', monospace;
+      }
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #4b5563;
+        border-radius: 4px;
+      }
+      .dark ::-webkit-scrollbar-thumb {
+        background: #374151;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #6b7280;
+      }
+    </style>
+  </head>
+  <body class="bg-zinc-50 text-zinc-950 dark:bg-[#09090b] dark:text-zinc-50 transition-colors duration-200 min-h-screen">
+    
+    <!-- Full-screen Loading Spinner -->
+    <div id="app-loader" class="fixed inset-0 z-50 flex items-center justify-center bg-zinc-50 dark:bg-[#09090b]">
+      <div class="flex flex-col items-center">
+        <div class="w-12 h-12 border-4 border-t-purple-600 border-zinc-200 dark:border-zinc-800 rounded-full animate-spin"></div>
+        <p class="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mt-4">Initializing Admin Panel...</p>
+      </div>
+    </div>
+
+    <!-- Auth View Container -->
+    <div id="auth-view" class="hidden min-h-screen flex items-center justify-center px-4 py-12">
+      <div class="w-full max-w-md bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-8 shadow-xl">
+        <div class="flex flex-col items-center mb-6">
+          <div class="p-3 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-full mb-3">
+            <i data-lucide="shield-check" class="w-8 h-8"></i>
+          </div>
+          <h2 class="text-3xl font-extrabold tracking-tight font-display text-zinc-950 dark:text-zinc-50">Student Hub</h2>
+          <p class="text-sm text-zinc-400 mt-1">Administration Control Center</p>
+        </div>
+
+        <!-- Auth Notification Toast -->
+        <div id="auth-alert" class="hidden flex items-start gap-3 p-4 rounded-lg border mb-6 text-sm">
+          <i data-lucide="alert-circle" class="w-5 h-5 shrink-0 text-rose-500"></i>
+          <div id="auth-alert-msg" class="flex-1 font-medium leading-5"></div>
+        </div>
+
+        <!-- Form -->
+        <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Username / Email</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-zinc-400">
+                <i data-lucide="mail" class="w-4 h-4"></i>
+              </span>
+              <input type="text" id="auth-email" required value="mohammedshakib663" placeholder="admin@studenthub.com" class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded-lg pl-10 pr-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 text-zinc-950 dark:text-zinc-100" />
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Password</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-zinc-400">
+                <i data-lucide="lock" class="w-4 h-4"></i>
+              </span>
+              <input type="password" id="auth-password" required value="MOHDshakib@123" placeholder="••••••••" class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded-lg pl-10 pr-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 text-zinc-950 dark:text-zinc-100" />
+            </div>
+          </div>
+
+          <button type="submit" id="auth-submit-btn" class="w-full mt-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-4 py-2.5 font-semibold transition-colors shadow-sm flex items-center justify-center gap-2">
+            <span>Sign In as Admin</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Dashboard App View Container (Hidden before Auth) -->
+    <div id="app-view" class="hidden min-h-screen flex flex-col md:flex-row">
+      
+      <!-- Mobile Navbar -->
+      <header class="md:hidden flex items-center justify-between px-6 py-4 bg-white dark:bg-[#0c0c0f] border-b border-zinc-200 dark:border-zinc-800 sticky top-0 z-40 shadow-sm">
+        <div class="flex items-center gap-2">
+          <span class="font-extrabold text-xl font-display text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-600">Student Hub</span>
+          <span class="text-[10px] uppercase tracking-widest px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 font-bold font-mono">Admin</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="toggleDarkMode()" class="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+            <i data-lucide="sun" id="mobile-theme-icon-sun" class="w-5 h-5 hidden"></i>
+            <i data-lucide="moon" id="mobile-theme-icon-moon" class="w-5 h-5"></i>
+          </button>
+          <button onclick="toggleMobileSidebar(true)" class="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Sidebar -->
+      <aside id="sidebar" class="fixed md:sticky md:top-0 left-0 top-0 bottom-0 w-64 z-50 bg-white dark:bg-[#0c0c0f] border-r border-zinc-200 dark:border-zinc-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between shadow-lg md:shadow-none">
+        <div class="flex flex-col h-full">
+          <div class="h-16 flex items-center justify-between px-6 border-b border-zinc-200 dark:border-zinc-800">
+            <div class="flex items-center gap-2">
+              <span class="font-extrabold text-2xl font-display text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-600">Student Hub</span>
+              <span class="text-[10px] uppercase tracking-widest px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 font-bold font-mono">Admin</span>
+            </div>
+            <button onclick="toggleMobileSidebar(false)" class="md:hidden p-1.5 rounded-md text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800">
+              <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+          </div>
+
+          <!-- Navigation Links -->
+          <nav class="flex-1 overflow-y-auto px-4 py-6 space-y-1.5">
+            <button onclick="navigateTo('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-purple-650 bg-purple-100 dark:bg-purple-900/30 dark:text-purple-400">
+              <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+              <span>Dashboard</span>
+            </button>
+            <button onclick="navigateTo('students')" id="nav-students" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="users" class="w-5 h-5"></i>
+              <span>Students</span>
+            </button>
+            <button onclick="navigateTo('notes')" id="nav-notes" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="book-open" class="w-5 h-5"></i>
+              <span>Notes</span>
+            </button>
+            <button onclick="navigateTo('assignments')" id="nav-assignments" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="file-spreadsheet" class="w-5 h-5"></i>
+              <span>Assignments</span>
+            </button>
+            <button onclick="navigateTo('announcements')" id="nav-announcements" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="megaphone" class="w-5 h-5"></i>
+              <span>Announcements</span>
+            </button>
+            <button onclick="navigateTo('timetables')" id="nav-timetables" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="calendar" class="w-5 h-5"></i>
+              <span>Timetables</span>
+            </button>
+            <button onclick="navigateTo('syllabus')" id="nav-syllabus" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="file-text" class="w-5 h-5"></i>
+              <span>Syllabus</span>
+            </button>
+            <button onclick="navigateTo('papers')" id="nav-papers" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="file-check" class="w-5 h-5"></i>
+              <span>Previous Papers</span>
+            </button>
+            <button onclick="navigateTo('categories')" id="nav-categories" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="layers" class="w-5 h-5"></i>
+              <span>Categories</span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- Sidebar Footer Settings -->
+        <div class="p-4 border-t border-zinc-200 dark:border-zinc-800 space-y-3">
+          
+          <!-- API configuration -->
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold text-zinc-400 uppercase">Backend API URL</label>
+            <input type="text" id="api-url-input" onchange="updateApiBaseUrl(this.value)" class="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-250 dark:border-zinc-800 rounded px-2 py-1 text-xs text-zinc-800 dark:text-zinc-200 font-mono focus:outline-none focus:border-purple-500" />
+          </div>
+
+          <div class="flex items-center gap-3 pt-2">
+            <div class="w-9 h-9 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-650 dark:text-purple-400 font-bold" id="user-avatar-initial">A</div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-bold truncate text-zinc-800 dark:text-zinc-200" id="user-display-name">Admin User</p>
+              <p class="text-[10px] text-zinc-400 truncate" id="user-display-email">admin@studenthub.com</p>
+            </div>
+          </div>
+
+          <div class="flex gap-2 pt-1">
+            <button onclick="toggleDarkMode()" class="hidden md:flex flex-1 items-center justify-center p-2 rounded-lg bg-zinc-50 dark:bg-zinc-900/50 hover:bg-zinc-100 dark:hover:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400" title="Toggle Theme">
+              <i data-lucide="sun" id="sidebar-theme-icon-sun" class="w-4 h-4 hidden"></i>
+              <i data-lucide="moon" id="sidebar-theme-icon-moon" class="w-4 h-4"></i>
+            </button>
+            <button onclick="handleLogout()" class="flex-1 flex items-center justify-center gap-1.5 p-2 rounded-lg bg-zinc-50 dark:bg-zinc-900/50 hover:bg-rose-50 dark:hover:bg-rose-950/20 border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 text-xs font-semibold">
+              <i data-lucide="log-out" class="w-4 h-4"></i>
+              <span>Log out</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Layout -->
+      <div class="flex-1 flex flex-col min-w-0">
+        
+        <!-- Desktop Header -->
+        <header class="hidden md:flex items-center justify-between h-16 px-8 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#0c0c0f] sticky top-0 z-30">
+          <h2 id="view-title" class="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 font-display">Dashboard</h2>
+          <div class="flex items-center gap-4">
+            <div class="text-right">
+              <p class="text-sm font-semibold text-zinc-850 dark:text-zinc-200" id="header-user-name">Administrator</p>
+              <p class="text-[10px] font-bold text-purple-600 dark:text-purple-400 uppercase tracking-widest">System Administrator</p>
+            </div>
+            <div class="w-9 h-9 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold" id="header-user-avatar">A</div>
+          </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 p-6 md:p-8 max-w-[1600px] w-full mx-auto overflow-y-auto">
+          
+          <!-- Alert Toast for Actions -->
+          <div id="action-alert" class="hidden flex items-start gap-3 p-4 rounded-lg border mb-6 text-sm">
+            <div id="action-alert-icon"></div>
+            <div id="action-alert-msg" class="flex-1 font-medium leading-5"></div>
+            <button onclick="hideActionAlert()" class="p-0.5 rounded-md hover:opacity-75"><i data-lucide="x" class="w-4 h-4"></i></button>
+          </div>
+
+          <!-- ============================================== -->
+          <!-- 1. DASHBOARD VIEW -->
+          <!-- ============================================== -->
+          <div id="view-dashboard" class="view-section space-y-6">
+            <!-- Stats cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div onclick="navigateTo('students')" class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm hover:border-purple-500/50 cursor-pointer flex items-start gap-4 transition-all">
+                <div class="p-3 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 rounded-lg"><i data-lucide="users" class="w-6 h-6"></i></div>
+                <div>
+                  <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Students</span>
+                  <h3 id="stat-students" class="text-3xl font-extrabold tracking-tight mt-1 font-display">0</h3>
+                </div>
+              </div>
+              <div onclick="navigateTo('notes')" class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm hover:border-purple-500/50 cursor-pointer flex items-start gap-4 transition-all">
+                <div class="p-3 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 rounded-lg"><i data-lucide="book-open" class="w-6 h-6"></i></div>
+                <div>
+                  <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Study Notes</span>
+                  <h3 id="stat-notes" class="text-3xl font-extrabold tracking-tight mt-1 font-display">0</h3>
+                </div>
+              </div>
+              <div onclick="navigateTo('assignments')" class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm hover:border-purple-500/50 cursor-pointer flex items-start gap-4 transition-all">
+                <div class="p-3 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 rounded-lg"><i data-lucide="file-spreadsheet" class="w-6 h-6"></i></div>
+                <div>
+                  <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Assignments</span>
+                  <h3 id="stat-assignments" class="text-3xl font-extrabold tracking-tight mt-1 font-display">0</h3>
+                </div>
+              </div>
+              <div onclick="navigateTo('announcements')" class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm hover:border-purple-500/50 cursor-pointer flex items-start gap-4 transition-all">
+                <div class="p-3 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 rounded-lg"><i data-lucide="megaphone" class="w-6 h-6"></i></div>
+                <div>
+                  <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Announcements</span>
+                  <h3 id="stat-announcements" class="text-3xl font-extrabold tracking-tight mt-1 font-display">0</h3>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Link Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div onclick="navigateTo('timetables')" class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 hover:border-purple-500/50 cursor-pointer flex items-center justify-between transition-all">
+                <div class="flex items-center gap-3">
+                  <div class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400"><i data-lucide="calendar" class="w-5 h-5"></i></div>
+                  <div>
+                    <p class="text-sm font-bold text-zinc-850 dark:text-zinc-200">Class Timetables</p>
+                    <p id="stat-timetables-sub" class="text-[10px] text-zinc-400">0 schedules active</p>
+                  </div>
+                </div>
+                <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-400"></i>
+              </div>
+              <div onclick="navigateTo('papers')" class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 hover:border-purple-500/50 cursor-pointer flex items-center justify-between transition-all">
+                <div class="flex items-center gap-3">
+                  <div class="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400"><i data-lucide="file-check" class="w-5 h-5"></i></div>
+                  <div>
+                    <p class="text-sm font-bold text-zinc-850 dark:text-zinc-200">Exam Papers</p>
+                    <p id="stat-papers-sub" class="text-[10px] text-zinc-400">0 papers uploaded</p>
+                  </div>
+                </div>
+                <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-400"></i>
+              </div>
+              <div onclick="navigateTo('categories')" class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 hover:border-purple-500/50 cursor-pointer flex items-center justify-between transition-all">
+                <div class="flex items-center gap-3">
+                  <div class="p-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400"><i data-lucide="layers" class="w-5 h-5"></i></div>
+                  <div>
+                    <p class="text-sm font-bold text-zinc-850 dark:text-zinc-200">Categories</p>
+                    <p id="stat-categories-sub" class="text-[10px] text-zinc-400">0 topics configured</p>
+                  </div>
+                </div>
+                <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-400"></i>
+              </div>
+            </div>
+
+            <!-- Recent list splits -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                  <h3 class="text-lg font-bold font-display text-zinc-950 dark:text-zinc-50">Recent Notes</h3>
+                  <button onclick="navigateTo('notes')" class="text-xs text-purple-600 dark:text-purple-400 hover:underline font-semibold flex items-center gap-1">
+                    <span>Manage notes</span><i data-lucide="arrow-right" class="w-3 h-3"></i>
+                  </button>
+                </div>
+                <div id="recent-notes-list" class="space-y-3">
+                  <p class="text-xs text-zinc-400 py-4 text-center">Loading notes...</p>
+                </div>
+              </div>
+
+              <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                  <h3 class="text-lg font-bold font-display text-zinc-950 dark:text-zinc-50">Recent Assignments</h3>
+                  <button onclick="navigateTo('assignments')" class="text-xs text-purple-600 dark:text-purple-400 hover:underline font-semibold flex items-center gap-1">
+                    <span>Manage assignments</span><i data-lucide="arrow-right" class="w-3 h-3"></i>
+                  </button>
+                </div>
+                <div id="recent-assignments-list" class="space-y-3">
+                  <p class="text-xs text-zinc-400 py-4 text-center">Loading assignments...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================================== -->
+          <!-- 2. STUDENTS VIEW -->
+          <!-- ============================================== -->
+          <div id="view-students" class="view-section hidden space-y-6">
+            <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
+              <div class="relative w-full sm:max-w-xs">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-zinc-400">
+                  <i data-lucide="search" class="w-4 h-4"></i>
+                </span>
+                <input type="text" id="students-search" oninput="filterStudentsTable()" placeholder="Search students..." class="w-full bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-lg pl-9 pr-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-zinc-950 dark:text-zinc-100" />
+              </div>
+              <div id="students-count-lbl" class="text-xs font-semibold text-zinc-500">Loading student count...</div>
+            </div>
+
+            <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr class="bg-zinc-100 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wider">
+                      <th class="py-4 px-6">Name</th>
+                      <th className="py-4 px-6">Email</th>
+                      <th className="py-4 px-6">Role</th>
+                      <th className="py-4 px-6">Joined Date</th>
+                      <th class="py-4 px-6 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="students-table-body" class="divide-y divide-zinc-200 dark:divide-zinc-800 text-sm">
+                    <tr><td colspan="5" class="py-8 text-center text-zinc-400">Loading students list...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================================== -->
+          <!-- 3. NOTES VIEW -->
+          <!-- ============================================== -->
+          <div id="view-notes" class="view-section hidden space-y-6">
+            <div class="flex flex-col lg:flex-row gap-8 animate-fade-in">
+              <div class="flex-1 space-y-6">
+                <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
+                  <div class="relative w-full sm:max-w-xs">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-zinc-400">
+                      <i data-lucide="search" class="w-4 h-4"></i>
+                    </span>
+                    <input type="text" id="notes-search" oninput="filterNotesTable()" placeholder="Search notes..." class="w-full bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-lg pl-9 pr-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-zinc-950 dark:text-zinc-100" />
+                  </div>
+                  <button onclick="toggleSidePanel('note', true)" class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-4 py-2 text-sm font-semibold shadow-sm flex items-center justify-center gap-1.5">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Upload Note</span>
+                  </button>
+                </div>
+
+                <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
+                  <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                      <thead>
+                        <tr class="bg-zinc-100 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wider">
+                          <th class="py-4 px-6">Title</th>
+                          <th class="py-4 px-6">Description</th>
+                          <th class="py-4 px-6">Uploaded By</th>
+                          <th class="py-4 px-6">Date</th>
+                          <th class="py-4 px-6 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody id="notes-table-body" class="divide-y divide-zinc-200 dark:divide-zinc-800 text-sm">
+                        <tr><td colspan="5" class="py-8 text-center text-zinc-400">Loading study notes...</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Side panel Note -->
+              <div id="note-side-panel" class="hidden w-full lg:w-80 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm h-fit">
+                <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                  <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">Upload Study Note</h3>
+                  <button onclick="toggleSidePanel('note', false)" class="text-zinc-400 hover:text-zinc-655"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+                <form id="note-form" onsubmit="handleNoteSubmit(event)" class="space-y-4">
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-zinc-400 uppercase">Title</label>
+                    <input type="text" id="note-title" required placeholder="e.g. Physics Unit 1" class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" />
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-zinc-400 uppercase">Description</label>
+                    <textarea id="note-desc" rows="3" placeholder="Brief details..." class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100 resize-none"></br></textarea>
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-zinc-400 uppercase">File Attachment</label>
+                    <input type="file" id="note-file" required class="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100" />
+                  </div>
+                  <button type="submit" id="note-submit-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded py-2 text-sm font-semibold transition-colors flex items-center justify-center gap-1.5">
+                    Save Note
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================================== -->
+          <!-- 4. ASSIGNMENTS VIEW -->
+          <!-- ============================================== -->
+          <div id="view-assignments" class="view-section hidden space-y-6">
+            <div class="flex flex-col lg:flex-row gap-8">
+              <div class="flex-1 space-y-6">
+                <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
+                  <div class="relative w-full sm:max-w-xs">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-zinc-400">
+                      <i data-lucide="search" class="w-4 h-4"></i>
+                    </span>
+                    <input type="text" id="asg-search" oninput="filterAsgTable()" placeholder="Search assignments..." class="w-full bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-lg pl-9 pr-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-zinc-950 dark:text-zinc-100" />
+                  </div>
+                  <button onclick="toggleSidePanel('asg', true)" class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-4 py-2 text-sm font-semibold shadow-sm flex items-center justify-center gap-1.5">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>New Assignment</span>
+                  </button>
+                </div>
+
+                <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
+                  <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                      <thead>
+                        <tr class="bg-zinc-100 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wider">
+                          <th class="py-4 px-6">Assignment Title</th>
+                          <th class="py-4 px-6">Description</th>
+                          <th class="py-4 px-6">Due Date</th>
+                          <th class="py-4 px-6">Status</th>
+                          <th class="py-4 px-6 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody id="asg-table-body" class="divide-y divide-zinc-200 dark:divide-zinc-800 text-sm">
+                        <tr><td colspan="5" class="py-8 text-center text-zinc-400">Loading assignments...</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Side panel Assignment -->
+              <div id="asg-side-panel" class="hidden w-full lg:w-80 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm h-fit">
+                <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                  <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">Create Assignment</h3>
+                  <button onclick="toggleSidePanel('asg', false)" class="text-zinc-400 hover:text-zinc-655"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+                <form id="asg-form" onsubmit="handleAsgSubmit(event)" class="space-y-4">
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-zinc-400 uppercase">Title</label>
+                    <input type="text" id="asg-title" required placeholder="e.g. History Essay Part 1" class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" />
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-zinc-400 uppercase">Description</label>
+                    <textarea id="asg-desc" rows="3" placeholder="Provide instructions..." class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100 resize-none"></br></textarea>
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-zinc-400 uppercase">Due Date</label>
+                    <input type="date" id="asg-duedate" required class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" />
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-zinc-400 uppercase">Assignment Sheet</label>
+                    <input type="file" id="asg-file" class="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100" />
+                  </div>
+                  <button type="submit" id="asg-submit-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded py-2 text-sm font-semibold transition-colors flex items-center justify-center gap-1.5">
+                    Create
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================================== -->
+          <!-- 5. ANNOUNCEMENTS VIEW -->
+          <!-- ============================================== -->
+          <div id="view-announcements" class="view-section hidden space-y-6">
+            <div class="flex flex-col lg:flex-row gap-8">
+              <div class="flex-1 space-y-6">
+                <div class="flex justify-between items-center">
+                  <h3 id="ann-header-count" class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Active Notices (0)</h3>
+                  <button onclick="toggleSidePanel('ann', true)" class="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-4 py-2 text-sm font-semibold shadow-sm flex items-center gap-1.5">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Create Announcement</span>
+                  </button>
+                </div>
+                <div id="ann-cards-container" class="space-y-4">
+                  <p class="text-sm text-zinc-400 text-center py-10">Loading notices list...</p>
+                </div>
+              </div>
+
+              <!-- Side panel Announcement -->
+              <div id="ann-side-panel" class="hidden w-full lg:w-80 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm h-fit">
+                <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                  <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">New Announcement</h3>
+                  <button onclick="toggleSidePanel('ann', false)" class="text-zinc-400 hover:text-zinc-655"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+                <form id="ann-form" onsubmit="handleAnnSubmit(event)" class="space-y-4">
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-zinc-400 uppercase">Title</label>
+                    <input type="text" id="ann-title" required placeholder="e.g. Semester Exam Updates" class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" />
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-zinc-400 uppercase">Details</label>
+                    <textarea id="ann-body" required rows="5" placeholder="Type notice body here..." class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100 resize-none"></textarea>
+                  </div>
+                  <button type="submit" id="ann-submit-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded py-2 text-sm font-semibold transition-colors flex items-center justify-center gap-1.5">
+                    Post Notice
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================================== -->
+          <!-- 6. TIMETABLES VIEW -->
+          <!-- ============================================== -->
+          <div id="view-timetables" class="view-section hidden space-y-6">
+            <div class="flex flex-col lg:flex-row gap-8">
+              <div class="flex-1 space-y-6">
+                <div class="flex justify-between items-center">
+                  <h3 class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Configured Schedules</h3>
+                  <button onclick="toggleSidePanel('tt', true)" class="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-4 py-2 text-sm font-semibold shadow-sm flex items-center gap-1.5">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Create Timetable</span>
+                  </button>
+                </div>
+                <div id="tt-grid-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <p class="text-sm text-zinc-400 text-center py-10 col-span-2">Loading timetables list...</p>
+                </div>
+              </div>
+
+              <!-- Side panel Timetable -->
+              <div id="tt-side-panel" class="hidden w-full lg:w-96 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm h-fit max-h-[80vh] overflow-y-auto">
+                <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                  <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">Create Timetable</h3>
+                  <button onclick="toggleSidePanel('tt', false)" class="text-zinc-400 hover:text-zinc-655"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+                <form id="tt-form" onsubmit="handleTtSubmit(event)" class="space-y-4">
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-zinc-400 uppercase">Class/Name</label>
+                    <input type="text" id="tt-title" required placeholder="e.g. Computer Science - Sem 3" class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" />
+                  </div>
+                  
+                  <div class="space-y-3 pt-2 border-t border-zinc-100 dark:border-zinc-800">
+                    <div class="flex justify-between items-center">
+                      <label class="text-[10px] font-bold text-zinc-400 uppercase">Periods / Slots</label>
+                      <button type="button" onclick="addFormPeriodRow()" class="text-xs text-purple-650 font-bold hover:underline flex items-center gap-1"><i data-lucide="plus" class="w-3 h-3"></i>Add Row</button>
+                    </div>
+                    <div id="tt-period-rows" class="space-y-3">
+                      <!-- Dynamically rendered rows -->
+                    </div>
+                  </div>
+
+                  <button type="submit" id="tt-submit-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded py-2 text-sm font-semibold transition-colors flex items-center justify-center gap-1.5">
+                    Save Timetable
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================================== -->
+          <!-- 7. SYLLABUS VIEW -->
+          <!-- ============================================== -->
+          <div id="view-syllabus" class="view-section hidden space-y-6">
+            <div class="flex flex-col lg:flex-row gap-8">
+              <div class="flex-1 space-y-6">
+                <div class="flex justify-between items-center">
+                  <h3 class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Configured Syllabus Lists</h3>
+                  <button onclick="toggleSidePanel('syl', true)" class="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-4 py-2 text-sm font-semibold shadow-sm flex items-center gap-1.5">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Configure Syllabus</span>
+                  </button>
+                </div>
+                <div id="syl-grid-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <p class="text-sm text-zinc-400 text-center py-10 col-span-2">Loading syllabus lists...</p>
+                </div>
+              </div>
+
+              <!-- Side panel Syllabus -->
+              <div id="syl-side-panel" class="hidden w-full lg:w-80 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm h-fit">
+                <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                  <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">New Syllabus</h3>
+                  <button onclick="toggleSidePanel('syl', false)" class="text-zinc-400 hover:text-zinc-655"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+                <form id="syl-form" onsubmit="handleSylSubmit(event)" class="space-y-4">
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-zinc-400 uppercase">Syllabus Title</label>
+                    <input type="text" id="syl-title" required placeholder="e.g. B.Sc Physics Sem 5" class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" />
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-zinc-400 uppercase">Description</label>
+                    <textarea id="syl-desc" rows="3" placeholder="Brief credits/objectives..." class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100 resize-none"></textarea>
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-zinc-400 uppercase">Subjects (Comma separated)</label>
+                    <input type="text" id="syl-subjects" placeholder="Quantum Mechanics, Optics, Lab" class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" />
+                  </div>
+                  <button type="submit" id="syl-submit-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded py-2 text-sm font-semibold transition-colors flex items-center justify-center gap-1.5">
+                    Save Syllabus
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================================== -->
+          <!-- 8. PAPERS VIEW -->
+          <!-- ============================================== -->
+          <div id="view-papers" class="view-section hidden space-y-6">
+            <div class="flex flex-col lg:flex-row gap-8">
+              <div class="flex-1 space-y-6">
+                <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
+                  <div class="relative w-full sm:max-w-xs">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-zinc-400">
+                      <i data-lucide="search" class="w-4 h-4"></i>
+                    </span>
+                    <input type="text" id="papers-search" oninput="filterPapersTable()" placeholder="Search papers..." class="w-full bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-lg pl-9 pr-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-zinc-950 dark:text-zinc-100" />
+                  </div>
+                  <button onclick="toggleSidePanel('paper', true)" class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-4 py-2 text-sm font-semibold shadow-sm flex items-center justify-center gap-1.5">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Upload Paper</span>
+                  </button>
+                </div>
+
+                <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
+                  <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                      <thead>
+                        <tr class="bg-zinc-100 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wider">
+                          <th class="py-4 px-6">Paper Title</th>
+                          <th class="py-4 px-6">Subject</th>
+                          <th class="py-4 px-6">Uploaded By</th>
+                          <th class="py-4 px-6">Date</th>
+                          <th class="py-4 px-6 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody id="papers-table-body" class="divide-y divide-zinc-200 dark:divide-zinc-800 text-sm">
+                        <tr><td colspan="5" class="py-8 text-center text-zinc-400">Loading previous year papers...</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Side panel Paper -->
+              <div id="paper-side-panel" class="hidden w-full lg:w-80 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm h-fit">
+                <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                  <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">Upload Exam Paper</h3>
+                  <button onclick="toggleSidePanel('paper', false)" class="text-zinc-400 hover:text-zinc-655"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+                <form id="paper-form" onsubmit="handlePaperSubmit(event)" class="space-y-4">
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-zinc-400 uppercase">Title</label>
+                    <input type="text" id="paper-title" required placeholder="e.g. End Term Exam 2024" class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" />
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-zinc-400 uppercase">Subject</label>
+                    <input type="text" id="paper-subject" required placeholder="e.g. Compiler Design" class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" />
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-zinc-400 uppercase">File Attachment</label>
+                    <input type="file" id="paper-file" required class="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100" />
+                  </div>
+                  <button type="submit" id="paper-submit-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded py-2 text-sm font-semibold transition-colors flex items-center justify-center gap-1.5">
+                    Upload
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================================== -->
+          <!-- 9. CATEGORIES VIEW -->
+          <!-- ============================================== -->
+          <div id="view-categories" class="view-section hidden space-y-6">
+            <div class="flex flex-col lg:flex-row gap-8">
+              <div class="flex-1 space-y-6">
+                <div class="flex justify-between items-center">
+                  <h3 class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Active Topics</h3>
+                  <button onclick="toggleSidePanel('cat', true)" class="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-4 py-2 text-sm font-semibold shadow-sm flex items-center gap-1.5">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Create Category</span>
+                  </button>
+                </div>
+                <div id="cat-grid-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <p class="text-sm text-zinc-400 text-center py-10 col-span-2">Loading categories list...</p>
+                </div>
+              </div>
+
+              <!-- Side panel Category -->
+              <div id="cat-side-panel" class="hidden w-full lg:w-80 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm h-fit">
+                <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                  <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">New Category</h3>
+                  <button onclick="toggleSidePanel('cat', false)" class="text-zinc-400 hover:text-zinc-655"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+                <form id="cat-form" onsubmit="handleCatSubmit(event)" class="space-y-4">
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-zinc-400 uppercase">Name</label>
+                    <input type="text" id="cat-name" required placeholder="e.g. Engineering" class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" />
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-zinc-400 uppercase">Description</label>
+                    <textarea id="cat-desc" rows="4" placeholder="Brief topics summary..." class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100 resize-none"></textarea>
+                  </div>
+                  <button type="submit" id="cat-submit-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded py-2 text-sm font-semibold transition-colors flex items-center justify-center gap-1.5">
+                    Save Category
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+        </main>
+      </div>
+
+      <!-- Mobile Sidebar Overlay background drawer -->
+      <div id="sidebar-overlay" onclick="toggleMobileSidebar(false)" class="hidden md:hidden fixed inset-0 z-40 bg-zinc-950/50 backdrop-blur-xs"></div>
+    </div>
+
+    <!-- Global Confirmation Modal dialog -->
+    <div id="confirm-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div class="fixed inset-0 bg-zinc-950/60 backdrop-blur-sm" onclick="closeConfirmModal()"></div>
+      <div class="relative w-full max-w-sm bg-white dark:bg-[#0c0c0f] border border-zinc-250 dark:border-zinc-800 rounded-xl p-6 shadow-2xl animate-in zoom-in-95 duration-200">
+        <h4 class="text-lg font-bold font-display text-zinc-950 dark:text-zinc-50 border-b border-zinc-100 dark:border-zinc-850 pb-2 mb-3">Delete Confirmation</h4>
+        <p id="confirm-modal-msg" class="text-sm text-zinc-500 dark:text-zinc-400 mb-6">Are you sure you want to delete this resource?</p>
+        <div class="flex justify-end gap-3">
+          <button onclick="closeConfirmModal()" class="bg-white dark:bg-[#262626] hover:bg-[#f8fafc] dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700 rounded px-3.5 py-1.5 text-xs font-semibold">Cancel</button>
+          <button id="confirm-modal-yes-btn" class="bg-rose-600 hover:bg-rose-700 text-white rounded px-3.5 py-1.5 text-xs font-semibold">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- SCRIPT SECTION -->
+    <!-- ============================================== -->
+    <script>
+      // Global App States
+      let activeView = 'dashboard';
+      let apiBaseUrl = localStorage.getItem('apiBaseUrl') || 'http://localhost:5000/api';
+      let token = localStorage.getItem('token') || '';
+      let user = null;
+
+      // In-Memory Data Arrays
+      let students = [];
+      let notes = [];
+      let assignments = [];
+      let announcements = [];
+      let timetables = [];
+      let syllabi = [];
+      let papers = [];
+      let categories = [];
+
+      // Confirm modal callback
+      let confirmCallback = null;
+
+      // App Initialization
+      window.addEventListener('DOMContentLoaded', () => {
+        // Initialize API inputs
+        document.getElementById('api-url-input').value = apiBaseUrl;
+        
+        // Sync theme with system / saved setting
+        const savedDarkMode = localStorage.getItem('darkMode');
+        const isDark = savedDarkMode ? JSON.parse(savedDarkMode) : true;
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+          showThemeIcons(true);
+        } else {
+          document.documentElement.classList.remove('dark');
+          showThemeIcons(false);
+        }
+
+        // Check Auth Status
+        checkAuthentication();
+      });
+
+      // API base URL configuration updater
+      function updateApiBaseUrl(val) {
+        if (!val.trim()) return;
+        apiBaseUrl = val.trim();
+        localStorage.setItem('apiBaseUrl', apiBaseUrl);
+        showActionAlert('success', `API URL configured to: ${apiBaseUrl}`);
+        if (token) {
+          checkAuthentication(); // reload with new API URL
+        }
+      }
+
+      // Theme toggle handlers
+      function toggleDarkMode() {
+        const root = document.documentElement;
+        const isDarkNow = root.classList.contains('dark');
+        if (isDarkNow) {
+          root.classList.remove('dark');
+          localStorage.setItem('darkMode', 'false');
+          showThemeIcons(false);
+        } else {
+          root.classList.add('dark');
+          localStorage.setItem('darkMode', 'true');
+          showThemeIcons(true);
+        }
+      }
+
+      function showThemeIcons(isDark) {
+        if (isDark) {
+          document.getElementById('sidebar-theme-icon-sun').classList.remove('hidden');
+          document.getElementById('sidebar-theme-icon-moon').classList.add('hidden');
+          document.getElementById('mobile-theme-icon-sun').classList.remove('hidden');
+          document.getElementById('mobile-theme-icon-moon').classList.add('hidden');
+        } else {
+          document.getElementById('sidebar-theme-icon-sun').classList.add('hidden');
+          document.getElementById('sidebar-theme-icon-moon').classList.remove('hidden');
+          document.getElementById('mobile-theme-icon-sun').classList.add('hidden');
+          document.getElementById('mobile-theme-icon-moon').classList.remove('hidden');
+        }
+      }
+
+      // Mobile Sidebar open/close
+      function toggleMobileSidebar(open) {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        if (open) {
+          sidebar.classList.remove('-translate-x-full');
+          overlay.classList.remove('hidden');
+        } else {
+          sidebar.classList.add('-translate-x-full');
+          overlay.classList.add('hidden');
+        }
+      }
+
+      // Navigation handler (hashless router)
+      function navigateTo(viewName) {
+        // Hide all views
+        document.querySelectorAll('.view-section').forEach(view => {
+          view.classList.add('hidden');
+        });
+        
+        // Show selected view
+        const currentView = document.getElementById(`view-${viewName}`);
+        if (currentView) {
+          currentView.classList.remove('hidden');
+        }
+
+        // Update active class in sidebar nav buttons
+        document.querySelectorAll('aside nav button').forEach(btn => {
+          btn.className = "w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50";
+        });
+        
+        const activeNavBtn = document.getElementById(`nav-${viewName}`);
+        if (activeNavBtn) {
+          activeNavBtn.className = "w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-purple-650 bg-purple-100 dark:bg-purple-900/30 dark:text-purple-400";
+        }
+
+        // Set top header title
+        const titles = {
+          dashboard: 'System Overview',
+          students: 'Student Profiles',
+          notes: 'Study Notes Library',
+          assignments: 'Class Projects & Assignments',
+          announcements: 'Push Announcements',
+          timetables: 'Class Timetables & Hours',
+          syllabus: 'Course Syllabus Lists',
+          papers: 'Previous Exam Papers',
+          categories: 'Notes & Resource Categories'
+        };
+        document.getElementById('view-title').innerText = titles[viewName] || 'Admin Dashboard';
+        activeView = viewName;
+
+        // Auto load data for the view
+        loadDataForView(viewName);
+        toggleMobileSidebar(false);
+      }
+
+      // Core Request API Helper (Native fetch)
+      async function apiRequest(endpoint, method = 'GET', body = null, isMultipart = false) {
+        const headers = {};
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+          headers['x-auth-token'] = token;
+        }
+
+        const options = { method, headers };
+
+        if (body) {
+          if (isMultipart) {
+            options.body = body; // let browser handle Content-Type boundaries
+          } else {
+            headers['Content-Type'] = 'application/json';
+            options.body = JSON.stringify(body);
+          }
+        }
+
+        const response = await fetch(`${apiBaseUrl}${endpoint}`, options);
+        
+        if (response.status === 401) {
+          handleLogout();
+          throw new Error('Authorization denied. Logged out.');
+        }
+
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.errors?.[0]?.msg || data.msg || 'Request failed');
+        }
+
+        return data;
+      }
+
+      // Check Authentication state
+      async function checkAuthentication() {
+        document.getElementById('app-loader').classList.remove('hidden');
+        if (!token) {
+          showAuthView(true);
+          return;
+        }
+
+        try {
+          user = await apiRequest('/auth/me');
+          if (user.role !== 'admin') {
+            throw new Error('Access Denied: Administrator role required.');
+          }
+          
+          // Setup user details
+          document.getElementById('user-display-name').innerText = user.name;
+          document.getElementById('user-display-email').innerText = user.email;
+          document.getElementById('header-user-name').innerText = user.name;
+          const initial = user.name ? user.name[0].toUpperCase() : 'A';
+          document.getElementById('user-avatar-initial').innerText = initial;
+          document.getElementById('header-user-avatar').innerText = initial;
+
+          showAuthView(false);
+          navigateTo('dashboard');
+        } catch (err) {
+          console.error(err);
+          localStorage.removeItem('token');
+          token = '';
+          showAuthView(true);
+          showAuthAlert(err.message);
+        }
+      }
+
+      function showAuthView(visible) {
+        document.getElementById('app-loader').classList.add('hidden');
+        if (visible) {
+          document.getElementById('auth-view').classList.remove('hidden');
+          document.getElementById('app-view').classList.add('hidden');
+        } else {
+          document.getElementById('auth-view').classList.add('hidden');
+          document.getElementById('app-view').classList.remove('hidden');
+        }
+        lucide.createIcons();
+      }
+
+      // Handle Authentication forms
+      async function handleAuthSubmit(e) {
+        e.preventDefault();
+        hideAuthAlert();
+
+        const email = document.getElementById('auth-email').value;
+        const password = document.getElementById('auth-password').value;
+        
+        const submitBtn = document.getElementById('auth-submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>Processing...</span>`;
+
+        try {
+          const res = await apiRequest('/auth/login', 'POST', { email, password });
+          token = res.token;
+          localStorage.setItem('token', token);
+          await checkAuthentication();
+        } catch (err) {
+          showAuthAlert(err.message);
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = "<span>Sign In as Admin</span>";
+        }
+      }
+
+      function showAuthAlert(msg) {
+        document.getElementById('auth-alert-msg').innerText = msg;
+        document.getElementById('auth-alert').classList.remove('hidden');
+      }
+
+      function hideAuthAlert() {
+        document.getElementById('auth-alert').classList.add('hidden');
+      }
+
+      function handleLogout() {
+        token = '';
+        user = null;
+        localStorage.removeItem('token');
+        showAuthView(true);
+      }
+
+      // Action Notification Alerts
+      function showActionAlert(type, message) {
+        const container = document.getElementById('action-alert');
+        const iconDiv = document.getElementById('action-alert-icon');
+        const msgDiv = document.getElementById('action-alert-msg');
+        
+        msgDiv.innerText = message;
+        
+        const styles = {
+          success: {
+            bg: 'bg-emerald-50 dark:bg-emerald-900/10 border-emerald-250 dark:border-emerald-800/30 text-emerald-800 dark:text-emerald-300',
+            icon: '<i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 shrink-0"></i>'
+          },
+          error: {
+            bg: 'bg-rose-50 dark:bg-rose-900/10 border-rose-250 dark:border-rose-800/30 text-rose-800 dark:text-rose-300',
+            icon: '<i data-lucide="alert-circle" class="w-5 h-5 text-rose-500 shrink-0"></i>'
+          }
+        };
+
+        const theme = styles[type] || styles.success;
+        container.className = `flex items-start gap-3 p-4 rounded-lg border mb-6 text-sm ${theme.bg}`;
+        iconDiv.innerHTML = theme.icon;
+        container.classList.remove('hidden');
+        lucide.createIcons();
+
+        // Auto close after 5s
+        setTimeout(() => {
+          hideActionAlert();
+        }, 5000);
+      }
+
+      function hideActionAlert() {
+        document.getElementById('action-alert').classList.add('hidden');
+      }
+
+      // ==============================================
+      // DATA LOADER GATEWAY FOR SPA VIEWS
+      // ==============================================
+      function loadDataForView(viewName) {
+        setErrorView(null);
+        switch (viewName) {
+          case 'dashboard':
+            loadDashboardStats();
+            break;
+          case 'students':
+            loadStudentsList();
+            break;
+          case 'notes':
+            loadNotesList();
+            break;
+          case 'assignments':
+            loadAssignmentsList();
+            break;
+          case 'announcements':
+            loadAnnouncementsList();
+            break;
+          case 'timetables':
+            loadTimetablesList();
+            break;
+          case 'syllabus':
+            loadSyllabiList();
+            break;
+          case 'papers':
+            loadPapersList();
+            break;
+          case 'categories':
+            loadCategoriesList();
+            break;
+        }
+      }
+
+      function setErrorView(msg) {
+        if (msg) {
+          showActionAlert('error', msg);
+        } else {
+          hideActionAlert();
+        }
+      }
+
+      // Confirmation dialog handling
+      function openConfirmModal(message, callback) {
+        document.getElementById('confirm-modal-msg').innerText = message;
+        document.getElementById('confirm-modal').classList.remove('hidden');
+        confirmCallback = callback;
+      }
+
+      function closeConfirmModal() {
+        document.getElementById('confirm-modal').classList.add('hidden');
+        confirmCallback = null;
+      }
+
+      document.getElementById('confirm-modal-yes-btn').addEventListener('click', async () => {
+        if (confirmCallback) {
+          const btn = document.getElementById('confirm-modal-yes-btn');
+          btn.disabled = true;
+          btn.innerHTML = 'Deleting...';
+          try {
+            await confirmCallback();
+          } catch (err) {
+            console.error(err);
+          } finally {
+            btn.disabled = false;
+            btn.innerHTML = 'Delete';
+            closeConfirmModal();
+          }
+        }
+      });
+
+      // Side panel toggles
+      function toggleSidePanel(panelName, show) {
+        const panel = document.getElementById(`${panelName}-side-panel`);
+        if (show) {
+          panel.classList.remove('hidden');
+        } else {
+          panel.classList.add('hidden');
+        }
+      }
+
+      // ==============================================
+      // 1. DASHBOARD LOAD LOGIC
+      // ==============================================
+      async function loadDashboardStats() {
+        try {
+          const [
+            usersRes,
+            notesRes,
+            asgRes,
+            annRes,
+            ttRes,
+            papersRes,
+            catRes
+          ] = await Promise.all([
+            apiRequest('/users'),
+            apiRequest('/notes'),
+            apiRequest('/assignments'),
+            apiRequest('/announcements'),
+            apiRequest('/timetable'),
+            apiRequest('/papers'),
+            apiRequest('/categories')
+          ]);
+
+          students = usersRes;
+          notes = notesRes;
+          assignments = asgRes;
+          announcements = annRes;
+          timetables = ttRes;
+          papers = papersRes;
+          categories = catRes;
+
+          const studentCount = students.filter(s => s.role !== 'admin').length;
+          document.getElementById('stat-students').innerText = studentCount;
+          document.getElementById('stat-notes').innerText = notes.length;
+          document.getElementById('stat-assignments').innerText = assignments.length;
+          document.getElementById('stat-announcements').innerText = announcements.length;
+          
+          document.getElementById('stat-timetables-sub').innerText = `${timetables.length} schedules active`;
+          document.getElementById('stat-papers-sub').innerText = `${papers.length} papers uploaded`;
+          document.getElementById('stat-categories-sub').innerText = `${categories.length} topics configured`;
+
+          // Render Recents
+          renderRecentNotes();
+          renderRecentAssignments();
+        } catch (err) {
+          setErrorView('Dashboard fetch failed. Verify backend.');
+        }
+      }
+
+      function renderRecentNotes() {
+        const container = document.getElementById('recent-notes-list');
+        const slice = notes.slice(0, 5);
+        if (slice.length === 0) {
+          container.innerHTML = `<p class="text-xs text-zinc-400 py-2 text-center">No study notes found.</p>`;
+          return;
+        }
+        container.innerHTML = slice.map(note => `
+          <div class="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-100 dark:border-zinc-800/50 rounded-lg">
+            <div class="min-w-0 flex-1">
+              <p class="text-xs font-semibold truncate text-zinc-800 dark:text-zinc-200">${note.title}</p>
+              <p class="text-[10px] text-zinc-400 truncate mt-0.5">${note.description || 'No description'}</p>
+            </div>
+            <span class="text-[9px] text-zinc-400 bg-zinc-150 dark:bg-zinc-800 rounded px-1.5 py-0.5 font-mono">${new Date(note.createdAt).toLocaleDateString()}</span>
+          </div>
+        `).join('');
+      }
+
+      function renderRecentAssignments() {
+        const container = document.getElementById('recent-assignments-list');
+        const slice = assignments.slice(0, 5);
+        if (slice.length === 0) {
+          container.innerHTML = `<p class="text-xs text-zinc-400 py-2 text-center">No assignments found.</p>`;
+          return;
+        }
+        container.innerHTML = slice.map(asg => {
+          const isOverdue = asg.dueDate && new Date(asg.dueDate) < new Date();
+          return `
+            <div class="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-100 dark:border-zinc-800/50 rounded-lg">
+              <div class="min-w-0 flex-1">
+                <p class="text-xs font-semibold truncate text-zinc-800 dark:text-zinc-200">${asg.title}</p>
+                <p class="text-[10px] text-zinc-400 truncate mt-0.5">Due: ${asg.dueDate ? new Date(asg.dueDate).toLocaleDateString() : 'N/A'}</p>
+              </div>
+              <span class="text-[9px] font-semibold rounded px-1.5 py-0.5 ${isOverdue ? 'bg-rose-100 dark:bg-rose-950/20 text-rose-600' : 'bg-emerald-100 dark:bg-emerald-950/20 text-emerald-600'}">${isOverdue ? 'Overdue' : 'Active'}</span>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // ==============================================
+      // 2. STUDENTS VIEW LOGIC
+      // ==============================================
+      async function loadStudentsList() {
+        try {
+          students = await apiRequest('/users');
+          renderStudentsTable(students);
+        } catch (err) {
+          setErrorView('Could not fetch student profiles.');
+        }
+      }
+
+      function renderStudentsTable(dataList) {
+        const tbody = document.getElementById('students-table-body');
+        const countLbl = document.getElementById('students-count-lbl');
+        
+        const nonAdmins = dataList.filter(s => s.role !== 'admin');
+        countLbl.innerText = `Showing ${nonAdmins.length} of ${dataList.length} registered profiles`;
+
+        if (dataList.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-zinc-400">No profiles found in database.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = dataList.map(s => `
+          <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-900/30 text-zinc-900 dark:text-zinc-200 transition-colors">
+            <td class="py-4 px-6 font-semibold flex items-center gap-2">
+              <div class="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold text-xs">
+                ${s.name ? s.name[0].toUpperCase() : 'U'}
+              </div>
+              <span>${s.name}</span>
+            </td>
+            <td class="py-4 px-6 font-mono text-xs">${s.email}</td>
+            <td class="py-4 px-6">
+              <span class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded ${s.role === 'admin' ? 'bg-purple-100 dark:bg-purple-950/20 text-purple-600 dark:text-purple-400' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500'}">
+                ${s.role}
+              </span>
+            </td>
+            <td class="py-4 px-6 text-zinc-400 text-xs">${new Date(s.createdAt).toLocaleDateString()}</td>
+            <td class="py-4 px-6 text-right">
+              ${s.role !== 'admin' ? `
+                <button onclick="confirmDeleteStudent('${s._id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors inline-flex">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              ` : `<span class="text-xs text-zinc-400 italic">Protected</span>`}
+            </td>
+          </tr>
+        `).join('');
+        lucide.createIcons();
+      }
+
+      function filterStudentsTable() {
+        const query = document.getElementById('students-search').value.toLowerCase();
+        const filtered = students.filter(s => 
+          s.name.toLowerCase().includes(query) || 
+          s.email.toLowerCase().includes(query)
+        );
+        renderStudentsTable(filtered);
+      }
+
+      function confirmDeleteStudent(id) {
+        openConfirmModal('Are you sure you want to delete this student profile permanently?', async () => {
+          try {
+            await apiRequest(`/users/${id}`, 'DELETE');
+            showActionAlert('success', 'Student profile successfully removed.');
+            loadStudentsList();
+          } catch (err) {
+            showActionAlert('error', err.message);
+          }
+        });
+      }
+
+      // ==============================================
+      // 3. NOTES VIEW LOGIC
+      // ==============================================
+      async function loadNotesList() {
+        try {
+          notes = await apiRequest('/notes');
+          renderNotesTable(notes);
+        } catch (err) {
+          setErrorView('Could not fetch study notes list.');
+        }
+      }
+
+      function renderNotesTable(dataList) {
+        const tbody = document.getElementById('notes-table-body');
+        if (dataList.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-zinc-400">No study notes uploaded yet.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = dataList.map(n => `
+          <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-900/30 text-zinc-900 dark:text-zinc-200 transition-colors">
+            <td class="py-4 px-6 font-semibold flex items-center gap-2">
+              <i data-lucide="file-text" class="w-4 h-4 text-purple-500 shrink-0"></i>
+              <span class="truncate max-w-[150px]">${n.title}</span>
+            </td>
+            <td class="py-4 px-6 text-zinc-400 truncate max-w-[200px]">${n.description || 'No description'}</td>
+            <td class="py-4 px-6 text-zinc-500">${n.createdBy?.name || 'Admin'}</td>
+            <td class="py-4 px-6 text-zinc-400 text-xs">${new Date(n.createdAt).toLocaleDateString()}</td>
+            <td class="py-4 px-6 text-right flex items-center justify-end gap-1.5">
+              ${n.fileUrl ? `
+                <a href="${n.fileUrl.startsWith('http') ? n.fileUrl : apiBaseUrl.replace('/api', '') + n.fileUrl}" target="_blank" class="p-1.5 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/20 rounded transition-colors inline-flex">
+                  <i data-lucide="download" class="w-4 h-4"></i>
+                </a>
+              ` : ''}
+              <button onclick="confirmDeleteNote('${n._id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors inline-flex">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </td>
+          </tr>
+        `).join('');
+        lucide.createIcons();
+      }
+
+      function filterNotesTable() {
+        const query = document.getElementById('notes-search').value.toLowerCase();
+        const filtered = notes.filter(n => 
+          n.title.toLowerCase().includes(query) || 
+          (n.description && n.description.toLowerCase().includes(query))
+        );
+        renderNotesTable(filtered);
+      }
+
+      async function handleNoteSubmit(e) {
+        e.preventDefault();
+        const title = document.getElementById('note-title').value;
+        const description = document.getElementById('note-desc').value;
+        const fileInput = document.getElementById('note-file');
+        
+        if (!fileInput.files.length) {
+          showActionAlert('error', 'Please choose a file attachment.');
+          return;
+        }
+
+        const btn = document.getElementById('note-submit-btn');
+        btn.disabled = true;
+        btn.innerHTML = 'Uploading...';
+
+        try {
+          const form = new FormData();
+          form.append('title', title);
+          form.append('description', description);
+          form.append('file', fileInput.files[0]);
+
+          const res = await apiRequest('/notes', 'POST', form, true);
+          showActionAlert('success', 'Study note successfully uploaded.');
+          
+          // Reset form
+          document.getElementById('note-form').reset();
+          toggleSidePanel('note', false);
+          loadNotesList();
+        } catch (err) {
+          showActionAlert('error', err.message);
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = 'Save Note';
+        }
+      }
+
+      function confirmDeleteNote(id) {
+        openConfirmModal('Are you sure you want to delete this study note?', async () => {
+          try {
+            await apiRequest(`/notes/${id}`, 'DELETE');
+            showActionAlert('success', 'Study note deleted.');
+            loadNotesList();
+          } catch (err) {
+            showActionAlert('error', err.message);
+          }
+        });
+      }
+
+      // ==============================================
+      // 4. ASSIGNMENTS VIEW LOGIC
+      // ==============================================
+      async function loadAssignmentsList() {
+        try {
+          assignments = await apiRequest('/assignments');
+          renderAsgTable(assignments);
+        } catch (err) {
+          setErrorView('Could not fetch assignments list.');
+        }
+      }
+
+      function renderAsgTable(dataList) {
+        const tbody = document.getElementById('asg-table-body');
+        if (dataList.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-zinc-400">No assignments created yet.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = dataList.map(a => {
+          const isOverdue = a.dueDate && new Date(a.dueDate) < new Date();
+          return `
+            <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-900/30 text-zinc-900 dark:text-zinc-200 transition-colors">
+              <td class="py-4 px-6 font-semibold flex items-center gap-2">
+                <i data-lucide="file-spreadsheet" class="w-4 h-4 text-purple-500 shrink-0"></i>
+                <span class="truncate max-w-[150px]">${a.title}</span>
+              </td>
+              <td class="py-4 px-6 text-zinc-400 truncate max-w-[200px]">${a.description || 'No description'}</td>
+              <td class="py-4 px-6 text-zinc-500 text-xs">${a.dueDate ? new Date(a.dueDate).toLocaleDateString() : 'N/A'}</td>
+              <td class="py-4 px-6">
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded ${isOverdue ? 'bg-rose-100 dark:bg-rose-950/20 text-rose-650' : 'bg-emerald-100 dark:bg-emerald-950/20 text-emerald-650'}">${isOverdue ? 'Overdue' : 'Active'}</span>
+              </td>
+              <td class="py-4 px-6 text-right flex items-center justify-end gap-1.5">
+                ${a.fileUrl ? `
+                  <a href="${a.fileUrl.startsWith('http') ? a.fileUrl : apiBaseUrl.replace('/api', '') + a.fileUrl}" target="_blank" class="p-1.5 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/20 rounded transition-colors inline-flex">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                  </a>
+                ` : ''}
+                <button onclick="confirmDeleteAsg('${a._id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors inline-flex">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+        lucide.createIcons();
+      }
+
+      function filterAsgTable() {
+        const query = document.getElementById('asg-search').value.toLowerCase();
+        const filtered = assignments.filter(a => 
+          a.title.toLowerCase().includes(query) || 
+          (a.description && a.description.toLowerCase().includes(query))
+        );
+        renderAsgTable(filtered);
+      }
+
+      async function handleAsgSubmit(e) {
+        e.preventDefault();
+        const title = document.getElementById('asg-title').value;
+        const description = document.getElementById('asg-desc').value;
+        const dueDate = document.getElementById('asg-duedate').value;
+        const fileInput = document.getElementById('asg-file');
+
+        const btn = document.getElementById('asg-submit-btn');
+        btn.disabled = true;
+        btn.innerHTML = 'Saving...';
+
+        try {
+          const form = new FormData();
+          form.append('title', title);
+          form.append('description', description);
+          form.append('dueDate', dueDate);
+          if (fileInput.files.length) {
+            form.append('file', fileInput.files[0]);
+          }
+
+          await apiRequest('/assignments', 'POST', form, true);
+          showActionAlert('success', 'Assignment successfully posted.');
+          
+          document.getElementById('asg-form').reset();
+          toggleSidePanel('asg', false);
+          loadAssignmentsList();
+        } catch (err) {
+          showActionAlert('error', err.message);
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = 'Create';
+        }
+      }
+
+      function confirmDeleteAsg(id) {
+        openConfirmModal('Are you sure you want to delete this assignment project?', async () => {
+          try {
+            await apiRequest(`/assignments/${id}`, 'DELETE');
+            showActionAlert('success', 'Assignment deleted.');
+            loadAssignmentsList();
+          } catch (err) {
+            showActionAlert('error', err.message);
+          }
+        });
+      }
+
+      // ==============================================
+      // 5. ANNOUNCEMENTS VIEW LOGIC
+      // ==============================================
+      async function loadAnnouncementsList() {
+        try {
+          announcements = await apiRequest('/announcements');
+          renderAnnouncements(announcements);
+        } catch (err) {
+          setErrorView('Could not fetch announcements.');
+        }
+      }
+
+      function renderAnnouncements(dataList) {
+        document.getElementById('ann-header-count').innerText = `Active Notices (${dataList.length})`;
+        const container = document.getElementById('ann-cards-container');
+        
+        if (dataList.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-12 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl">
+              <i data-lucide="megaphone" class="mx-auto text-zinc-300 dark:text-zinc-700 mb-2 w-12 h-12"></i>
+              <p class="text-sm font-semibold text-zinc-850 dark:text-zinc-200">No announcements posted</p>
+            </div>
+          `;
+          lucide.createIcons();
+          return;
+        }
+
+        container.innerHTML = dataList.map(a => `
+          <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow relative group">
+            <div class="p-3 bg-purple-50 dark:bg-purple-900/20 text-purple-650 dark:text-purple-400 rounded-lg shrink-0">
+              <i data-lucide="megaphone" class="w-5 h-5"></i>
+            </div>
+            <div class="flex-1 min-w-0 pr-8">
+              <div class="flex items-center gap-2 mb-1 flex-wrap">
+                <h4 class="text-base font-bold text-zinc-950 dark:text-zinc-50 font-display">${a.title}</h4>
+                <span class="text-[10px] text-zinc-400 font-mono">${new Date(a.createdAt).toLocaleString()}</span>
+              </div>
+              <p class="text-sm text-zinc-550 dark:text-zinc-400 leading-relaxed whitespace-pre-wrap">${a.body}</p>
+              <p class="text-[10px] text-zinc-400 mt-3 italic">Posted by: ${a.createdBy?.name || 'Administrator'}</p>
+            </div>
+            <button onclick="confirmDeleteAnn('${a._id}')" class="absolute top-4 right-4 p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors opacity-0 group-hover:opacity-100">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+        `).join('');
+        lucide.createIcons();
+      }
+
+      async function handleAnnSubmit(e) {
+        e.preventDefault();
+        const title = document.getElementById('ann-title').value;
+        const body = document.getElementById('ann-body').value;
+
+        const btn = document.getElementById('ann-submit-btn');
+        btn.disabled = true;
+        btn.innerHTML = 'Posting...';
+
+        try {
+          await apiRequest('/announcements', 'POST', { title, body });
+          showActionAlert('success', 'Notice posted successfully.');
+          
+          document.getElementById('ann-form').reset();
+          toggleSidePanel('ann', false);
+          loadAnnouncementsList();
+        } catch (err) {
+          showActionAlert('error', err.message);
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = 'Post Notice';
+        }
+      }
+
+      function confirmDeleteAnn(id) {
+        openConfirmModal('Are you sure you want to remove this announcement notice?', async () => {
+          try {
+            await apiRequest(`/announcements/${id}`, 'DELETE');
+            showActionAlert('success', 'Announcement deleted.');
+            loadAnnouncementsList();
+          } catch (err) {
+            showActionAlert('error', err.message);
+          }
+        });
+      }
+
+      // ==============================================
+      // 6. TIMETABLES VIEW LOGIC
+      // ==============================================
+      async function loadTimetablesList() {
+        try {
+          timetables = await apiRequest('/timetable');
+          renderTimetables(timetables);
+        } catch (err) {
+          setErrorView('Could not fetch timetables list.');
+        }
+      }
+
+      function renderTimetables(dataList) {
+        const container = document.getElementById('tt-grid-container');
+        if (dataList.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-12 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl col-span-2">
+              <i data-lucide="calendar" class="mx-auto text-zinc-300 dark:text-zinc-700 mb-2 w-12 h-12"></i>
+              <p class="text-sm font-semibold text-zinc-850 dark:text-zinc-200">No schedules configured</p>
+            </div>
+          `;
+          lucide.createIcons();
+          return;
+        }
+
+        container.innerHTML = dataList.map(tt => `
+          <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm flex flex-col justify-between group">
+            <div>
+              <div class="flex justify-between items-start p-5 border-b border-zinc-100 dark:border-zinc-800">
+                <div>
+                  <h4 class="text-base font-bold text-zinc-950 dark:text-zinc-50 font-display">${tt.title}</h4>
+                  <p class="text-[9px] text-zinc-400 font-mono mt-0.5">Created: ${new Date(tt.createdAt).toLocaleDateString()}</p>
+                </div>
+                <button onclick="confirmDeleteTt('${tt._id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors opacity-0 group-hover:opacity-100">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              </div>
+              
+              <div class="p-5 space-y-3 max-h-[300px] overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-850">
+                ${tt.entries.map((entry, idx) => `
+                  <div class="pt-3 first:pt-0 flex flex-col gap-1">
+                    <div class="flex justify-between items-center">
+                      <span class="text-[10px] font-bold text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/10 px-2 py-0.5 rounded">${entry.day}</span>
+                      <div class="flex items-center gap-1 text-[10px] text-zinc-400 font-mono">
+                        <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                        <span>${entry.start} - ${entry.end}</span>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 text-sm font-semibold text-zinc-850 dark:text-zinc-200">
+                      <i data-lucide="book-open" class="w-3.5 h-3.5 text-zinc-400 shrink-0"></i>
+                      <span class="truncate">${entry.subject}</span>
+                    </div>
+                    ${entry.location ? `
+                      <div class="flex items-center gap-1 text-[11px] text-zinc-400">
+                        <i data-lucide="map-pin" class="w-3 h-3 shrink-0"></i>
+                        <span class="truncate">${entry.location}</span>
+                      </div>
+                    ` : ''}
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            <div class="p-4 bg-zinc-50 dark:bg-zinc-900/20 border-t border-zinc-100 dark:border-zinc-800 text-[10px] text-zinc-450 dark:text-zinc-500 text-center">
+              ${tt.entries.length} period slots scheduled
+            </div>
+          </div>
+        `).join('');
+        lucide.createIcons();
+      }
+
+      // Dynamic period row builder
+      function addFormPeriodRow() {
+        const container = document.getElementById('tt-period-rows');
+        const index = container.children.length;
+        
+        const row = document.createElement('div');
+        row.className = "p-3 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-150 dark:border-zinc-800/50 rounded-lg space-y-2.5 relative row-item";
+        row.innerHTML = `
+          <button type="button" onclick="this.parentElement.remove()" class="absolute top-2 right-2 p-1 text-zinc-400 hover:text-rose-500 rounded hover:bg-zinc-200 dark:hover:bg-zinc-800"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
+          <div class="grid grid-cols-2 gap-2">
+            <div class="flex flex-col gap-0.5">
+              <label class="text-[9px] font-bold text-zinc-400">Day</label>
+              <select class="p-day bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-1.5 py-0.5 text-xs text-zinc-800 dark:text-zinc-200">
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+              </select>
+            </div>
+            <div class="flex flex-col gap-0.5">
+              <label class="text-[9px] font-bold text-zinc-400">Subject</label>
+              <input type="text" required class="p-subject bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-1.5 py-0.5 text-xs text-zinc-800 dark:text-zinc-200" placeholder="Maths" />
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <div class="flex flex-col gap-0.5">
+              <label class="text-[9px] font-bold text-zinc-400">Start</label>
+              <input type="text" required class="p-start bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-1.5 py-0.5 text-xs text-zinc-800 dark:text-zinc-200 font-mono" placeholder="09:00" />
+            </div>
+            <div class="flex flex-col gap-0.5">
+              <label class="text-[9px] font-bold text-zinc-400">End</label>
+              <input type="text" required class="p-end bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-1.5 py-0.5 text-xs text-zinc-800 dark:text-zinc-200 font-mono" placeholder="10:00" />
+            </div>
+            <div class="flex flex-col gap-0.5">
+              <label class="text-[9px] font-bold text-zinc-400">Room</label>
+              <input type="text" class="p-location bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-1.5 py-0.5 text-xs text-zinc-800 dark:text-zinc-200" placeholder="Lobby" />
+            </div>
+          </div>
+        `;
+        container.appendChild(row);
+        lucide.createIcons();
+      }
+
+      async function handleTtSubmit(e) {
+        e.preventDefault();
+        const title = document.getElementById('tt-title').value;
+        const rowElements = document.querySelectorAll('#tt-period-rows .row-item');
+        
+        if (rowElements.length === 0) {
+          showActionAlert('error', 'Add at least one slot entry.');
+          return;
+        }
+
+        const entries = [];
+        rowElements.forEach(row => {
+          entries.push({
+            day: row.querySelector('.p-day').value,
+            subject: row.querySelector('.p-subject').value,
+            start: row.querySelector('.p-start').value,
+            end: row.querySelector('.p-end').value,
+            location: row.querySelector('.p-location').value
+          });
+        });
+
+        const btn = document.getElementById('tt-submit-btn');
+        btn.disabled = true;
+        btn.innerHTML = 'Saving...';
+
+        try {
+          await apiRequest('/timetable', 'POST', { title, entries });
+          showActionAlert('success', 'Timetable class schedule saved.');
+          
+          document.getElementById('tt-form').reset();
+          document.getElementById('tt-period-rows').innerHTML = '';
+          toggleSidePanel('tt', false);
+          loadTimetablesList();
+        } catch (err) {
+          showActionAlert('error', err.message);
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = 'Save Timetable';
+        }
+      }
+
+      function confirmDeleteTt(id) {
+        openConfirmModal('Delete this class timetable schedule?', async () => {
+          try {
+            await apiRequest(`/timetable/${id}`, 'DELETE');
+            showActionAlert('success', 'Schedule timetable deleted.');
+            loadTimetablesList();
+          } catch (err) {
+            showActionAlert('error', err.message);
+          }
+        });
+      }
+
+      // Initialize side panels forms
+      function initTtSideForm() {
+        document.getElementById('tt-period-rows').innerHTML = '';
+        addFormPeriodRow();
+      }
+
+      // ==============================================
+      // 7. SYLLABUS VIEW LOGIC
+      // ==============================================
+      async function loadSyllabiList() {
+        try {
+          syllabi = await apiRequest('/syllabus');
+          renderSyllabi(syllabi);
+        } catch (err) {
+          setErrorView('Could not load syllabus.');
+        }
+      }
+
+      function renderSyllabi(dataList) {
+        const container = document.getElementById('syl-grid-container');
+        if (dataList.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-12 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl col-span-2">
+              <i data-lucide="file-text" class="mx-auto text-zinc-300 dark:text-zinc-700 mb-2 w-12 h-12"></i>
+              <p class="text-sm font-semibold text-zinc-850 dark:text-zinc-200">No syllabus lists</p>
+            </div>
+          `;
+          lucide.createIcons();
+          return;
+        }
+
+        container.innerHTML = dataList.map(s => `
+          <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm flex flex-col justify-between group relative hover:shadow-md transition-shadow">
+            <div>
+              <div class="flex items-center gap-3 mb-2 pr-8">
+                <div class="p-2 bg-purple-50 dark:bg-purple-900/20 text-purple-650 dark:text-purple-400 rounded-lg">
+                  <i data-lucide="file-text" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h4 class="text-base font-bold text-zinc-950 dark:text-zinc-50 font-display">${s.title}</h4>
+                  <p class="text-[9px] text-zinc-400 font-mono">Created: ${new Date(s.createdAt).toLocaleDateString()}</p>
+                </div>
+              </div>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-2 mb-4 leading-relaxed line-clamp-3">${s.description || 'No description provided.'}</p>
+              ${s.subjects && s.subjects.length > 0 ? `
+                <div class="flex flex-wrap gap-1 mb-2">
+                  ${s.subjects.map(sub => `<span class="text-[9px] font-semibold px-2 py-0.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 rounded">${sub}</span>`).join('')}
+                </div>
+              ` : ''}
+            </div>
+            <div class="pt-4 border-t border-zinc-100 dark:border-zinc-850 mt-4 flex items-center justify-between text-xs text-zinc-400">
+              <span>By: ${s.createdBy?.name || 'Admin'}</span>
+              <span>${s.subjects?.length || 0} subjects</span>
+            </div>
+            <button onclick="confirmDeleteSyl('${s._id}')" class="absolute top-4 right-4 p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors opacity-0 group-hover:opacity-100">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+        `).join('');
+        lucide.createIcons();
+      }
+
+      async function handleSylSubmit(e) {
+        e.preventDefault();
+        const title = document.getElementById('syl-title').value;
+        const description = document.getElementById('syl-desc').value;
+        const subjectsVal = document.getElementById('syl-subjects').value;
+
+        const subjects = subjectsVal.split(',').map(s => s.trim()).filter(s => s.length > 0);
+
+        const btn = document.getElementById('syl-submit-btn');
+        btn.disabled = true;
+        btn.innerHTML = 'Saving...';
+
+        try {
+          await apiRequest('/syllabus', 'POST', { title, description, subjects });
+          showActionAlert('success', 'Syllabus guidelines created.');
+          
+          document.getElementById('syl-form').reset();
+          toggleSidePanel('syl', false);
+          loadSyllabiList();
+        } catch (err) {
+          showActionAlert('error', err.message);
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = 'Save Syllabus';
+        }
+      }
+
+      function confirmDeleteSyl(id) {
+        openConfirmModal('Delete this class syllabus configurations?', async () => {
+          try {
+            await apiRequest(`/syllabus/${id}`, 'DELETE');
+            showActionAlert('success', 'Syllabus course outline removed.');
+            loadSyllabiList();
+          } catch (err) {
+            showActionAlert('error', err.message);
+          }
+        });
+      }
+
+      // ==============================================
+      // 8. PAPERS VIEW LOGIC
+      // ==============================================
+      async function loadPapersList() {
+        try {
+          papers = await apiRequest('/papers');
+          renderPapersTable(papers);
+        } catch (err) {
+          setErrorView('Could not fetch papers list.');
+        }
+      }
+
+      function renderPapersTable(dataList) {
+        const tbody = document.getElementById('papers-table-body');
+        if (dataList.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-zinc-400">No papers uploaded.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = dataList.map(p => `
+          <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-900/30 text-zinc-900 dark:text-zinc-200 transition-colors">
+            <td class="py-4 px-6 font-semibold flex items-center gap-2">
+              <i data-lucide="file-check" class="w-4 h-4 text-purple-500 shrink-0"></i>
+              <span class="truncate max-w-[150px]">${p.title}</span>
+            </td>
+            <td class="py-4 px-6 text-zinc-400 truncate max-w-[200px]">${p.subject}</td>
+            <td class="py-4 px-6 text-zinc-500">${p.createdBy?.name || 'Admin'}</td>
+            <td class="py-4 px-6 text-zinc-400 text-xs">${new Date(p.createdAt).toLocaleDateString()}</td>
+            <td class="py-4 px-6 text-right flex items-center justify-end gap-1.5">
+              ${p.fileUrl ? `
+                <a href="${p.fileUrl.startsWith('http') ? p.fileUrl : apiBaseUrl.replace('/api', '') + p.fileUrl}" target="_blank" class="p-1.5 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/20 rounded transition-colors inline-flex">
+                  <i data-lucide="download" class="w-4 h-4"></i>
+                </a>
+              ` : ''}
+              <button onclick="confirmDeletePaper('${p._id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors inline-flex">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </td>
+          </tr>
+        `).join('');
+        lucide.createIcons();
+      }
+
+      function filterPapersTable() {
+        const query = document.getElementById('papers-search').value.toLowerCase();
+        const filtered = papers.filter(p => 
+          p.title.toLowerCase().includes(query) || 
+          p.subject.toLowerCase().includes(query)
+        );
+        renderPapersTable(filtered);
+      }
+
+      async function handlePaperSubmit(e) {
+        e.preventDefault();
+        const title = document.getElementById('paper-title').value;
+        const subject = document.getElementById('paper-subject').value;
+        const fileInput = document.getElementById('paper-file');
+        
+        if (!fileInput.files.length) {
+          showActionAlert('error', 'Select file to upload.');
+          return;
+        }
+
+        const btn = document.getElementById('paper-submit-btn');
+        btn.disabled = true;
+        btn.innerHTML = 'Uploading...';
+
+        try {
+          const form = new FormData();
+          form.append('title', title);
+          form.append('subject', subject);
+          form.append('file', fileInput.files[0]);
+
+          await apiRequest('/papers', 'POST', form, true);
+          showActionAlert('success', 'Exam paper uploaded successfully.');
+          
+          document.getElementById('paper-form').reset();
+          toggleSidePanel('paper', false);
+          loadPapersList();
+        } catch (err) {
+          showActionAlert('error', err.message);
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = 'Upload';
+        }
+      }
+
+      function confirmDeletePaper(id) {
+        openConfirmModal('Delete this previous year exam paper?', async () => {
+          try {
+            await apiRequest(`/papers/${id}`, 'DELETE');
+            showActionAlert('success', 'Exam paper deleted.');
+            loadPapersList();
+          } catch (err) {
+            showActionAlert('error', err.message);
+          }
+        });
+      }
+
+      // ==============================================
+      // 9. CATEGORIES VIEW LOGIC
+      // ==============================================
+      async function loadCategoriesList() {
+        try {
+          categories = await apiRequest('/categories');
+          renderCategories(categories);
+        } catch (err) {
+          setErrorView('Could not load categories.');
+        }
+      }
+
+      function renderCategories(dataList) {
+        const container = document.getElementById('cat-grid-container');
+        if (dataList.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-12 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl col-span-2">
+              <i data-lucide="layers" class="mx-auto text-zinc-300 dark:text-zinc-700 mb-2 w-12 h-12"></i>
+              <p class="text-sm font-semibold text-zinc-850 dark:text-zinc-200">No categories found</p>
+            </div>
+          `;
+          lucide.createIcons();
+          return;
+        }
+
+        container.innerHTML = dataList.map(cat => `
+          <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 hover:shadow-md transition-shadow relative group flex items-start gap-4">
+            <div class="p-3 bg-purple-50 dark:bg-purple-900/20 text-purple-650 dark:text-purple-400 rounded-lg shrink-0">
+              <i data-lucide="layers" class="w-5 h-5"></i>
+            </div>
+            <div class="flex-1 min-w-0 pr-8">
+              <h4 class="text-base font-bold text-zinc-950 dark:text-zinc-50 font-display truncate">${cat.name}</h4>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed line-clamp-2">${cat.description || 'No description provided.'}</p>
+            </div>
+            <button onclick="confirmDeleteCat('${cat._id}')" class="absolute top-4 right-4 p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors opacity-0 group-hover:opacity-100">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+        `).join('');
+        lucide.createIcons();
+      }
+
+      async function handleCatSubmit(e) {
+        e.preventDefault();
+        const name = document.getElementById('cat-name').value;
+        const description = document.getElementById('cat-desc').value;
+
+        const btn = document.getElementById('cat-submit-btn');
+        btn.disabled = true;
+        btn.innerHTML = 'Saving...';
+
+        try {
+          await apiRequest('/categories', 'POST', { name, description });
+          showActionAlert('success', 'Category created successfully.');
+          
+          document.getElementById('cat-form').reset();
+          toggleSidePanel('cat', false);
+          loadCategoriesList();
+        } catch (err) {
+          showActionAlert('error', err.message);
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = 'Save Category';
+        }
+      }
+
+      function confirmDeleteCat(id) {
+        openConfirmModal('Delete this category? Resources tagged with it will remain.', async () => {
+          try {
+            await apiRequest(`/categories/${id}`, 'DELETE');
+            showActionAlert('success', 'Category successfully deleted.');
+            loadCategoriesList();
+          } catch (err) {
+            showActionAlert('error', err.message);
+          }
+        });
+      }
+
+      // Sidebar panel logic helper triggers
+      function toggleSidePanel(panelName, show) {
+        const panel = document.getElementById(`${panelName}-side-panel`);
+        if (show) {
+          panel.classList.remove('hidden');
+          if (panelName === 'tt') initTtSideForm();
+        } else {
+          panel.classList.add('hidden');
+        }
+      }
+    </script>
+  </body>
+</html>
