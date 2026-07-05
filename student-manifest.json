@@ -1,0 +1,23 @@
+{
+  "name": "Student Hub",
+  "short_name": "Student Hub",
+  "description": "Your Learning Portal - Notes, Assignments, Timetable",
+  "start_url": "./student.html",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#7c3aed",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192x192/7c3aed/ffffff?text=SH",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/7c3aed/ffffff?text=SH",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
