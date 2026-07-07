@@ -1190,7 +1190,7 @@
             ttRes,
             papersRes,
             catRes
-          ] = await Promise.all([
+          ] = await Promise.allSettled([
             apiRequest('/users'),
             apiRequest('/notes'),
             apiRequest('/assignments'),
@@ -1200,13 +1200,15 @@
             apiRequest('/categories')
           ]);
 
-          students = usersRes;
-          notes = notesRes;
-          assignments = asgRes;
-          announcements = annRes;
-          timetables = ttRes;
-          papers = papersRes;
-          categories = catRes;
+          const val = (r, fallback = []) => r.status === 'fulfilled' ? r.value : fallback;
+
+          students      = val(usersRes);
+          notes         = val(notesRes);
+          assignments   = val(asgRes);
+          announcements = val(annRes);
+          timetables    = val(ttRes);
+          papers        = val(papersRes);
+          categories    = val(catRes);
 
           const studentCount = students.filter(s => s.role !== 'admin').length;
           document.getElementById('stat-students').innerText = studentCount;
@@ -1222,7 +1224,7 @@
           renderRecentNotes();
           renderRecentAssignments();
         } catch (err) {
-          setErrorView('Dashboard fetch failed. Verify backend.');
+          setErrorView('Dashboard fetch failed. Verify backend: ' + err.message);
         }
       }
 
@@ -1628,11 +1630,22 @@
       // 6. TIMETABLES VIEW LOGIC
       // ==============================================
       async function loadTimetablesList() {
+        const container = document.getElementById('tt-grid-container');
+        container.innerHTML = '<p class="text-sm text-zinc-400 text-center py-10 col-span-2">Loading timetables...</p>';
         try {
           timetables = await apiRequest('/timetable');
           renderTimetables(timetables);
         } catch (err) {
-          setErrorView('Could not fetch timetables list.');
+          const msg = err.message || 'Could not fetch timetables list.';
+          setErrorView(msg);
+          container.innerHTML = `
+            <div class="col-span-2 text-center py-12">
+              <i data-lucide="wifi-off" class="mx-auto text-rose-400 mb-2 w-10 h-10"></i>
+              <p class="text-sm font-semibold text-rose-500">Failed to load timetables</p>
+              <p class="text-xs text-zinc-400 mt-1">${msg}</p>
+              <button onclick="loadTimetablesList()" class="mt-4 text-xs text-purple-500 hover:underline font-semibold">↻ Retry</button>
+            </div>`;
+          lucide.createIcons();
         }
       }
 
