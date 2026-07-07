@@ -347,17 +347,31 @@ def update_announcement(aid):
 # ══════════════════════════════════════════════════════════════════════════════
 #  TIMETABLE  /api/timetable
 # ══════════════════════════════════════════════════════════════════════════════
+def serialize_tt(doc):
+    """Serialize timetable doc — normalise old 'entries' field to 'slots'."""
+    s = serialize(doc)
+    if s is None:
+        return None
+    # backward-compat: old records stored period rows under 'entries' key
+    if not s.get("slots") and s.get("entries"):
+        s["slots"] = s["entries"]
+    if "slots" not in s:
+        s["slots"] = []
+    return s
+
 @app.get("/api/timetable")
 def get_timetables():
-    return jsonify([serialize(t) for t in timetables.find().sort("createdAt", -1)])
+    return jsonify([serialize_tt(t) for t in timetables.find().sort("createdAt", -1)])
 
 @app.post("/api/timetable")
 @auth_required
 def create_timetable():
     data = request.get_json(force=True)
+    # accept both 'slots' (new) and 'entries' (legacy) key names
+    slots = data.get("slots") or data.get("entries") or []
     doc = {
         "title":     data.get("title", ""),
-        "slots":     data.get("slots", []),
+        "slots":     slots,
         "createdBy": request.user_id,
         "createdAt": datetime.datetime.utcnow(),
     }
@@ -376,9 +390,25 @@ def delete_timetable(tid):
 @auth_required
 def update_timetable(tid):
     data = request.get_json(force=True)
+    # normalise key if client sends 'entries'
+    if "entries" in data and "slots" not in data:
+        data["slots"] = data.pop("entries")
     timetables.update_one({"_id": ObjectId(tid)}, {"$set": data})
     doc = timetables.find_one({"_id": ObjectId(tid)})
-    return jsonify(serialize(doc))
+    return jsonify(serialize_tt(doc))
+
+@app.post("/api/timetable/migrate")
+@auth_required
+def migrate_timetables():
+    """One-shot: copy 'entries' -> 'slots' for all old records missing slots."""
+    updated = 0
+    for doc in timetables.find({"slots": {"$in": [[], None]}, "entries": {"$exists": True}}):
+        timetables.update_one(
+            {"_id": doc["_id"]},
+            {"$set": {"slots": doc.get("entries", [])}, "$unset": {"entries": ""}}
+        )
+        updated += 1
+    return jsonify({"msg": f"Migrated {updated} timetable records"})
 
 # ══════════════════════════════════════════════════════════════════════════════
 #  SYLLABUS  /api/syllabus
