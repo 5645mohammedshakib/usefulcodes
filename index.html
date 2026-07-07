@@ -1629,10 +1629,19 @@
       // ==============================================
       // 6. TIMETABLES VIEW LOGIC
       // ==============================================
+      // Run once per session to fix old DB records (entries -> slots)
+      let _ttMigrated = false;
+      async function silentMigrateTimetables() {
+        if (_ttMigrated) return;
+        _ttMigrated = true;
+        try { await apiRequest('/timetable/migrate', 'POST'); } catch (_) {}
+      }
+
       async function loadTimetablesList() {
         const container = document.getElementById('tt-grid-container');
         container.innerHTML = '<p class="text-sm text-zinc-400 text-center py-10 col-span-2">Loading timetables...</p>';
         try {
+          await silentMigrateTimetables(); // fix old records silently first
           timetables = await apiRequest('/timetable');
           renderTimetables(timetables);
         } catch (err) {
