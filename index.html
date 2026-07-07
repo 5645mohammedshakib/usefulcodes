@@ -1663,7 +1663,7 @@
               </div>
               
               <div class="p-5 space-y-3 max-h-[300px] overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-850">
-                ${tt.entries.map((entry, idx) => `
+                ${(tt.slots||[]).map((entry, idx) => `
                   <div class="pt-3 first:pt-0 flex flex-col gap-1">
                     <div class="flex justify-between items-center">
                       <span class="text-[10px] font-bold text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/10 px-2 py-0.5 rounded">${entry.day}</span>
@@ -1687,7 +1687,7 @@
               </div>
             </div>
             <div class="p-4 bg-zinc-50 dark:bg-zinc-900/20 border-t border-zinc-100 dark:border-zinc-800 text-[10px] text-zinc-450 dark:text-zinc-500 text-center">
-              ${tt.entries.length} period slots scheduled
+              ${(tt.slots||[]).length} period slots scheduled
             </div>
           </div>
         `).join('');
@@ -1750,9 +1750,9 @@
           return;
         }
 
-        const entries = [];
+        const slots = [];
         rowElements.forEach(row => {
-          entries.push({
+          slots.push({
             day: row.querySelector('.p-day').value,
             subject: row.querySelector('.p-subject').value,
             start: row.querySelector('.p-start').value,
@@ -1766,7 +1766,7 @@
         btn.innerHTML = 'Saving...';
 
         try {
-          await apiRequest('/timetable', 'POST', { title, entries });
+          await apiRequest('/timetable', 'POST', { title, slots });
           showActionAlert('success', 'Timetable class schedule saved.');
           
           document.getElementById('tt-form').reset();
