@@ -41,7 +41,7 @@
   <script>
 if('serviceWorker' in navigator){
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=18').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=19').then(reg => {
           reg.addEventListener('updatefound', () => {
             const nw = reg.installing;
             if (nw) {
@@ -347,7 +347,7 @@ tailwind.config = {
           <div class="card p-4 flex flex-col gap-2"><div class="w-9 h-9 rounded-xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center"><i data-lucide="megaphone" class="w-5 h-5 text-violet-600 dark:text-violet-400"></i></div><p id="stat-ann" class="text-2xl font-bold text-zinc-900 dark:text-white">-</p><p class="text-xs text-zinc-500">Announcements</p></div>
           <div class="card p-4 flex flex-col gap-2"><div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center"><i data-lucide="file-text" class="w-5 h-5 text-emerald-600 dark:text-emerald-400"></i></div><p id="stat-papers" class="text-2xl font-bold text-zinc-900 dark:text-white">-</p><p class="text-xs text-zinc-500">Papers</p></div>
         </div>
-        <div class="grid md:grid-cols-2 gap-5">
+        <div class="grid md:grid-cols-3 gap-5">
           <div class="card p-5 space-y-3">
             <div class="flex items-center gap-2 font-bold text-base text-zinc-900 dark:text-white"><i data-lucide="play-circle" class="w-5 h-5 text-violet-500"></i>Continue Learning</div>
             <div id="list-continue-learning" class="space-y-2.5"><p class="text-xs text-zinc-400">No recent topics. Start studying!</p></div>
@@ -355,6 +355,21 @@ tailwind.config = {
           <div class="card p-5 space-y-3">
             <div class="flex items-center gap-2 font-bold text-base text-zinc-900 dark:text-white"><i data-lucide="file-text" class="w-5 h-5 text-emerald-500"></i>Recently Opened PDFs</div>
             <div id="list-recent-pdfs" class="space-y-2.5"><p class="text-xs text-zinc-400">No PDFs opened recently.</p></div>
+          </div>
+          <div id="home-focus-zone-card" class="card p-5 flex flex-col justify-between space-y-3">
+            <div class="flex items-center gap-2 font-bold text-base text-zinc-900 dark:text-white"><i data-lucide="timer" class="w-5 h-5 text-purple-500"></i>Focus Zone</div>
+            <div class="flex flex-col items-center justify-center flex-1 py-1.5">
+              <span id="dashboard-timer-display" class="text-3xl font-extrabold text-zinc-900 dark:text-white tracking-wider">25:00</span>
+              <span id="dashboard-status-label" class="text-[10px] text-zinc-400 uppercase tracking-widest font-semibold mt-1">Get to Work</span>
+            </div>
+            <div class="flex gap-2">
+              <button id="dashboard-play-btn" onclick="togglePomo()" class="flex-1 py-2 bg-purple-650 hover:bg-purple-750 text-white rounded-xl font-bold text-xs shadow-md transition-all flex items-center justify-center gap-1.5">
+                <i data-lucide="play" class="w-3.5 h-3.5"></i><span>Start</span>
+              </button>
+              <button onclick="goto('focus')" class="py-2 px-3.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl font-bold text-xs transition-all flex items-center justify-center">
+                <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
           </div>
         </div>
         <div id="home-popular-card" class="card p-5">
@@ -1502,16 +1517,16 @@ const API = (window.location.hostname === 'localhost' || window.location.hostnam
   function togglePomo() {
     if (pomoRunning) {
       clearInterval(pomoTimer); pomoRunning = false;
-      ['pomo-play-btn','fo-play-btn'].forEach(id => { const b = document.getElementById(id); if (b) b.innerHTML = '<i data-lucide="play" class="w-4 h-4"></i><span>Start</span>'; });
+      ['pomo-play-btn','fo-play-btn','dashboard-play-btn'].forEach(id => { const b = document.getElementById(id); if (b) b.innerHTML = '<i data-lucide="play" class="w-4 h-4"></i><span>Start</span>'; });
     } else {
       pomoRunning = true;
-      ['pomo-play-btn','fo-play-btn'].forEach(id => { const b = document.getElementById(id); if (b) b.innerHTML = '<i data-lucide="pause" class="w-4 h-4"></i><span>Pause</span>'; });
+      ['pomo-play-btn','fo-play-btn','dashboard-play-btn'].forEach(id => { const b = document.getElementById(id); if (b) b.innerHTML = '<i data-lucide="pause" class="w-4 h-4"></i><span>Pause</span>'; });
       pomoTimer = setInterval(() => {
         pomoCurrent--;
         updatePomoUI();
         if (pomoCurrent <= 0) {
           clearInterval(pomoTimer); pomoRunning = false;
-          ['pomo-play-btn','fo-play-btn'].forEach(id => { const b = document.getElementById(id); if (b) b.innerHTML = '<i data-lucide="play" class="w-4 h-4"></i><span>Start</span>'; });
+          ['pomo-play-btn','fo-play-btn','dashboard-play-btn'].forEach(id => { const b = document.getElementById(id); if (b) b.innerHTML = '<i data-lucide="play" class="w-4 h-4"></i><span>Start</span>'; });
           if (pomoMode === 'work') {
             const p = parseInt(localStorage.getItem('s_pomos')||'0') + 1;
             const t = parseInt(localStorage.getItem('s_focus_time')||'0') + 25;
@@ -1532,7 +1547,7 @@ const API = (window.location.hostname === 'localhost' || window.location.hostnam
     clearInterval(pomoTimer); pomoRunning = false;
     pomoCurrent = pomoDurations[pomoMode];
     updatePomoUI();
-    ['pomo-play-btn','fo-play-btn'].forEach(id => { const b = document.getElementById(id); if (b) b.innerHTML = '<i data-lucide="play" class="w-4 h-4"></i><span>Start</span>'; });
+    ['pomo-play-btn','fo-play-btn','dashboard-play-btn'].forEach(id => { const b = document.getElementById(id); if (b) b.innerHTML = '<i data-lucide="play" class="w-4 h-4"></i><span>Start</span>'; });
     lucide.createIcons();
   }
 
@@ -1540,13 +1555,15 @@ const API = (window.location.hostname === 'localhost' || window.location.hostnam
     const m = String(Math.floor(pomoCurrent / 60)).padStart(2,'0');
     const s = String(pomoCurrent % 60).padStart(2,'0');
     const timeStr = m + ':' + s;
-    ['pomo-timer-display','fo-timer'].forEach(id => { const el = document.getElementById(id); if (el) el.innerText = timeStr; });
+    ['pomo-timer-display','fo-timer','dashboard-timer-display'].forEach(id => { const el = document.getElementById(id); if (el) el.innerText = timeStr; });
     const circum = 552, pct = 1 - (pomoCurrent / pomoTotal);
     const offset = circum * pct;
     const c = document.getElementById('pomo-circle'); if (c) c.style.strokeDashoffset = offset;
     const fc = document.getElementById('fo-circle');  if (fc) fc.style.strokeDashoffset = offset * (653/552);
-    const lbl = document.getElementById('pomo-status-label');
-    if (lbl) lbl.innerText = pomoMode === 'work' ? (pomoRunning ? 'Stay focused!' : 'Get to work') : (pomoRunning ? 'Enjoy your break' : 'Take a break');
+    ['pomo-status-label','dashboard-status-label'].forEach(id => {
+      const lbl = document.getElementById(id);
+      if (lbl) lbl.innerText = pomoMode === 'work' ? (pomoRunning ? 'Stay focused!' : 'Get to work') : (pomoRunning ? 'Enjoy your break' : 'Take a break');
+    });
     const foLbl = document.getElementById('fo-mode-label');
     if (foLbl) foLbl.innerText = pomoMode === 'work' ? 'Focus Session' : pomoMode === 'short' ? 'Short Break' : 'Long Break';
   }
