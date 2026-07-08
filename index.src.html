@@ -37,7 +37,7 @@
   <script>
 if('serviceWorker' in navigator){
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=9').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=11').then(reg => {
           reg.update();
         }).catch(err => console.error('SW registration failed:', err));
       });
@@ -179,7 +179,8 @@ tailwind.config = {
               <i data-lucide="x" class="w-5 h-5"></i>
             </button>
           </div>
-          <nav class="flex-1 overflow-y-auto px-4 py-6 space-y-1.5">
+          <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-0.5">
+            <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-600 px-4 pb-1 pt-2">Overview</p>
             <button onclick="navigateTo('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-purple-650 bg-purple-100 dark:bg-purple-900/30 dark:text-purple-400">
               <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
               <span>Dashboard</span>
@@ -188,6 +189,7 @@ tailwind.config = {
               <i data-lucide="users" class="w-5 h-5"></i>
               <span>Students</span>
             </button>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-600 px-4 pb-1 pt-3">Content</p>
             <button onclick="navigateTo('notes')" id="nav-notes" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
               <i data-lucide="book-open" class="w-5 h-5"></i>
               <span>Notes</span>
@@ -196,9 +198,9 @@ tailwind.config = {
               <i data-lucide="file-spreadsheet" class="w-5 h-5"></i>
               <span>Assignments</span>
             </button>
-            <button onclick="navigateTo('announcements')" id="nav-announcements" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
-              <i data-lucide="megaphone" class="w-5 h-5"></i>
-              <span>Announcements</span>
+            <button onclick="navigateTo('papers')" id="nav-papers" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="file-check" class="w-5 h-5"></i>
+              <span>Previous Papers</span>
             </button>
             <button onclick="navigateTo('timetables')" id="nav-timetables" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
               <i data-lucide="calendar" class="w-5 h-5"></i>
@@ -208,23 +210,63 @@ tailwind.config = {
               <i data-lucide="file-text" class="w-5 h-5"></i>
               <span>Syllabus</span>
             </button>
-            <button onclick="navigateTo('papers')" id="nav-papers" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
-              <i data-lucide="file-check" class="w-5 h-5"></i>
-              <span>Previous Papers</span>
+            <button onclick="navigateTo('announcements')" id="nav-announcements" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="megaphone" class="w-5 h-5"></i>
+              <span>Announcements</span>
+            </button>
+            <button onclick="navigateTo('events')" id="nav-events" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="calendar-days" class="w-5 h-5"></i>
+              <span>Events & Calendar</span>
+            </button>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-600 px-4 pb-1 pt-3">Structure</p>
+            <button onclick="navigateTo('subjects')" id="nav-subjects" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="book-marked" class="w-5 h-5"></i>
+              <span>Subjects</span>
+            </button>
+            <button onclick="navigateTo('semesters')" id="nav-semesters" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+              <span>Semesters</span>
             </button>
             <button onclick="navigateTo('categories')" id="nav-categories" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
               <i data-lucide="layers" class="w-5 h-5"></i>
               <span>Categories</span>
             </button>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-600 px-4 pb-1 pt-3">Home Screen</p>
+            <button onclick="navigateTo('quicklinks')" id="nav-quicklinks" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="link" class="w-5 h-5"></i>
+              <span>Quick Links</span>
+            </button>
+            <button onclick="navigateTo('banners')" id="nav-banners" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="image" class="w-5 h-5"></i>
+              <span>Banners & Cards</span>
+            </button>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-600 px-4 pb-1 pt-3">Control</p>
+            <button onclick="navigateTo('featurecontrol')" id="nav-featurecontrol" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="sliders-horizontal" class="w-5 h-5"></i>
+              <span>Feature Control</span>
+            </button>
+            <button onclick="navigateTo('notifications')" id="nav-notifications" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="bell" class="w-5 h-5"></i>
+              <span>Notifications</span>
+            </button>
             <button onclick="navigateTo('analytics')" id="nav-analytics" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
               <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
               <span>Analytics & Logs</span>
             </button>
-            <button onclick="navigateTo('bulkupload')" id="nav-bulkupload" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+            <button onclick="navigateTo('bulktools')" id="nav-bulktools" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="database" class="w-5 h-5"></i>
+              <span>Bulk Tools</span>
+            </button>
+            <button onclick="navigateTo('appsettings')" id="nav-appsettings" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="settings-2" class="w-5 h-5"></i>
+              <span>App Settings</span>
+            </button>
+            <button onclick="navigateTo('bulkupload')" id="nav-bulkupload" class="hidden w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
               <i data-lucide="upload-cloud" class="w-5 h-5"></i>
               <span>Bulk Upload</span>
             </button>
           </nav>
+
         </div>
         <div class="p-4 border-t border-zinc-200 dark:border-zinc-800 space-y-3">
           <div class="space-y-1">
@@ -887,6 +929,330 @@ tailwind.config = {
               </div>
             </div>
           </div>
+
+          <!-- ═══════════ EVENTS & CALENDAR ═══════════ -->
+          <div id="view-events" class="view-section hidden space-y-6">
+            <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
+              <p class="text-sm text-zinc-500">Manage upcoming events, exams, and calendar entries.</p>
+              <button onclick="toggleSidePanel('event', true)" class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-4 py-2 text-sm font-semibold shadow-sm flex items-center justify-center gap-1.5">
+                <i data-lucide="plus" class="w-4 h-4"></i><span>Add Event</span>
+              </button>
+            </div>
+            <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead><tr class="bg-zinc-100 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wider">
+                    <th class="py-4 px-6">Title</th><th class="py-4 px-6">Type</th><th class="py-4 px-6">Start Date</th><th class="py-4 px-6">Semester</th><th class="py-4 px-6 text-right">Actions</th>
+                  </tr></thead>
+                  <tbody id="events-table-body" class="divide-y divide-zinc-200 dark:divide-zinc-800 text-sm">
+                    <tr><td colspan="5" class="py-8 text-center text-zinc-400">Loading events...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div id="event-side-panel" class="hidden bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm max-w-lg">
+              <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">Add Event</h3>
+                <button onclick="toggleSidePanel('event', false)" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+              </div>
+              <form id="event-form" onsubmit="handleEventSubmit(event)" class="space-y-3">
+                <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Title</label><input type="text" id="event-title" required placeholder="e.g. Mid-term Exam" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Type</label><select id="event-type" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100"><option value="general">General</option><option value="exam">Exam</option><option value="holiday">Holiday</option><option value="deadline">Deadline</option><option value="seminar">Seminar</option></select></div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Start Date</label><input type="date" id="event-start" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">End Date</label><input type="date" id="event-end" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                </div>
+                <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Location</label><input type="text" id="event-location" placeholder="e.g. Auditorium" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Description</label><textarea id="event-desc" rows="2" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100 resize-none"></textarea></div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Semester</label><select id="event-semester" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100"><option value="all">All</option><option value="1">Sem 1</option><option value="2">Sem 2</option><option value="3">Sem 3</option><option value="4">Sem 4</option><option value="5">Sem 5</option><option value="6">Sem 6</option><option value="7">Sem 7</option><option value="8">Sem 8</option></select></div>
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Color</label><input type="color" id="event-color" value="#7c3aed" class="w-full h-9 rounded cursor-pointer" /></div>
+                </div>
+                <button type="submit" id="event-submit-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded py-2 text-sm font-semibold">Save Event</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- ═══════════ SUBJECTS ═══════════ -->
+          <div id="view-subjects" class="view-section hidden space-y-6">
+            <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
+              <p class="text-sm text-zinc-500">Manage your subjects master list.</p>
+              <button onclick="toggleSidePanel('subj', true)" class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-4 py-2 text-sm font-semibold shadow-sm flex items-center justify-center gap-1.5">
+                <i data-lucide="plus" class="w-4 h-4"></i><span>Add Subject</span>
+              </button>
+            </div>
+            <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead><tr class="bg-zinc-100 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wider">
+                    <th class="py-4 px-6">Name</th><th class="py-4 px-6">Code</th><th class="py-4 px-6">Semester</th><th class="py-4 px-6">Credits</th><th class="py-4 px-6">Branch</th><th class="py-4 px-6 text-right">Actions</th>
+                  </tr></thead>
+                  <tbody id="subjects-table-body" class="divide-y divide-zinc-200 dark:divide-zinc-800 text-sm">
+                    <tr><td colspan="6" class="py-8 text-center text-zinc-400">Loading subjects...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div id="subj-side-panel" class="hidden bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm max-w-lg">
+              <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">Add Subject</h3>
+                <button onclick="toggleSidePanel('subj', false)" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+              </div>
+              <form id="subj-form" onsubmit="handleSubjSubmit(event)" class="space-y-3">
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Subject Name</label><input type="text" id="subj-name" required placeholder="e.g. Data Structures" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Code</label><input type="text" id="subj-code" placeholder="e.g. CS301" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Semester</label><select id="subj-semester" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100"><option value="1">Sem 1</option><option value="2">Sem 2</option><option value="3">Sem 3</option><option value="4">Sem 4</option><option value="5">Sem 5</option><option value="6">Sem 6</option><option value="7">Sem 7</option><option value="8">Sem 8</option></select></div>
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Credits</label><input type="number" id="subj-credits" min="0" max="10" value="4" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                </div>
+                <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Branch</label><input type="text" id="subj-branch" placeholder="all / CSE / ECE etc." class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Description</label><textarea id="subj-desc" rows="2" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100 resize-none"></textarea></div>
+                <button type="submit" id="subj-submit-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded py-2 text-sm font-semibold">Save Subject</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- ═══════════ SEMESTERS ═══════════ -->
+          <div id="view-semesters" class="view-section hidden space-y-6">
+            <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
+              <p class="text-sm text-zinc-500">Manage semester records (1–8).</p>
+              <button onclick="toggleSidePanel('sem', true)" class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-4 py-2 text-sm font-semibold shadow-sm flex items-center justify-center gap-1.5">
+                <i data-lucide="plus" class="w-4 h-4"></i><span>Add Semester</span>
+              </button>
+            </div>
+            <div id="semesters-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <p class="text-sm text-zinc-400 col-span-4 text-center py-8">Loading semesters...</p>
+            </div>
+            <div id="sem-side-panel" class="hidden bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm max-w-md">
+              <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">Add Semester</h3>
+                <button onclick="toggleSidePanel('sem', false)" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+              </div>
+              <form id="sem-form" onsubmit="handleSemSubmit(event)" class="space-y-3">
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Number (1–8)</label><input type="number" id="sem-number" required min="1" max="8" placeholder="e.g. 3" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Label</label><input type="text" id="sem-label" placeholder="e.g. Semester 3" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Start Date</label><input type="date" id="sem-start" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">End Date</label><input type="date" id="sem-end" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                </div>
+                <button type="submit" id="sem-submit-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded py-2 text-sm font-semibold">Save Semester</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- ═══════════ QUICK LINKS ═══════════ -->
+          <div id="view-quicklinks" class="view-section hidden space-y-6">
+            <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
+              <p class="text-sm text-zinc-500">Manage quick-access links shown on the student home screen.</p>
+              <button onclick="toggleSidePanel('ql', true)" class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-4 py-2 text-sm font-semibold shadow-sm flex items-center justify-center gap-1.5">
+                <i data-lucide="plus" class="w-4 h-4"></i><span>Add Quick Link</span>
+              </button>
+            </div>
+            <div id="quicklinks-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <p class="text-sm text-zinc-400 col-span-3 text-center py-8">Loading quick links...</p>
+            </div>
+            <div id="ql-side-panel" class="hidden bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm max-w-md">
+              <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">Add Quick Link</h3>
+                <button onclick="toggleSidePanel('ql', false)" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+              </div>
+              <form id="ql-form" onsubmit="handleQlSubmit(event)" class="space-y-3">
+                <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Title</label><input type="text" id="ql-title" required placeholder="e.g. College Website" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">URL</label><input type="url" id="ql-url" required placeholder="https://..." class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Description</label><input type="text" id="ql-desc" placeholder="Optional short description" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Icon (lucide name)</label><input type="text" id="ql-icon" placeholder="link" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Color</label><input type="color" id="ql-color" value="#7c3aed" class="w-full h-9 rounded cursor-pointer" /></div>
+                </div>
+                <button type="submit" id="ql-submit-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded py-2 text-sm font-semibold">Save Quick Link</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- ═══════════ BANNERS & CARDS ═══════════ -->
+          <div id="view-banners" class="view-section hidden space-y-6">
+            <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
+              <p class="text-sm text-zinc-500">Manage home screen banners and announcement cards.</p>
+              <button onclick="toggleSidePanel('ban', true)" class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-4 py-2 text-sm font-semibold shadow-sm flex items-center justify-center gap-1.5">
+                <i data-lucide="plus" class="w-4 h-4"></i><span>Add Banner</span>
+              </button>
+            </div>
+            <div id="banners-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <p class="text-sm text-zinc-400 col-span-3 text-center py-8">Loading banners...</p>
+            </div>
+            <div id="ban-side-panel" class="hidden bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm max-w-md">
+              <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">Add Banner</h3>
+                <button onclick="toggleSidePanel('ban', false)" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+              </div>
+              <form id="ban-form" onsubmit="handleBanSubmit(event)" class="space-y-3">
+                <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Title</label><input type="text" id="ban-title" required placeholder="Banner heading" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Subtitle</label><input type="text" id="ban-subtitle" placeholder="Short description" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Link URL (optional)</label><input type="url" id="ban-link" placeholder="https://..." class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">BG Color</label><input type="color" id="ban-bg" value="#7c3aed" class="w-full h-9 rounded cursor-pointer" /></div>
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Text Color</label><input type="color" id="ban-text" value="#ffffff" class="w-full h-9 rounded cursor-pointer" /></div>
+                </div>
+                <div class="flex items-center gap-2"><input type="checkbox" id="ban-active" checked class="w-4 h-4 text-purple-600" /><label for="ban-active" class="text-xs font-semibold text-zinc-600 dark:text-zinc-300">Active (visible to students)</label></div>
+                <button type="submit" id="ban-submit-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded py-2 text-sm font-semibold">Save Banner</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- ═══════════ FEATURE CONTROL ═══════════ -->
+          <div id="view-featurecontrol" class="view-section hidden space-y-6">
+            <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50 flex items-center gap-2"><i data-lucide="sliders-horizontal" class="w-5 h-5 text-purple-500"></i>Master Feature Switches</h3>
+                <button onclick="saveFeatureControl()" id="fc-save-btn" class="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-4 py-2 text-xs font-bold">Save Changes</button>
+              </div>
+              <p class="text-xs text-zinc-500 mb-5">Toggle features ON/OFF. Changes reflect instantly in the Student App.</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                <label class="flex items-center gap-2.5 cursor-pointer group p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-purple-500/50 transition-colors">
+                  <input type="checkbox" id="fc-notes" class="w-4 h-4 rounded text-purple-600" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">📝 Notes</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-purple-500/50 transition-colors">
+                  <input type="checkbox" id="fc-assignments" class="w-4 h-4 rounded text-purple-600" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">📋 Assignments</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-purple-500/50 transition-colors">
+                  <input type="checkbox" id="fc-timetable" class="w-4 h-4 rounded text-purple-600" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">🕐 Timetable</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-purple-500/50 transition-colors">
+                  <input type="checkbox" id="fc-syllabus" class="w-4 h-4 rounded text-purple-600" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">📚 Syllabus</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-purple-500/50 transition-colors">
+                  <input type="checkbox" id="fc-papers" class="w-4 h-4 rounded text-purple-600" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">📄 Previous Papers</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-purple-500/50 transition-colors">
+                  <input type="checkbox" id="fc-announcements" class="w-4 h-4 rounded text-purple-600" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">📢 Announcements</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-purple-500/50 transition-colors">
+                  <input type="checkbox" id="fc-events" class="w-4 h-4 rounded text-purple-600" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">📅 Events</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-purple-500/50 transition-colors">
+                  <input type="checkbox" id="fc-quickLinks" class="w-4 h-4 rounded text-purple-600" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">🔗 Quick Links</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-purple-500/50 transition-colors">
+                  <input type="checkbox" id="fc-banners" class="w-4 h-4 rounded text-purple-600" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">🖼️ Banners</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-purple-500/50 transition-colors">
+                  <input type="checkbox" id="fc-search" class="w-4 h-4 rounded text-purple-600" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">🔍 Search</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-purple-500/50 transition-colors">
+                  <input type="checkbox" id="fc-bookmarks" class="w-4 h-4 rounded text-purple-600" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">🔖 Bookmarks</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-purple-500/50 transition-colors">
+                  <input type="checkbox" id="fc-focus" class="w-4 h-4 rounded text-purple-600" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">🎯 Focus Zone</span>
+                </label>
+              </div>
+              <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-3 flex items-center gap-1.5"><i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>Security & Advanced</h4>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-5">
+                <label class="flex items-center gap-2.5 cursor-pointer group p-3 rounded-lg border border-rose-200 dark:border-rose-900/30 hover:border-rose-500/50 transition-colors">
+                  <input type="checkbox" id="fc-maintenanceMode" class="w-4 h-4 rounded text-rose-600" />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">🚨 Maintenance Mode (Lock Portal)</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-purple-500/50 transition-colors">
+                  <input type="checkbox" id="fc-directDownloads" class="w-4 h-4 rounded text-purple-600" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">🔒 Allow PDF Downloads</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-purple-500/50 transition-colors">
+                  <input type="checkbox" id="fc-feedbackEnabled" class="w-4 h-4 rounded text-purple-600" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">💬 Feedback Enabled</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-purple-500/50 transition-colors">
+                  <input type="checkbox" id="fc-emergencyBanner" class="w-4 h-4 rounded text-purple-600" />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">📢 Emergency Banner</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-purple-500/50 transition-colors">
+                  <input type="checkbox" id="fc-streaksEnabled" class="w-4 h-4 rounded text-purple-600" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">🔥 Streaks System</span>
+                </label>
+              </div>
+              <div class="flex flex-col gap-1.5 max-w-xl mb-4">
+                <label class="text-xs font-bold text-zinc-400 uppercase">Broadcast Message</label>
+                <input id="fc-broadcast" type="text" placeholder="e.g. Portal under maintenance..." class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" />
+              </div>
+            </div>
+            <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm">
+              <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50 mb-4 flex items-center gap-2"><i data-lucide="layout-list" class="w-5 h-5 text-purple-500"></i>Home Page Section Order</h3>
+              <p class="text-xs text-zinc-500 mb-4">Use ↑↓ arrows to reorder sections shown on student home.</p>
+              <div id="home-sections-order" class="space-y-2 max-w-sm"></div>
+              <button onclick="saveHomeSectionsOrder()" class="mt-4 bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-4 py-2 text-xs font-bold">Save Section Order</button>
+            </div>
+          </div>
+
+          <!-- ═══════════ NOTIFICATIONS ═══════════ -->
+          <div id="view-notifications" class="view-section hidden space-y-6">
+            <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm max-w-2xl">
+              <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50 mb-4 flex items-center gap-2"><i data-lucide="send" class="w-5 h-5 text-purple-500"></i>Send Broadcast Notification</h3>
+              <div class="space-y-3">
+                <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Title</label><input type="text" id="notif-title" placeholder="e.g. Exam schedule updated" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Message</label><textarea id="notif-msg" rows="3" placeholder="Notification body text..." class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100 resize-none"></textarea></div>
+                <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Target</label><select id="notif-target" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100"><option value="all">All Students</option><option value="sem1">Semester 1</option><option value="sem2">Semester 2</option><option value="sem3">Semester 3</option><option value="sem4">Semester 4</option></select></div>
+                <button onclick="sendNotification()" id="notif-send-btn" class="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-5 py-2.5 text-sm font-semibold flex items-center gap-2"><i data-lucide="send" class="w-4 h-4"></i>Send as Announcement</button>
+              </div>
+            </div>
+            <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm">
+              <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50 mb-4 flex items-center gap-2"><i data-lucide="history" class="w-5 h-5 text-purple-500"></i>Notification History</h3>
+              <div id="notif-history" class="space-y-3 max-h-80 overflow-y-auto">
+                <p class="text-zinc-400 text-sm text-center py-4">Loading...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══════════ BULK TOOLS ═══════════ -->
+          <div id="view-bulktools" class="view-section hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm">
+                <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50 mb-4 flex items-center gap-2"><i data-lucide="upload-cloud" class="w-5 h-5 text-purple-500"></i>Bulk Upload (JSON)</h3>
+                <div class="space-y-3">
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Item Type</label><select id="bulk2-type" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100"><option value="note">Notes</option><option value="paper">Papers</option></select></div>
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">JSON Array</label><textarea id="bulk2-json" rows="8" placeholder='[{"title":"Note 1","description":"...","category":"Maths","fileUrl":""}]' class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-xs font-mono text-zinc-950 dark:text-zinc-100 resize-y"></textarea></div>
+                  <button onclick="handleBulkUpload2()" id="bulk2-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-lg py-2.5 text-sm font-semibold flex items-center justify-center gap-2"><i data-lucide="check" class="w-4 h-4"></i><span>Process Bulk Upload</span></button>
+                </div>
+              </div>
+              <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm">
+                <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50 mb-2 flex items-center gap-2"><i data-lucide="trash-2" class="w-5 h-5 text-rose-500"></i>Bulk Delete Collection</h3>
+                <p class="text-xs text-zinc-500 mb-4">⚠️ This permanently deletes ALL records from a collection. Cannot be undone.</p>
+                <div class="space-y-3">
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Collection</label><select id="bulk-del-col" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100"><option value="notes">Notes</option><option value="assignments">Assignments</option><option value="papers">Papers</option><option value="announcements">Announcements</option><option value="timetables">Timetables</option><option value="syllabi">Syllabi</option><option value="events">Events</option><option value="subjects">Subjects</option><option value="quick_links">Quick Links</option><option value="banners">Banners</option></select></div>
+                  <button onclick="handleBulkDelete()" class="w-full bg-rose-600 hover:bg-rose-700 text-white rounded-lg py-2.5 text-sm font-semibold flex items-center justify-center gap-2"><i data-lucide="trash-2" class="w-4 h-4"></i>Delete All Records</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══════════ APP SETTINGS ═══════════ -->
+          <div id="view-appsettings" class="view-section hidden space-y-6">
+            <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm max-w-2xl">
+              <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50 mb-4 flex items-center gap-2"><i data-lucide="settings-2" class="w-5 h-5 text-purple-500"></i>App Version & Update</h3>
+              <div class="space-y-3">
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">App Version</label><input type="text" id="app-version-input" placeholder="e.g. 2.0.0" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                  <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Force Update</label><div class="flex items-center gap-2 mt-2"><input type="checkbox" id="app-update-required" class="w-4 h-4 text-purple-600" /><span class="text-xs text-zinc-500">Require update to continue</span></div></div>
+                </div>
+                <div class="flex flex-col gap-1"><label class="text-xs font-bold text-zinc-400 uppercase">Update Message</label><input type="text" id="app-update-msg" placeholder="e.g. New features available! Please refresh." class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" /></div>
+                <button onclick="saveAppVersion()" class="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-5 py-2.5 text-sm font-semibold">Save App Version</button>
+              </div>
+            </div>
+          </div>
+
         </main>
       </div>
       <div id="sidebar-overlay" onclick="toggleMobileSidebar(false)" class="hidden md:hidden fixed inset-0 z-40 bg-zinc-950/50 backdrop-blur-xs"></div>
@@ -1030,7 +1396,16 @@ tailwind.config = {
           papers: 'Previous Exam Papers',
           categories: 'Notes & Resource Categories',
           analytics: 'System Analytics & Audit Logs',
-          bulkupload: 'Bulk Resource Ingestion'
+          bulkupload: 'Bulk Resource Ingestion',
+          events: 'Events & Calendar',
+          subjects: 'Subjects Master List',
+          semesters: 'Semesters',
+          quicklinks: 'Quick Links',
+          banners: 'Banners & Cards',
+          featurecontrol: 'Feature Control Panel',
+          notifications: 'Notifications',
+          bulktools: 'Bulk Tools',
+          appsettings: 'App Settings'
         };
         document.getElementById('view-title').innerText = titles[viewName] || 'Admin Dashboard';
         activeView = viewName;
@@ -1201,39 +1576,25 @@ tailwind.config = {
       function loadDataForView(viewName) {
         setErrorView(null);
         switch (viewName) {
-          case 'dashboard':
-            loadDashboardStats();
-            break;
-          case 'students':
-            loadStudentsList();
-            break;
-          case 'notes':
-            loadNotesList();
-            break;
-          case 'assignments':
-            loadAssignmentsList();
-            break;
-          case 'announcements':
-            loadAnnouncementsList();
-            break;
-          case 'timetables':
-            loadTimetablesList();
-            break;
-          case 'syllabus':
-            loadSyllabiList();
-            break;
-          case 'papers':
-            loadPapersList();
-            break;
-          case 'categories':
-            loadCategoriesList();
-            break;
-          case 'analytics':
-            loadAnalyticsData();
-            loadStudentSettings();
-            break;
-          case 'bulkupload':
-            break;
+          case 'dashboard':     loadDashboardStats(); break;
+          case 'students':      loadStudentsList(); break;
+          case 'notes':         loadNotesList(); break;
+          case 'assignments':   loadAssignmentsList(); break;
+          case 'announcements': loadAnnouncementsList(); break;
+          case 'timetables':    loadTimetablesList(); break;
+          case 'syllabus':      loadSyllabiList(); break;
+          case 'papers':        loadPapersList(); break;
+          case 'categories':    loadCategoriesList(); break;
+          case 'analytics':     loadAnalyticsData(); break;
+          case 'events':        loadEventsList(); break;
+          case 'subjects':      loadSubjectsList(); break;
+          case 'semesters':     loadSemestersList(); break;
+          case 'quicklinks':    loadQuickLinksList(); break;
+          case 'banners':       loadBannersList(); break;
+          case 'featurecontrol': loadFeatureControl(); break;
+          case 'notifications': loadNotificationsList(); break;
+          case 'appsettings':   loadAppSettings(); break;
+          case 'bulktools':     break;
         }
       }
 

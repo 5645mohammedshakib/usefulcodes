@@ -50,21 +50,40 @@ activity_logs = db["activity_logs"]
 error_logs    = db["error_logs"]
 feedback_col  = db["feedback"]
 settings_col  = db["settings"]
+events_col        = db["events"]
+subjects_col      = db["subjects"]
+semesters_col     = db["semesters"]
+quick_links_col   = db["quick_links"]
+banners_col       = db["banners"]
+notifications_col = db["notifications"]
 
 # ─── Indexes ───────────────────────────────────────────────────────────────────
 try:
     users.create_index("email",    unique=True, sparse=True)
     users.create_index("username", unique=True, sparse=True)
+    users.create_index("createdAt")
     notes_col.create_index([("title","text"),("description","text"),("category","text")])
     notes_col.create_index("createdAt")
     notes_col.create_index("category")
+    notes_col.create_index("semester")
     assignments.create_index("createdAt")
+    assignments.create_index("semester")
     papers_col.create_index([("title","text"),("subject","text")])
     papers_col.create_index("createdAt")
     papers_col.create_index("subject")
+    papers_col.create_index("semester")
     announcements.create_index("createdAt")
     timetables.create_index("createdAt")
     syllabi.create_index("createdAt")
+    categories.create_index("name")
+    events_col.create_index("startDate")
+    events_col.create_index("createdAt")
+    subjects_col.create_index("name")
+    semesters_col.create_index("number")
+    quick_links_col.create_index("order")
+    banners_col.create_index("order")
+    banners_col.create_index("active")
+    notifications_col.create_index("createdAt")
     clicks_col.create_index("resourceId", unique=True)
     clicks_col.create_index([("clicks", DESCENDING)])
     activity_logs.create_index("timestamp")
@@ -776,12 +795,17 @@ def get_student_settings():
     if not s:
         default = {
             "key": "student_features",
-            "search": True, "bookmarks": True, "planner": True,
-            "focus": True, "papers": True, "syllabus": True,
-            "assignments": True, "announcements": True, "timetable": True,
+            "search": True, "bookmarks": True, "focus": True,
+            "papers": True, "syllabus": True, "assignments": True,
+            "announcements": True, "timetable": True, "notes": True,
+            "events": True, "quickLinks": True, "banners": True,
+            "feedback": True, "downloads": True,
             "directDownloads": True, "maintenanceMode": False,
             "emergencyBanner": False, "feedbackEnabled": True, "streaksEnabled": True,
-            "broadcastMessage": "Welcome to Student Hub Portal!"
+            "broadcastMessage": "Welcome to Student Hub Portal!",
+            "homePageSections": ["announcements","notes","assignments","papers","timetable","syllabus","events","quickLinks"],
+            "featureVisibility": {},
+            "appVersion": "1.0.0", "appUpdateMessage": "", "appUpdateRequired": False,
         }
         settings_col.insert_one(default)
         s = default
@@ -794,24 +818,400 @@ def update_student_settings():
         return jsonify({"msg": "Admin required"}), 403
     data = request.get_json(force=True)
     updates = {}
-    
-    # Boolean settings
     bool_keys = [
-        "search", "bookmarks", "planner", "focus", "papers", "syllabus", 
-        "assignments", "announcements", "timetable", "directDownloads", 
-        "maintenanceMode", "emergencyBanner", "feedbackEnabled", "streaksEnabled"
+        "search", "bookmarks", "focus", "papers", "syllabus",
+        "assignments", "announcements", "timetable", "notes",
+        "events", "quickLinks", "banners", "feedback", "downloads",
+        "directDownloads", "maintenanceMode", "emergencyBanner",
+        "feedbackEnabled", "streaksEnabled", "appUpdateRequired"
     ]
     for k in bool_keys:
         if k in data:
             updates[k] = bool(data[k])
-            
-    # String settings
-    if "broadcastMessage" in data:
-        updates["broadcastMessage"] = str(data["broadcastMessage"])
-    
+    str_keys = ["broadcastMessage", "appVersion", "appUpdateMessage"]
+    for k in str_keys:
+        if k in data:
+            updates[k] = str(data[k])
+    if "homePageSections" in data and isinstance(data["homePageSections"], list):
+        updates["homePageSections"] = data["homePageSections"]
+    if "featureVisibility" in data and isinstance(data["featureVisibility"], dict):
+        updates["featureVisibility"] = data["featureVisibility"]
     settings_col.update_one({"key": "student_features"}, {"$set": updates}, upsert=True)
-    log_admin_action("UPDATE_SETTINGS", "Updated student portal feature toggles and settings")
-    return jsonify({"status": "ok", "msg": "Student features updated successfully!"})
+    log_admin_action("UPDATE_SETTINGS", "Updated student portal settings")
+    return jsonify({"status": "ok", "msg": "Settings updated successfully!"})
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  EVENTS  /api/events
+# ══════════════════════════════════════════════════════════════════════════════
+@app.get("/api/events")
+def get_events():
+    limit  = int(request.args.get("limit", 50))
+    skip   = int(request.args.get("skip", 0))
+    cursor = events_col.find({}).sort("startDate", ASCENDING).skip(skip).limit(limit)
+    resp = jsonify([serialize(e) for e in cursor])
+    return add_cache_headers(resp, 30)
+
+@app.post("/api/events")
+@auth_required
+def create_event():
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    data = request.get_json(force=True)
+    doc = {
+        "title": data.get("title", ""), "description": data.get("description", ""),
+        "startDate": data.get("startDate", ""), "endDate": data.get("endDate", ""),
+        "type": data.get("type", "general"), "color": data.get("color", "#7c3aed"),
+        "location": data.get("location", ""), "semester": data.get("semester", "all"),
+        "createdBy": request.user_id, "createdAt": datetime.datetime.utcnow(),
+    }
+    ins = events_col.insert_one(doc)
+    doc["_id"] = str(ins.inserted_id); doc["createdAt"] = doc["createdAt"].isoformat()
+    log_admin_action("CREATE_EVENT", f"Created event: {data.get('title')}")
+    return jsonify(doc), 201
+
+@app.delete("/api/events/<eid>")
+@auth_required
+def delete_event(eid):
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    events_col.delete_one({"_id": ObjectId(eid)})
+    log_admin_action("DELETE_EVENT", f"Deleted event: {eid}")
+    return jsonify({"msg": "Event deleted"})
+
+@app.put("/api/events/<eid>")
+@auth_required
+def update_event(eid):
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    data = request.get_json(force=True)
+    events_col.update_one({"_id": ObjectId(eid)}, {"$set": data})
+    return jsonify(serialize(events_col.find_one({"_id": ObjectId(eid)})))
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  SUBJECTS  /api/subjects
+# ══════════════════════════════════════════════════════════════════════════════
+@app.get("/api/subjects")
+def get_subjects():
+    semester = request.args.get("semester", "")
+    query = {"semester": semester} if semester else {}
+    resp = jsonify([serialize(s) for s in subjects_col.find(query).sort("name", ASCENDING)])
+    return add_cache_headers(resp, 120)
+
+@app.post("/api/subjects")
+@auth_required
+def create_subject():
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    data = request.get_json(force=True)
+    doc = {
+        "name": data.get("name", ""), "code": data.get("code", ""),
+        "semester": data.get("semester", ""), "branch": data.get("branch", "all"),
+        "credits": data.get("credits", 0), "description": data.get("description", ""),
+        "active": data.get("active", True),
+        "createdBy": request.user_id, "createdAt": datetime.datetime.utcnow(),
+    }
+    ins = subjects_col.insert_one(doc)
+    doc["_id"] = str(ins.inserted_id); doc["createdAt"] = doc["createdAt"].isoformat()
+    log_admin_action("CREATE_SUBJECT", f"Created subject: {data.get('name')}")
+    return jsonify(doc), 201
+
+@app.delete("/api/subjects/<sid>")
+@auth_required
+def delete_subject(sid):
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    subjects_col.delete_one({"_id": ObjectId(sid)})
+    log_admin_action("DELETE_SUBJECT", f"Deleted subject: {sid}")
+    return jsonify({"msg": "Subject deleted"})
+
+@app.put("/api/subjects/<sid>")
+@auth_required
+def update_subject(sid):
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    data = request.get_json(force=True)
+    subjects_col.update_one({"_id": ObjectId(sid)}, {"$set": data})
+    return jsonify(serialize(subjects_col.find_one({"_id": ObjectId(sid)})))
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  SEMESTERS  /api/semesters
+# ══════════════════════════════════════════════════════════════════════════════
+@app.get("/api/semesters")
+def get_semesters():
+    resp = jsonify([serialize(s) for s in semesters_col.find().sort("number", ASCENDING)])
+    return add_cache_headers(resp, 120)
+
+@app.post("/api/semesters")
+@auth_required
+def create_semester():
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    data = request.get_json(force=True)
+    num = data.get("number")
+    if not num: return jsonify({"msg": "Semester number required"}), 400
+    doc = {
+        "number": int(num), "label": data.get("label", f"Semester {num}"),
+        "startDate": data.get("startDate", ""), "endDate": data.get("endDate", ""),
+        "active": data.get("active", True),
+        "createdBy": request.user_id, "createdAt": datetime.datetime.utcnow(),
+    }
+    ins = semesters_col.insert_one(doc)
+    doc["_id"] = str(ins.inserted_id); doc["createdAt"] = doc["createdAt"].isoformat()
+    log_admin_action("CREATE_SEMESTER", f"Created semester {num}")
+    return jsonify(doc), 201
+
+@app.delete("/api/semesters/<sid>")
+@auth_required
+def delete_semester(sid):
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    semesters_col.delete_one({"_id": ObjectId(sid)})
+    log_admin_action("DELETE_SEMESTER", f"Deleted semester: {sid}")
+    return jsonify({"msg": "Semester deleted"})
+
+@app.put("/api/semesters/<sid>")
+@auth_required
+def update_semester(sid):
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    data = request.get_json(force=True)
+    semesters_col.update_one({"_id": ObjectId(sid)}, {"$set": data})
+    return jsonify(serialize(semesters_col.find_one({"_id": ObjectId(sid)})))
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  QUICK LINKS  /api/quick-links
+# ══════════════════════════════════════════════════════════════════════════════
+@app.get("/api/quick-links")
+def get_quick_links():
+    resp = jsonify([serialize(q) for q in quick_links_col.find({"active": {"$ne": False}}).sort("order", ASCENDING)])
+    return add_cache_headers(resp, 60)
+
+@app.get("/api/quick-links/all")
+@auth_required
+def get_quick_links_all():
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    return jsonify([serialize(q) for q in quick_links_col.find().sort("order", ASCENDING)])
+
+@app.post("/api/quick-links")
+@auth_required
+def create_quick_link():
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    data = request.get_json(force=True)
+    doc = {
+        "title": data.get("title", ""), "url": data.get("url", ""),
+        "icon": data.get("icon", "link"), "color": data.get("color", "#7c3aed"),
+        "description": data.get("description", ""),
+        "order": data.get("order", quick_links_col.count_documents({})),
+        "active": data.get("active", True), "openInNewTab": data.get("openInNewTab", True),
+        "createdBy": request.user_id, "createdAt": datetime.datetime.utcnow(),
+    }
+    ins = quick_links_col.insert_one(doc)
+    doc["_id"] = str(ins.inserted_id); doc["createdAt"] = doc["createdAt"].isoformat()
+    log_admin_action("CREATE_QUICK_LINK", f"Created quick link: {data.get('title')}")
+    return jsonify(doc), 201
+
+@app.delete("/api/quick-links/<lid>")
+@auth_required
+def delete_quick_link(lid):
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    quick_links_col.delete_one({"_id": ObjectId(lid)})
+    log_admin_action("DELETE_QUICK_LINK", f"Deleted: {lid}")
+    return jsonify({"msg": "Quick link deleted"})
+
+@app.put("/api/quick-links/<lid>")
+@auth_required
+def update_quick_link(lid):
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    data = request.get_json(force=True)
+    quick_links_col.update_one({"_id": ObjectId(lid)}, {"$set": data})
+    return jsonify(serialize(quick_links_col.find_one({"_id": ObjectId(lid)})))
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  BANNERS  /api/banners
+# ══════════════════════════════════════════════════════════════════════════════
+@app.get("/api/banners")
+def get_banners():
+    resp = jsonify([serialize(b) for b in banners_col.find({"active": True}).sort("order", ASCENDING)])
+    return add_cache_headers(resp, 30)
+
+@app.get("/api/banners/all")
+@auth_required
+def get_banners_all():
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    return jsonify([serialize(b) for b in banners_col.find().sort("order", ASCENDING)])
+
+@app.post("/api/banners")
+@auth_required
+def create_banner():
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    data = request.get_json(force=True)
+    doc = {
+        "title": data.get("title", ""), "subtitle": data.get("subtitle", ""),
+        "imageUrl": data.get("imageUrl", ""), "linkUrl": data.get("linkUrl", ""),
+        "bgColor": data.get("bgColor", "#7c3aed"), "textColor": data.get("textColor", "#ffffff"),
+        "type": data.get("type", "info"),
+        "order": data.get("order", banners_col.count_documents({})),
+        "active": data.get("active", True),
+        "showFrom": data.get("showFrom", ""), "showUntil": data.get("showUntil", ""),
+        "createdBy": request.user_id, "createdAt": datetime.datetime.utcnow(),
+    }
+    ins = banners_col.insert_one(doc)
+    doc["_id"] = str(ins.inserted_id); doc["createdAt"] = doc["createdAt"].isoformat()
+    log_admin_action("CREATE_BANNER", f"Created banner: {data.get('title')}")
+    return jsonify(doc), 201
+
+@app.delete("/api/banners/<bid>")
+@auth_required
+def delete_banner(bid):
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    banners_col.delete_one({"_id": ObjectId(bid)})
+    log_admin_action("DELETE_BANNER", f"Deleted: {bid}")
+    return jsonify({"msg": "Banner deleted"})
+
+@app.put("/api/banners/<bid>")
+@auth_required
+def update_banner(bid):
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    data = request.get_json(force=True)
+    banners_col.update_one({"_id": ObjectId(bid)}, {"$set": data})
+    return jsonify(serialize(banners_col.find_one({"_id": ObjectId(bid)})))
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  NOTIFICATIONS  /api/admin/notifications
+# ══════════════════════════════════════════════════════════════════════════════
+@app.get("/api/admin/notifications")
+@auth_required
+def get_notifications():
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    items = [serialize(n) for n in notifications_col.find().sort("createdAt", DESCENDING).limit(100)]
+    return jsonify(items)
+
+@app.post("/api/admin/send-notification")
+@auth_required
+def send_notification():
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    data = request.get_json(force=True)
+    title = data.get("title", ""); message = data.get("message", "")
+    target = data.get("target", "all")
+    if not title or not message:
+        return jsonify({"msg": "Title and message required"}), 400
+    announcements.insert_one({
+        "title": title, "message": message, "type": "notification", "target": target,
+        "createdBy": request.user_id, "createdAt": datetime.datetime.utcnow(),
+    })
+    notifications_col.insert_one({
+        "title": title, "message": message, "target": target,
+        "sentBy": request.user_id, "createdAt": datetime.datetime.utcnow(), "status": "delivered"
+    })
+    log_admin_action("SEND_NOTIFICATION", f"Sent: {title} to {target}")
+    return jsonify({"msg": f"Notification sent to {target}!", "status": "ok"})
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  BULK DELETE  /api/admin/bulk-delete
+# ══════════════════════════════════════════════════════════════════════════════
+ALLOWED_DELETE_COLS = {
+    "notes": notes_col, "assignments": assignments, "papers": papers_col,
+    "announcements": announcements, "timetables": timetables, "syllabi": syllabi,
+    "categories": categories, "events": events_col, "subjects": subjects_col,
+    "quick_links": quick_links_col, "banners": banners_col,
+}
+
+@app.post("/api/admin/bulk-delete")
+@auth_required
+def bulk_delete():
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    data = request.get_json(force=True)
+    col_name = data.get("collection")
+    ids = data.get("ids", [])
+    delete_all = data.get("deleteAll", False)
+    if col_name not in ALLOWED_DELETE_COLS:
+        return jsonify({"msg": "Invalid collection"}), 400
+    col = ALLOWED_DELETE_COLS[col_name]
+    if delete_all:
+        deleted = col.delete_many({}).deleted_count
+    elif ids:
+        oids = [ObjectId(i) for i in ids if ObjectId.is_valid(i)]
+        deleted = col.delete_many({"_id": {"$in": oids}}).deleted_count
+    else:
+        return jsonify({"msg": "Provide ids or deleteAll=true"}), 400
+    log_admin_action("BULK_DELETE", f"Deleted {deleted} from {col_name}")
+    return jsonify({"msg": f"Deleted {deleted} items from {col_name}", "deleted": deleted})
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  FEATURE VISIBILITY  /api/admin/feature-visibility
+# ══════════════════════════════════════════════════════════════════════════════
+@app.get("/api/admin/feature-visibility")
+@auth_required
+def get_feature_visibility():
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    s = settings_col.find_one({"key": "student_features"}) or {}
+    return jsonify(s.get("featureVisibility", {}))
+
+@app.post("/api/admin/feature-visibility")
+@auth_required
+def set_feature_visibility():
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    data = request.get_json(force=True)
+    settings_col.update_one({"key": "student_features"}, {"$set": {"featureVisibility": data}}, upsert=True)
+    log_admin_action("UPDATE_FEATURE_VISIBILITY", "Updated per-semester feature visibility")
+    return jsonify({"status": "ok", "msg": "Feature visibility updated!"})
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  APP VERSION  /api/admin/app-version
+# ══════════════════════════════════════════════════════════════════════════════
+@app.get("/api/admin/app-version")
+@auth_required
+def get_app_version():
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    s = settings_col.find_one({"key": "student_features"}) or {}
+    return jsonify({
+        "appVersion": s.get("appVersion", "1.0.0"),
+        "appUpdateMessage": s.get("appUpdateMessage", ""),
+        "appUpdateRequired": s.get("appUpdateRequired", False),
+    })
+
+@app.post("/api/admin/app-version")
+@auth_required
+def update_app_version():
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    data = request.get_json(force=True)
+    updates = {}
+    if "appVersion" in data: updates["appVersion"] = str(data["appVersion"])
+    if "appUpdateMessage" in data: updates["appUpdateMessage"] = str(data["appUpdateMessage"])
+    if "appUpdateRequired" in data: updates["appUpdateRequired"] = bool(data["appUpdateRequired"])
+    settings_col.update_one({"key": "student_features"}, {"$set": updates}, upsert=True)
+    log_admin_action("UPDATE_APP_VERSION", f"Updated app version to {data.get('appVersion')}")
+    return jsonify({"status": "ok", "msg": "App version updated!"})
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  FULL STATS  /api/admin/full-stats
+# ══════════════════════════════════════════════════════════════════════════════
+@app.get("/api/admin/full-stats")
+@auth_required
+def get_full_stats():
+    if not is_admin(request.user_id): return jsonify({"msg": "Admin required"}), 403
+    six_months_ago = datetime.datetime.utcnow() - datetime.timedelta(days=180)
+    pipeline = [
+        {"$match": {"createdAt": {"$gte": six_months_ago}, "role": {"$ne": "admin"}}},
+        {"$group": {"_id": {"year": {"$year": "$createdAt"}, "month": {"$month": "$createdAt"}}, "count": {"$sum": 1}}},
+        {"$sort": {"_id": 1}}
+    ]
+    growth_data = [{"month": f"{g['_id']['year']}-{g['_id']['month']:02d}", "count": g["count"]} for g in users.aggregate(pipeline)]
+    total_size = sum(os.path.getsize(os.path.join(UPLOAD_DIR, f))
+                     for f in os.listdir(UPLOAD_DIR) if os.path.isfile(os.path.join(UPLOAD_DIR, f))) if os.path.exists(UPLOAD_DIR) else 0
+    file_count = len([f for f in os.listdir(UPLOAD_DIR) if os.path.isfile(os.path.join(UPLOAD_DIR, f))]) if os.path.exists(UPLOAD_DIR) else 0
+    return jsonify({
+        "totalStudents": users.count_documents({"role": {"$ne": "admin"}}),
+        "totalNotes": notes_col.count_documents({}),
+        "totalAssignments": assignments.count_documents({}),
+        "totalPapers": papers_col.count_documents({}),
+        "totalAnnouncements": announcements.count_documents({}),
+        "totalTimetables": timetables.count_documents({}),
+        "totalSyllabi": syllabi.count_documents({}),
+        "totalCategories": categories.count_documents({}),
+        "totalEvents": events_col.count_documents({}),
+        "totalSubjects": subjects_col.count_documents({}),
+        "totalSemesters": semesters_col.count_documents({}),
+        "totalQuickLinks": quick_links_col.count_documents({}),
+        "totalBanners": banners_col.count_documents({}),
+        "totalNotifications": notifications_col.count_documents({}),
+        "totalFeedback": feedback_col.count_documents({}),
+        "storageUsed": total_size, "fileCount": file_count,
+        "maxStorage": 100 * 1024 * 1024, "studentGrowth": growth_data,
+    })
+
+
 
 # ─── Error Handler ─────────────────────────────────────────────────────────────
 @app.errorhandler(Exception)

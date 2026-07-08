@@ -41,7 +41,7 @@
   <script>
 if('serviceWorker' in navigator){
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=9').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=11').then(reg => {
           reg.addEventListener('updatefound', () => {
             const nw = reg.installing;
             if (nw) {
@@ -299,7 +299,6 @@ tailwind.config = {
       <button id="nav-timetable"     onclick="goto('timetable')"     class="nav-btn"><i data-lucide="calendar-days"  class="w-4 h-4 shrink-0"></i>Timetable</button>
       <button id="nav-syllabus"      onclick="goto('syllabus')"      class="nav-btn"><i data-lucide="book-open"      class="w-4 h-4 shrink-0"></i>Syllabus</button>
       <button id="nav-papers"        onclick="goto('papers')"        class="nav-btn"><i data-lucide="file-text"      class="w-4 h-4 shrink-0"></i>Previous Papers</button>
-      <button id="nav-planner"       onclick="goto('planner')"       class="nav-btn"><i data-lucide="calendar"       class="w-4 h-4 shrink-0"></i>Study Planner</button>
       <button id="nav-focus"         onclick="goto('focus')"         class="nav-btn"><i data-lucide="timer"          class="w-4 h-4 shrink-0"></i>Focus Zone</button>
     </nav>
     <div class="px-4 py-4 space-y-2" style="border-top:1px solid rgba(255,255,255,.08)">
@@ -366,13 +365,12 @@ tailwind.config = {
           <div class="flex items-center gap-2 mb-4"><i data-lucide="megaphone" class="w-5 h-5 text-violet-500"></i><h3 class="font-bold text-zinc-900 dark:text-white text-base">Latest Announcements</h3></div>
           <div id="home-ann" class="space-y-3"><div class="skeleton h-16 w-full"></div><div class="skeleton h-16 w-full mt-3"></div></div>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
           <button onclick="goto('notes')"         class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="notebook-text" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Study Notes</p><p class="text-xs text-zinc-500">View all</p></div></button>
           <button onclick="goto('assignments')"   class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="clipboard-list" class="w-5 h-5 text-orange-500"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Assignments</p><p class="text-xs text-zinc-500">View tasks</p></div></button>
           <button onclick="goto('timetable')"     class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="calendar-days" class="w-5 h-5 text-teal-600 dark:text-teal-400"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Timetable</p><p class="text-xs text-zinc-500">Class schedule</p></div></button>
           <button onclick="goto('syllabus')"      class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="book-open" class="w-5 h-5 text-pink-600 dark:text-pink-400"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Syllabus</p><p class="text-xs text-zinc-500">Course content</p></div></button>
           <button onclick="goto('papers')"        class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="file-text" class="w-5 h-5 text-emerald-600 dark:text-emerald-400"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Past Papers</p><p class="text-xs text-zinc-500">Exam practice</p></div></button>
-          <button onclick="goto('planner')"       class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="calendar" class="w-5 h-5 text-indigo-600 dark:text-indigo-400"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Study Planner</p><p class="text-xs text-zinc-500">Goals & countdown</p></div></button>
         </div>
       </section>
       <section id="view-announcements" class="hidden fade-in"><div id="list-announcements" class="space-y-4"></div></section>
@@ -415,66 +413,8 @@ tailwind.config = {
           <button onclick="loadMorePapers()" class="px-6 py-2 bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 text-zinc-800 dark:text-zinc-200 rounded-xl text-xs font-bold transition-all">Load More</button>
         </div>
       </section>
-      <section id="view-planner" class="hidden fade-in space-y-6">
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="card p-5 space-y-4">
-            <div class="flex items-center gap-2 font-bold text-base text-zinc-900 dark:text-white"><i data-lucide="hourglass" class="w-5 h-5 text-indigo-500"></i><span>Exam Countdown</span></div>
-            <div id="countdown-display" class="grid grid-cols-4 gap-2 text-center">
-              <div class="bg-indigo-50 dark:bg-indigo-900/20 p-2 rounded-xl"><p id="cd-days" class="text-xl font-bold text-indigo-600 dark:text-indigo-400">00</p><p class="text-[10px] text-zinc-400 font-medium">Days</p></div>
-              <div class="bg-indigo-50 dark:bg-indigo-900/20 p-2 rounded-xl"><p id="cd-hours" class="text-xl font-bold text-indigo-600 dark:text-indigo-400">00</p><p class="text-[10px] text-zinc-400 font-medium">Hours</p></div>
-              <div class="bg-indigo-50 dark:bg-indigo-900/20 p-2 rounded-xl"><p id="cd-mins" class="text-xl font-bold text-indigo-600 dark:text-indigo-400">00</p><p class="text-[10px] text-zinc-400 font-medium">Mins</p></div>
-              <div class="bg-indigo-50 dark:bg-indigo-900/20 p-2 rounded-xl"><p id="cd-secs" class="text-xl font-bold text-indigo-600 dark:text-indigo-400">00</p><p class="text-[10px] text-zinc-400 font-medium">Secs</p></div>
-            </div>
-            <div class="flex gap-2">
-              <input id="cd-title-input" type="text" placeholder="Exam Title (e.g. Finals)" class="flex-1 px-3 py-1.5 text-xs" />
-              <input id="cd-date-input" type="date" class="px-3 py-1.5 text-xs" />
-              <button onclick="saveCountdown()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold">Set</button>
-            </div>
-            <p id="cd-target-label" class="text-xs text-zinc-400 text-center"></p>
-          </div>
-          <div class="card p-5 space-y-4">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2 font-bold text-base text-zinc-900 dark:text-white"><i data-lucide="check-square" class="w-5 h-5 text-emerald-500"></i><span>Daily Goals</span></div>
-              <span id="goals-progress" class="text-xs text-zinc-400">0/0 done</span>
-            </div>
-            <div>
-              <div class="progress-bar mb-3"><div id="goals-fill" class="progress-fill" style="width:0%"></div></div>
-              <div class="flex gap-2">
-                <input id="goal-input" type="text" placeholder="Add a new goal..." class="flex-1 px-3 py-1.5 text-xs" />
-                <button onclick="addGoal()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold">Add</button>
-              </div>
-            </div>
-            <div id="goals-list" class="space-y-2 max-h-40 overflow-y-auto pr-1"></div>
-          </div>
-        </div>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="card p-5 space-y-4">
-            <div class="flex items-center gap-2 font-bold text-base text-zinc-900 dark:text-white"><i data-lucide="bar-chart-2" class="w-5 h-5 text-amber-500"></i><span>Study Statistics</span></div>
-            <div class="grid grid-cols-3 gap-3">
-              <div class="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-900/30 text-center">
-                <p id="stats-pomos" class="text-2xl font-bold text-amber-600 dark:text-amber-400">0</p>
-                <p class="text-xs text-zinc-500 mt-1">Pomodoros</p>
-              </div>
-              <div class="p-4 rounded-xl bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 text-center">
-                <p id="stats-time" class="text-2xl font-bold text-blue-600 dark:text-blue-400">0m</p>
-                <p class="text-xs text-zinc-500 mt-1">Focus Time</p>
-              </div>
-              <div class="p-4 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/30 text-center">
-                <p id="stats-streak" class="text-2xl font-bold text-red-500">0</p>
-                <p class="text-xs text-zinc-500 mt-1">&#128293; Streak</p>
-              </div>
-            </div>
-          </div>
-          <div class="card p-5 space-y-4">
-            <div class="flex items-center gap-2 font-bold text-base text-zinc-900 dark:text-white"><i data-lucide="book-marked" class="w-5 h-5 text-pink-500"></i><span>Revision Planner</span></div>
-            <div class="flex gap-2">
-              <input id="rev-subject" type="text" placeholder="Subject/Topic" class="flex-1 px-3 py-1.5 text-xs" />
-              <button onclick="addRevision()" class="px-3 py-1.5 bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-xs font-semibold">Track</button>
-            </div>
-            <div id="rev-list" class="space-y-2 max-h-40 overflow-y-auto pr-1"></div>
-          </div>
-        </div>
-      </section>
+
+
       <section id="view-focus" class="hidden fade-in space-y-6">
         <div class="card p-8 flex flex-col items-center justify-center text-center space-y-6 max-w-xl mx-auto">
           <div class="flex gap-2 bg-zinc-100 dark:bg-zinc-800 p-1.5 rounded-xl text-xs font-semibold">
@@ -633,7 +573,6 @@ const API = 'https://hub-6yrl.onrender.com/api';
     timetable:     ['Timetable &#128197;', 'Your weekly class schedule'],
     syllabus:      ['Syllabus &#128218;', 'Course topics and content'],
     papers:        ['Previous Papers &#128196;', 'Past exam papers for practice'],
-    planner:       ['Study Planner &#128197;', 'Track your exams, goals and revision tasks'],
     focus:         ['Focus Zone &#9201;', 'Pomodoro timer for distraction-free study']
   };
 
@@ -653,7 +592,6 @@ const API = 'https://hub-6yrl.onrender.com/api';
   const loaded = {};
   async function loadView(v) {
     if (v === 'home')    { loadHome(); return; }
-    if (v === 'planner') { initPlanner(); return; }
     if (v === 'focus')   { initPomo(); return; }
     if (loaded[v]) return;
     const map = {
@@ -1417,13 +1355,16 @@ const API = 'https://hub-6yrl.onrender.com/api';
   const FEATURE_MAP = {
     search:       { extras: ['universal-search', 'universal-search-suggestions'] },
     bookmarks:    { extras: ['btn-notes-bookmarked', 'btn-papers-bookmarked'] },
-    planner:      { nav: 'nav-planner',       section: 'view-planner' },
     focus:        { nav: 'nav-focus',         section: 'view-focus' },
+    notes:        { nav: 'nav-notes',         section: 'view-notes' },
     announcements:{ nav: 'nav-announcements', section: 'view-announcements' },
     timetable:    { nav: 'nav-timetable',     section: 'view-timetable' },
     syllabus:     { nav: 'nav-syllabus',      section: 'view-syllabus' },
     papers:       { nav: 'nav-papers',        section: 'view-papers' },
-    assignments:  { nav: 'nav-assignments',   section: 'view-assignments' }
+    assignments:  { nav: 'nav-assignments',   section: 'view-assignments' },
+    events:       { extras: ['home-events-section'] },
+    quickLinks:   { extras: ['home-quicklinks-section'] },
+    banners:      { extras: ['home-banners-section'] }
   };
 
   function applySettings(s) {
@@ -1447,7 +1388,7 @@ const API = 'https://hub-6yrl.onrender.com/api';
     });
     
     // Reset quick actions
-    const qButtons = ['planner', 'papers', 'assignments', 'timetable', 'syllabus'];
+    const qButtons = ['papers', 'assignments', 'timetable', 'syllabus'];
     qButtons.forEach(btn => {
       var b = document.querySelector('button[onclick*="' + btn + '"]');
       if (b) b.classList.remove('feature-disabled');
@@ -1471,7 +1412,7 @@ const API = 'https://hub-6yrl.onrender.com/api';
     const bBanner = document.getElementById('broadcast-banner');
     if (bBanner) bBanner.classList.add('hidden');
 
-    // 2. Apply disabled controls
+    // 2. Apply disabled controls from FEATURE_MAP
     Object.keys(FEATURE_MAP).forEach(function(key) {
       if (s[key] === false) {
         var map = FEATURE_MAP[key];
@@ -1481,11 +1422,10 @@ const API = 'https://hub-6yrl.onrender.com/api';
       }
     });
 
-    if (s['planner'] === false) { var b = document.querySelector('button[onclick*="planner"]'); if(b) b.classList.add('feature-disabled'); }
-    if (s['papers'] === false)  { var b2 = document.querySelector('button[onclick*="papers"]'); if(b2) b2.classList.add('feature-disabled'); }
+    if (s['papers'] === false)      { var b2 = document.querySelector('button[onclick*="papers"]');      if(b2) b2.classList.add('feature-disabled'); }
     if (s['assignments'] === false) { var b3 = document.querySelector('button[onclick*="assignments"]'); if(b3) b3.classList.add('feature-disabled'); }
-    if (s['timetable'] === false)   { var b4 = document.querySelector('button[onclick*="timetable"]'); if(b4) b4.classList.add('feature-disabled'); }
-    if (s['syllabus'] === false)    { var b5 = document.querySelector('button[onclick*="syllabus"]'); if(b5) b5.classList.add('feature-disabled'); }
+    if (s['timetable'] === false)   { var b4 = document.querySelector('button[onclick*="timetable"]');   if(b4) b4.classList.add('feature-disabled'); }
+    if (s['syllabus'] === false)    { var b5 = document.querySelector('button[onclick*="syllabus"]');    if(b5) b5.classList.add('feature-disabled'); }
 
     // 3. Apply advanced controls
     if (s.maintenanceMode === true) {
@@ -1533,7 +1473,8 @@ const API = 'https://hub-6yrl.onrender.com/api';
     });
   });
   var appView = document.getElementById('app-view');
-  if (appView) observer.observe(appView, { attributes: true, attributeFilter: ['class'] });
+  var observerOpts = { attributes: true, attributeFilter: ['class'] };
+  if (appView) observer.observe(appView, observerOpts);
 })();
 </script>
 </body>
