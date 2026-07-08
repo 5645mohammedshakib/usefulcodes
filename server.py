@@ -792,6 +792,15 @@ def migrate_timetables():
 @app.get("/api/settings")
 def get_student_settings():
     s = settings_col.find_one({"key": "student_features"})
+    default_features = [
+        { "key": "announcements", "title": "Announcements", "icon": "megaphone", "type": "builtin", "enabled": True },
+        { "key": "notes", "title": "Study Notes", "icon": "notebook-text", "type": "builtin", "enabled": True },
+        { "key": "assignments", "title": "Assignments", "icon": "clipboard-list", "type": "builtin", "enabled": True },
+        { "key": "timetable", "title": "Timetable", "icon": "calendar-days", "type": "builtin", "enabled": True },
+        { "key": "syllabus", "title": "Syllabus", "icon": "book-open", "type": "builtin", "enabled": True },
+        { "key": "papers", "title": "Previous Papers", "icon": "file-text", "type": "builtin", "enabled": True },
+        { "key": "focus", "title": "Focus Zone", "icon": "timer", "type": "builtin", "enabled": True }
+    ]
     if not s:
         default = {
             "key": "student_features",
@@ -806,9 +815,14 @@ def get_student_settings():
             "homePageSections": ["announcements","notes","assignments","papers","timetable","syllabus","events","quickLinks"],
             "featureVisibility": {},
             "appVersion": "1.0.0", "appUpdateMessage": "", "appUpdateRequired": False,
+            "features": default_features
         }
         settings_col.insert_one(default)
         s = default
+    else:
+        if "features" not in s:
+            s["features"] = default_features
+            settings_col.update_one({"key": "student_features"}, {"$set": {"features": default_features}})
     return jsonify(serialize(s))
 
 @app.post("/api/admin/settings")
@@ -836,6 +850,8 @@ def update_student_settings():
         updates["homePageSections"] = data["homePageSections"]
     if "featureVisibility" in data and isinstance(data["featureVisibility"], dict):
         updates["featureVisibility"] = data["featureVisibility"]
+    if "features" in data and isinstance(data["features"], list):
+        updates["features"] = data["features"]
     settings_col.update_one({"key": "student_features"}, {"$set": updates}, upsert=True)
     log_admin_action("UPDATE_SETTINGS", "Updated student portal settings")
     return jsonify({"status": "ok", "msg": "Settings updated successfully!"})

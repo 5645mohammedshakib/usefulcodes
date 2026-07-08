@@ -41,7 +41,7 @@
   <script>
 if('serviceWorker' in navigator){
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=12').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=13').then(reg => {
           reg.addEventListener('updatefound', () => {
             const nw = reg.installing;
             if (nw) {
@@ -292,7 +292,7 @@ tailwind.config = {
         <p class="text-xs text-zinc-400">Learning Portal</p>
       </div>
     </div>
-    <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
+    <nav id="sidebar-nav" class="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
       <button id="nav-home"          onclick="goto('home')"          class="nav-btn active"><i data-lucide="layout-dashboard" class="w-4 h-4 shrink-0"></i>Home</button>
       <button id="nav-announcements" onclick="goto('announcements')" class="nav-btn"><i data-lucide="megaphone"       class="w-4 h-4 shrink-0"></i>Announcements</button>
       <button id="nav-notes"         onclick="goto('notes')"         class="nav-btn"><i data-lucide="notebook-text"  class="w-4 h-4 shrink-0"></i>Study Notes</button>
@@ -444,7 +444,11 @@ tailwind.config = {
           <button onclick="toggleFocusMode(true)" class="text-xs text-violet-500 hover:text-violet-600 font-semibold flex items-center gap-1.5 mt-2">
             <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> Enter Focus Mode (Fullscreen)
           </button>
-        </div>
+      </section>
+
+      <!-- ── Dynamic Custom Feature Section ── -->
+      <section id="view-dynamic-feature" class="hidden fade-in space-y-6">
+        <div class="card p-6 min-h-[50vh]" id="dynamic-feature-content"></div>
       </section>
     </div>
   </main>
@@ -577,10 +581,34 @@ const API = 'https://hub-6yrl.onrender.com/api';
     focus:         ['Focus Zone &#9201;', 'Pomodoro timer for distraction-free study']
   };
 
-  function goto(view) {
+  function goto(view, customData = null) {
     currentTab = view;
     document.querySelectorAll('[id^="view-"]').forEach(s => s.classList.add('hidden'));
     document.querySelectorAll('[id^="nav-"]').forEach(b => b.classList.remove('active'));
+    
+    if (customData) {
+      const sec = document.getElementById('view-dynamic-feature');
+      if (sec) sec.classList.remove('hidden');
+      const nav = document.getElementById('nav-' + view);
+      if (nav) nav.classList.add('active');
+      toggleSidebar(false);
+      document.getElementById('page-title').innerHTML = customData.title;
+      document.getElementById('page-sub').innerText   = customData.type === 'link' ? 'External Web Resource' : 'Custom Section';
+      const contentEl = document.getElementById('dynamic-feature-content');
+      if (customData.type === 'link') {
+        contentEl.innerHTML = `
+          <div class="flex flex-col gap-4" style="height:70vh">
+            <a href="${customData.value}" target="_blank" class="px-4 py-2 bg-purple-650 hover:bg-purple-750 text-white rounded-lg text-xs font-bold w-fit flex items-center gap-1.5"><i data-lucide="external-link" class="w-3.5 h-3.5"></i>Open in New Tab</a>
+            <iframe src="${customData.value}" class="w-full flex-1 border border-zinc-200 dark:border-zinc-800 rounded-2xl bg-white dark:bg-black shadow-inner" style="min-height:480px"></iframe>
+          </div>
+        `;
+      } else {
+        contentEl.innerHTML = `<div class="prose dark:prose-invert text-zinc-800 dark:text-zinc-200 text-sm leading-relaxed">${customData.value || 'No content provided.'}</div>`;
+      }
+      lucide.createIcons();
+      return;
+    }
+
     const sec = document.getElementById('view-' + view); if (sec) sec.classList.remove('hidden');
     const nav = document.getElementById('nav-' + view);   if (nav) nav.classList.add('active');
     toggleSidebar(false);
@@ -589,6 +617,13 @@ const API = 'https://hub-6yrl.onrender.com/api';
     document.getElementById('page-sub').innerText   = t[1];
     loadView(view);
   }
+
+  window.gotoCustom = function(key) {
+    const f = currentFeaturesList.find(item => item.key === key);
+    if (f) {
+      goto(key, f);
+    }
+  };
 
   const loaded = {};
   async function loadView(v) {
@@ -1352,6 +1387,7 @@ const API = 'https://hub-6yrl.onrender.com/api';
 <script>
 (function(){
   const API = 'https://hub-6yrl.onrender.com/api';
+  let currentFeaturesList = [];
 
   const FEATURE_MAP = {
     search:       { extras: ['universal-search', 'universal-search-suggestions'] },
@@ -1368,7 +1404,36 @@ const API = 'https://hub-6yrl.onrender.com/api';
     banners:      { extras: ['home-banners-section'] }
   };
 
+  function renderSidebarNav(features) {
+    currentFeaturesList = features || [];
+    const container = document.getElementById('sidebar-nav');
+    if (!container) return;
+    
+    let html = `<button id="nav-home" onclick="goto('home')" class="nav-btn ${currentTab === 'home' ? 'active' : ''}"><i data-lucide="layout-dashboard" class="w-4 h-4 shrink-0"></i>Home</button>`;
+    
+    currentFeaturesList.forEach(f => {
+      if (f.enabled !== false) {
+        const isActive = currentTab === f.key;
+        if (f.type === 'builtin') {
+          html += `<button id="nav-${f.key}" onclick="goto('${f.key}')" class="nav-btn ${isActive ? 'active' : ''}"><i data-lucide="${f.icon || 'star'}" class="w-4 h-4 shrink-0"></i>${f.title}</button>`;
+        } else {
+          html += `<button id="nav-${f.key}" onclick="gotoCustom('${f.key}')" class="nav-btn ${isActive ? 'active' : ''}"><i data-lucide="${f.icon || 'star'}" class="w-4 h-4 shrink-0"></i>${f.title}</button>`;
+        }
+      }
+    });
+    
+    container.innerHTML = html;
+    lucide.createIcons();
+  }
+
   function applySettings(s) {
+    if (s.features) {
+      s.features.forEach(f => {
+        s[f.key] = f.enabled;
+      });
+      renderSidebarNav(s.features);
+    }
+
     // 1. Reset all elements first to make sure they show back if enabled
     Object.keys(FEATURE_MAP).forEach(function(key) {
       var map = FEATURE_MAP[key];
