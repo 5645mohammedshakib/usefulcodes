@@ -10,28 +10,14 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="Student Hub" />
-  <script>
-    if('serviceWorker' in navigator){
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=4').then(reg => {
-          reg.update();
-        }).catch(err => console.error('SW registration failed:', err));
-      });
-    }
-  </script>
+  <script>eval(atob('aWYoJ3NlcnZpY2VXb3JrZXInIGluIG5hdmlnYXRvcil7CiAgICAgIHdpbmRvdy5hZGRFdmVudExpc3RlbmVyKCdsb2FkJywgKCkg'+'PT4gewogICAgICAgIG5hdmlnYXRvci5zZXJ2aWNlV29ya2VyLnJlZ2lzdGVyKCcuL3N3LmpzP3Y9NScpLnRoZW4ocmVnID0+IHsK'+'ICAgICAgICAgIHJlZy51cGRhdGUoKTsKICAgICAgICAgIHJlZy5vbnVwZGF0ZWZvdW5kID0gKCkgPT4gewogICAgICAgICAgICBj'+'b25zdCBpbnN0YWxsaW5nV29ya2VyID0gcmVnLmluc3RhbGxpbmc7CiAgICAgICAgICAgIGluc3RhbGxpbmdXb3JrZXIub25zdGF0'+'ZWNoYW5nZSA9ICgpID0+IHsKICAgICAgICAgICAgICBpZiAoaW5zdGFsbGluZ1dvcmtlci5zdGF0ZSA9PT0gJ2luc3RhbGxlZCcp'+'IHsKICAgICAgICAgICAgICAgIGlmIChuYXZpZ2F0b3Iuc2VydmljZVdvcmtlci5jb250cm9sbGVyKSB7CiAgICAgICAgICAgICAg'+'ICAgIHdpbmRvdy5sb2NhdGlvbi5yZWxvYWQoKTsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICB9CiAgICAgICAgICAg'+'IH07CiAgICAgICAgICB9OwogICAgICAgIH0pLmNhdGNoKGVyciA9PiBjb25zb2xlLmVycm9yKCdTVyByZWdpc3RyYXRpb24gZmFp'+'bGVkOicsIGVycikpOwogICAgICB9KTsKICAgIH0='))</script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: { extend: { fontFamily: { sans: ['Inter','sans-serif'] } } }
-    };
-  </script>
+  <script>eval(atob('dGFpbHdpbmQuY29uZmlnID0gewogICAgICBkYXJrTW9kZTogJ2NsYXNzJywKICAgICAgdGhlbWU6IHsgZXh0ZW5kOiB7IGZvbnRG'+'YW1pbHk6IHsgc2FuczogWydJbnRlcicsJ3NhbnMtc2VyaWYnXSB9IH0gfQogICAgfTs='))</script>
   <style>
     *{font-family:'Inter',sans-serif}
     ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:linear-gradient(to bottom,#f43f5e,#a855f7,#3b82f6);border-radius:9px}
-
     /* === RAINBOW ANIMATED BACKGROUND === */
     body {
       background: #0a0a0f;
@@ -56,7 +42,6 @@
       50%  { filter: hue-rotate(60deg)  brightness(1.1); }
       100% { filter: hue-rotate(120deg) brightness(1); }
     }
-
     /* === FLOATING ORBS === */
     .orb { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.35; pointer-events: none; z-index: 0; animation: float 8s ease-in-out infinite; }
     .orb-1 { width:350px;height:350px;background:radial-gradient(circle,#f43f5e,transparent); top:-80px;left:-80px; animation-delay:0s; }
@@ -68,7 +53,6 @@
       0%,100% { transform: translateY(0px) scale(1); }
       50%      { transform: translateY(-30px) scale(1.08); }
     }
-
     /* === GLASSMORPHISM === */
     .glass {
       background: rgba(255,255,255,0.06);
@@ -87,7 +71,6 @@
     }
     .card { border-radius: 1rem; }
     .dark .card { background: rgba(255,255,255,0.05); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
-
     /* === RAINBOW GRADIENT TEXT === */
     .rainbow-text {
       background: linear-gradient(90deg, #f43f5e, #f97316, #eab308, #22c55e, #06b6d4, #6366f1, #a855f7, #ec4899);
@@ -98,7 +81,6 @@
       animation: rainbowText 4s linear infinite;
     }
     @keyframes rainbowText { to { background-position: 200% center; } }
-
     /* === RAINBOW BORDER === */
     .rainbow-border {
       position: relative;
@@ -118,7 +100,6 @@
       pointer-events: none;
     }
     @keyframes rainbowBorder { to { background-position: 200% center; } }
-
     /* === RAINBOW BUTTON === */
     .btn-rainbow {
       background: linear-gradient(90deg, #f43f5e, #f97316, #eab308, #22c55e, #06b6d4, #6366f1, #a855f7, #ec4899);
@@ -130,21 +111,17 @@
       box-shadow: 0 4px 20px rgba(139,92,246,0.4);
     }
     .btn-rainbow:hover { box-shadow: 0 6px 30px rgba(244,63,94,0.5); transform: translateY(-1px); }
-
     /* === NAV === */
     .nav-btn{width:100%;display:flex;align-items:center;gap:.75rem;padding:.625rem 1rem;border-radius:.75rem;font-size:.875rem;font-weight:600;transition:all .2s;color:rgba(255,255,255,0.5)}
     .nav-btn:hover{background:rgba(255,255,255,0.08);color:white;transform:translateX(2px)}
     .nav-btn.active{background:linear-gradient(90deg,rgba(244,63,94,0.2),rgba(168,85,247,0.2));color:white;border-left:3px solid transparent;border-image:linear-gradient(to bottom,#f43f5e,#a855f7) 1}
-
     /* === TAGS === */
     .tag{display:inline-flex;align-items:center;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);font-size:.75rem;font-weight:500;padding:.2rem .7rem;border-radius:9999px;border:1px solid rgba(255,255,255,0.1)}
     .pill-dl{display:inline-flex;align-items:center;gap:.35rem;background:linear-gradient(90deg,rgba(244,63,94,0.3),rgba(168,85,247,0.3));color:white;font-size:.75rem;font-weight:700;padding:.25rem .7rem;border-radius:.5rem;text-decoration:none;border:1px solid rgba(255,255,255,0.2)}
-
     /* === ANIMATIONS === */
     .fade-in{animation:fi .3s ease}@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
     .skeleton{background:rgba(255,255,255,0.06);border-radius:.5rem;animation:pulse 1.5s infinite}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
     /* === INPUT === */
     input, select, textarea {
       background: rgba(255,255,255,0.07) !important;
@@ -154,24 +131,18 @@
     }
     input::placeholder { color: rgba(255,255,255,0.35) !important; }
     input:focus { border-color: rgba(168,85,247,0.6) !important; box-shadow: 0 0 0 3px rgba(168,85,247,0.15) !important; outline: none; }
-
     /* === GLOW === */
     .glow-purple { box-shadow: 0 0 20px rgba(168,85,247,0.3); }
     .glow-pink   { box-shadow: 0 0 20px rgba(244,63,94,0.3); }
   </style>
-
 </head>
 <body class="text-white min-h-screen">
-<!-- Rainbow Background -->
 <div class="rainbow-bg"></div>
-<!-- Floating Orbs -->
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
 <div class="orb orb-3"></div>
 <div class="orb orb-4"></div>
 <div class="orb orb-5"></div>
-
-<!-- AUTH SCREEN -->
 <div id="auth-view" class="min-h-screen flex items-center justify-center p-4 relative z-10">
   <div class="w-full max-w-sm">
     <div class="glass rainbow-border p-8" style="border-radius:1.5rem">
@@ -182,20 +153,14 @@
         <h1 class="text-2xl font-bold rainbow-text">Student Hub</h1>
         <p class="text-sm mt-1" style="color:rgba(255,255,255,0.5)">Your Learning Portal</p>
       </div>
-
-      <!-- Tabs -->
       <div class="flex rounded-xl p-1 mb-6" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1)">
         <button id="tab-login"    onclick="switchTab('login')"    class="flex-1 py-1.5 text-sm font-semibold rounded-lg transition-all" style="background:linear-gradient(90deg,rgba(244,63,94,0.4),rgba(168,85,247,0.4));color:white;box-shadow:0 2px 10px rgba(168,85,247,0.3)">Sign In</button>
         <button id="tab-register" onclick="switchTab('register')" class="flex-1 py-1.5 text-sm font-semibold rounded-lg transition-all" style="color:rgba(255,255,255,0.5)">Register</button>
       </div>
-
-      <!-- Alert -->
       <div id="auth-alert" class="hidden items-center gap-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/40 text-red-600 dark:text-red-400 text-sm rounded-xl px-4 py-3 mb-4">
         <i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i>
         <span id="auth-alert-msg"></span>
       </div>
-
-      <!-- Login -->
       <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
         <div>
           <label class="text-xs font-semibold uppercase tracking-wider text-zinc-500 block mb-1.5">Username / Email</label>
@@ -215,8 +180,6 @@
           <i data-lucide="log-in" class="w-4 h-4"></i><span>Sign In</span>
         </button>
       </form>
-
-      <!-- Register -->
       <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4 hidden">
         <div>
           <label class="text-xs font-semibold uppercase tracking-wider text-zinc-500 block mb-1.5">Full Name</label>
@@ -250,11 +213,7 @@
     <p class="text-center text-xs text-zinc-400 mt-5">Student Hub &copy; 2026 &mdash; For Students | <a href="#" onclick="forceReset(event)" class="underline hover:text-white transition-colors">Reset Cache</a></p>
   </div>
 </div>
-
-<!-- APP VIEW -->
 <div id="app-view" class="hidden min-h-screen flex flex-col md:flex-row relative z-10">
-
-  <!-- Mobile top bar -->
   <header class="md:hidden sticky top-0 z-40 flex items-center justify-between px-4 py-3" style="background:rgba(10,10,15,0.8);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.1)">
     <button onclick="toggleSidebar(true)" class="p-2 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all">
       <i data-lucide="menu" class="w-5 h-5"></i>
@@ -264,11 +223,7 @@
       <i data-lucide="log-out" class="w-4 h-4"></i>
     </button>
   </header>
-
-  <!-- Sidebar overlay -->
   <div id="sidebar-overlay" onclick="toggleSidebar(false)" class="hidden fixed inset-0 bg-black/50 z-40 md:hidden"></div>
-
-  <!-- Sidebar -->
   <aside id="sidebar" class="fixed md:sticky top-0 left-0 h-screen w-64 z-50 -translate-x-full md:translate-x-0 transition-transform duration-300 flex flex-col" style="background:rgba(10,10,15,0.85);backdrop-filter:blur(24px);border-right:1px solid rgba(255,255,255,0.08)">
     <div class="px-5 py-5 flex items-center gap-3" style="border-bottom:1px solid rgba(255,255,255,0.08)">
       <div class="w-10 h-10 rounded-2xl flex items-center justify-center shadow" style="background:linear-gradient(135deg,#f43f5e,#f97316,#eab308,#22c55e,#06b6d4,#a855f7)">
@@ -279,7 +234,6 @@
         <p class="text-xs text-zinc-400">Learning Portal</p>
       </div>
     </div>
-
     <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
       <button id="nav-home"          onclick="goto('home')"          class="nav-btn active"><i data-lucide="layout-dashboard" class="w-4 h-4 shrink-0"></i>Home</button>
       <button id="nav-announcements" onclick="goto('announcements')" class="nav-btn"><i data-lucide="megaphone"       class="w-4 h-4 shrink-0"></i>Announcements</button>
@@ -289,7 +243,6 @@
       <button id="nav-syllabus"      onclick="goto('syllabus')"      class="nav-btn"><i data-lucide="book-open"      class="w-4 h-4 shrink-0"></i>Syllabus</button>
       <button id="nav-papers"        onclick="goto('papers')"        class="nav-btn"><i data-lucide="file-text"      class="w-4 h-4 shrink-0"></i>Previous Papers</button>
     </nav>
-
     <div class="px-4 py-4 border-t border-zinc-100 dark:border-zinc-800">
       <div class="flex items-center gap-3 mb-3">
         <div id="s-avatar" class="w-9 h-9 rounded-full bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center text-white font-bold text-sm shrink-0">S</div>
@@ -308,19 +261,14 @@
       </button>
     </div>
   </aside>
-
-  <!-- Main -->
   <main class="flex-1 overflow-y-auto bg-zinc-50 dark:bg-[#09090b]">
     <div class="max-w-5xl mx-auto px-4 py-6 space-y-6">
-
       <div class="flex items-center justify-between">
         <div>
           <h2 id="page-title" class="text-xl font-bold text-zinc-900 dark:text-white">Welcome 👋</h2>
           <p  id="page-sub"   class="text-sm text-zinc-500 mt-0.5">Here's what's new today</p>
         </div>
       </div>
-
-      <!-- HOME -->
       <section id="view-home" class="space-y-5 fade-in">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div class="card p-4 flex flex-col gap-2"><div class="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center"><i data-lucide="notebook-text" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i></div><p id="stat-notes" class="text-2xl font-bold text-zinc-900 dark:text-white">—</p><p class="text-xs text-zinc-500">Notes</p></div>
@@ -328,12 +276,10 @@
           <div class="card p-4 flex flex-col gap-2"><div class="w-9 h-9 rounded-xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center"><i data-lucide="megaphone" class="w-5 h-5 text-violet-600 dark:text-violet-400"></i></div><p id="stat-ann" class="text-2xl font-bold text-zinc-900 dark:text-white">—</p><p class="text-xs text-zinc-500">Announcements</p></div>
           <div class="card p-4 flex flex-col gap-2"><div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center"><i data-lucide="file-text" class="w-5 h-5 text-emerald-600 dark:text-emerald-400"></i></div><p id="stat-papers" class="text-2xl font-bold text-zinc-900 dark:text-white">—</p><p class="text-xs text-zinc-500">Papers</p></div>
         </div>
-
         <div class="card p-5">
           <div class="flex items-center gap-2 mb-4"><i data-lucide="megaphone" class="w-5 h-5 text-violet-500"></i><h3 class="font-bold text-zinc-900 dark:text-white text-base">Latest Announcements</h3></div>
           <div id="home-ann" class="space-y-3"><div class="skeleton h-16 w-full"></div><div class="skeleton h-16 w-full mt-3"></div></div>
         </div>
-
         <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
           <button onclick="goto('notes')"         class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="notebook-text" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Study Notes</p><p class="text-xs text-zinc-500">View all</p></div></button>
           <button onclick="goto('assignments')"   class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="clipboard-list" class="w-5 h-5 text-orange-500"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Assignments</p><p class="text-xs text-zinc-500">View tasks</p></div></button>
@@ -343,11 +289,7 @@
           <button onclick="goto('announcements')" class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="megaphone" class="w-5 h-5 text-violet-600 dark:text-violet-400"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Announcements</p><p class="text-xs text-zinc-500">Latest updates</p></div></button>
         </div>
       </section>
-
-      <!-- ANNOUNCEMENTS -->
       <section id="view-announcements" class="hidden fade-in"><div id="list-announcements" class="space-y-4"></div></section>
-
-      <!-- NOTES -->
       <section id="view-notes" class="hidden fade-in space-y-4">
         <div class="relative">
           <span class="absolute inset-y-0 left-3 flex items-center text-zinc-400"><i data-lucide="search" class="w-4 h-4"></i></span>
@@ -355,293 +297,14 @@
         </div>
         <div id="list-notes" class="grid md:grid-cols-2 gap-4"></div>
       </section>
-
-      <!-- ASSIGNMENTS -->
       <section id="view-assignments" class="hidden fade-in"><div id="list-assignments" class="space-y-4"></div></section>
-
-      <!-- TIMETABLE -->
       <section id="view-timetable" class="hidden fade-in"><div id="list-timetable" class="space-y-4"></div></section>
-
-      <!-- SYLLABUS -->
       <section id="view-syllabus" class="hidden fade-in"><div id="list-syllabus" class="space-y-4"></div></section>
-
-      <!-- PAPERS -->
       <section id="view-papers" class="hidden fade-in"><div id="list-papers" class="grid md:grid-cols-2 gap-4"></div></section>
-
     </div>
   </main>
 </div>
-
-<script>
-  const API='https://hub-6yrl.onrender.com/api';
-  let token=localStorage.getItem('s_token')||'';
-  let currentUser=null, allNotes=[];
-
-  window.addEventListener('DOMContentLoaded',()=>{
-    const dark=localStorage.getItem('s_dark')!==null?JSON.parse(localStorage.getItem('s_dark')):true;
-    applyTheme(dark); token?checkAuth():showAuth(); lucide.createIcons();
-  });
-
-  function applyTheme(dark){
-    document.documentElement.classList.toggle('dark',dark);
-    localStorage.setItem('s_dark',dark);
-    document.getElementById('icon-sun').classList.toggle('hidden',!dark);
-    document.getElementById('icon-moon').classList.toggle('hidden',dark);
-    const lbl=document.getElementById('theme-label');
-    if(lbl) lbl.innerText=dark?'Light Mode':'Dark Mode';
-  }
-  function toggleTheme(){applyTheme(!document.documentElement.classList.contains('dark'));}
-  function toggleSidebar(open){
-    document.getElementById('sidebar').classList.toggle('-translate-x-full',!open);
-    document.getElementById('sidebar-overlay').classList.toggle('hidden',!open);
-  }
-  function switchTab(tab){
-    const isLogin=tab==='login';
-    document.getElementById('login-form').classList.toggle('hidden',!isLogin);
-    document.getElementById('register-form').classList.toggle('hidden',isLogin);
-    const on='flex-1 py-1.5 text-sm font-semibold rounded-lg bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm transition-all';
-    const off='flex-1 py-1.5 text-sm font-semibold rounded-lg text-zinc-500 dark:text-zinc-400 transition-all';
-    document.getElementById('tab-login').className=isLogin?on:off;
-    document.getElementById('tab-register').className=!isLogin?on:off;
-    hideAlert();
-  }
-  function showAuth(){document.getElementById('auth-view').classList.remove('hidden');document.getElementById('app-view').classList.add('hidden');lucide.createIcons();}
-  function showApp(){document.getElementById('auth-view').classList.add('hidden');document.getElementById('app-view').classList.remove('hidden');goto('home');lucide.createIcons();}
-  function showAlert(msg){const el=document.getElementById('auth-alert');el.classList.remove('hidden');el.classList.add('flex');document.getElementById('auth-alert-msg').innerText=msg;lucide.createIcons();}
-  function hideAlert(){const el=document.getElementById('auth-alert');el.classList.add('hidden');el.classList.remove('flex');}
-
-  async function checkAuth(){
-    try{
-      const r=await fetch(`${API}/auth/me`,{headers:{Authorization:`Bearer ${token}`}});
-      if(!r.ok)throw new Error();
-      currentUser=await r.json();
-      document.getElementById('s-name').innerText=currentUser.name||currentUser.username||'Student';
-      document.getElementById('s-email').innerText=currentUser.email||'';
-      document.getElementById('s-avatar').innerText=(currentUser.name||'S')[0].toUpperCase();
-      showApp();
-    }catch{token='';localStorage.removeItem('s_token');showAuth();}
-  }
-
-  async function handleLogin(e){
-    e.preventDefault();hideAlert();
-    const btn=document.getElementById('login-btn');
-    btn.disabled=true;
-    const maxRetries=3;
-    for(let attempt=1;attempt<=maxRetries;attempt++){
-      try{
-        if(attempt===1) btn.innerHTML='<span>Signing in…</span>';
-        else btn.innerHTML=`<span>⏳ Server starting… (${attempt}/${maxRetries})</span>`;
-        const r=await fetch(`${API}/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:document.getElementById('login-email').value,password:document.getElementById('login-password').value})});
-        const data=await r.json();
-        if(!r.ok)throw new Error(data.errors?.[0]?.msg||'Login failed');
-        token=data.token;localStorage.setItem('s_token',token);await checkAuth();
-        return;
-      }catch(err){
-        const isNetworkErr=err.message==='Failed to fetch'||err.name==='TypeError';
-        if(isNetworkErr && attempt<maxRetries){
-          showAlert(`⏳ Server waking up... please wait (${attempt}/${maxRetries})`);
-          await new Promise(r=>setTimeout(r,attempt*8000));
-        } else {
-          showAlert(isNetworkErr?'❌ Server offline. Please try again in 30 seconds.':err.message);
-          break;
-        }
-      }
-    }
-    btn.disabled=false;btn.innerHTML='<i data-lucide="log-in" class="w-4 h-4"></i><span>Sign In</span>';lucide.createIcons();
-  }
-
-
-  async function handleRegister(e){
-    e.preventDefault();hideAlert();
-    const btn=document.getElementById('reg-btn');
-    btn.disabled=true;btn.innerHTML='<span>Creating…</span>';
-    try{
-      const r=await fetch(`${API}/auth/register`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:document.getElementById('reg-name').value,email:document.getElementById('reg-email').value,username:document.getElementById('reg-username').value,password:document.getElementById('reg-password').value})});
-      const data=await r.json();
-      if(!r.ok)throw new Error(data.errors?.[0]?.msg||'Registration failed');
-      token=data.token;localStorage.setItem('s_token',token);await checkAuth();
-    }catch(err){showAlert(err.message);}
-    finally{btn.disabled=false;btn.innerHTML='<i data-lucide="user-plus" class="w-4 h-4"></i><span>Create Account</span>';lucide.createIcons();}
-  }
-
-  function handleLogout(){token='';currentUser=null;localStorage.removeItem('s_token');showAuth();}
-
-  const titles={home:['Welcome \uD83D\uDC4B','Here\'s what\'s new today'],announcements:['Announcements \uD83D\uDCE2','Latest updates from institution'],notes:['Study Notes \uD83D\uDCDD','Download and read study materials'],assignments:['Assignments \uD83D\uDCCB','Your tasks and deadlines'],timetable:['Timetable \uD83D\uDDD3\uFE0F','Your weekly class schedule'],syllabus:['Syllabus \uD83D\uDCDA','Course topics and content'],papers:['Previous Papers \uD83D\uDCC4','Past exam papers for practice']};
-
-  function goto(view){
-    document.querySelectorAll('[id^="view-"]').forEach(s=>s.classList.add('hidden'));
-    document.querySelectorAll('[id^="nav-"]').forEach(b=>b.classList.remove('active'));
-    const sec=document.getElementById('view-'+view);if(sec)sec.classList.remove('hidden');
-    const nav=document.getElementById('nav-'+view);if(nav)nav.classList.add('active');
-    toggleSidebar(false);
-    document.getElementById('page-title').innerText=titles[view]?.[0]||'';
-    document.getElementById('page-sub').innerText=titles[view]?.[1]||'';
-    loadView(view);
-  }
-
-  const loaded={};
-  async function loadView(v){
-    if(v==='home'){loadHome();return;}
-    if(loaded[v])return;
-    const map={announcements:loadAnnouncements,notes:loadNotes,assignments:loadAssignments,timetable:loadTimetable,syllabus:loadSyllabus,papers:loadPapers};
-    if(map[v]){await map[v]();loaded[v]=true;}
-  }
-
-  async function apiFetch(ep){
-    const r=await fetch(`${API}${ep}`,{headers:token?{Authorization:`Bearer ${token}`}:{}});
-    if(!r.ok)throw new Error('Failed');return r.json();
-  }
-
-  async function loadHome(){
-    try{
-      const[notes,asgn,ann,papers]=await Promise.all([apiFetch('/notes'),apiFetch('/assignments'),apiFetch('/announcements'),apiFetch('/papers')]);
-      document.getElementById('stat-notes').innerText=notes.length;
-      document.getElementById('stat-asgn').innerText=asgn.length;
-      document.getElementById('stat-ann').innerText=ann.length;
-      document.getElementById('stat-papers').innerText=papers.length;
-      document.getElementById('home-ann').innerHTML=ann.slice(0,3).map(a=>`
-        <div class="flex gap-3 p-3 bg-violet-50 dark:bg-violet-900/10 border border-violet-100 dark:border-violet-800/30 rounded-xl">
-          <div class="w-8 h-8 rounded-lg bg-violet-100 dark:bg-violet-900/40 flex items-center justify-center shrink-0 mt-0.5"><i data-lucide="megaphone" class="w-4 h-4 text-violet-600 dark:text-violet-400"></i></div>
-          <div><p class="font-semibold text-sm text-zinc-900 dark:text-white">${esc(a.title)}</p><p class="text-xs text-zinc-500 mt-0.5 line-clamp-2">${esc(a.message||'')}</p></div>
-        </div>`).join('')||'<p class="text-sm text-zinc-400 text-center py-6">No announcements yet.</p>';
-      lucide.createIcons();
-    }catch{}
-  }
-
-  async function loadAnnouncements(){
-    const box=document.getElementById('list-announcements');
-    box.innerHTML='<div class="skeleton h-20 w-full"></div><div class="skeleton h-20 w-full mt-4"></div>';
-    try{
-      const data=await apiFetch('/announcements');
-      box.innerHTML=data.length?data.map(a=>`
-        <div class="card p-5 border-l-4 border-violet-500">
-          <div class="flex items-start gap-3">
-            <div class="w-10 h-10 rounded-xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center shrink-0"><i data-lucide="megaphone" class="w-5 h-5 text-violet-600 dark:text-violet-400"></i></div>
-            <div class="flex-1"><p class="font-bold text-zinc-900 dark:text-white">${esc(a.title)}</p><p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1 whitespace-pre-wrap">${esc(a.message||'')}</p><p class="text-xs text-zinc-400 mt-2">${fmtDate(a.createdAt)}</p></div>
-          </div>
-        </div>`).join(''):empty('No announcements yet.');
-      lucide.createIcons();
-    }catch{box.innerHTML=errCard();}
-  }
-
-  async function loadNotes(){
-    const box=document.getElementById('list-notes');
-    box.innerHTML='<div class="skeleton h-32 w-full col-span-2"></div>';
-    try{
-      allNotes=await apiFetch('/notes');renderNotes(allNotes);
-    }catch{box.innerHTML=errCard();}
-  }
-  function filterNotes(){
-    const q=document.getElementById('notes-search').value.toLowerCase();
-    renderNotes(allNotes.filter(n=>(n.title||'').toLowerCase().includes(q)||(n.description||'').toLowerCase().includes(q)));
-  }
-  function renderNotes(data){
-    const box=document.getElementById('list-notes');
-    box.innerHTML=data.length?data.map(n=>`
-      <div class="card p-5 flex flex-col gap-3 hover:border-blue-300 dark:hover:border-blue-700 transition-all">
-        <div class="flex items-start gap-3">
-          <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center shrink-0"><i data-lucide="notebook-text" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i></div>
-          <div class="flex-1 min-w-0"><p class="font-bold text-zinc-900 dark:text-white truncate">${esc(n.title)}</p>${n.category?`<span class="tag mt-1">${esc(n.category)}</span>`:''}</div>
-        </div>
-        ${n.description?`<p class="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-3">${esc(n.description)}</p>`:''}
-        <div class="flex items-center justify-between mt-auto pt-2 border-t border-zinc-100 dark:border-zinc-800">
-          <p class="text-xs text-zinc-400">${fmtDate(n.createdAt)}</p>
-          ${n.fileUrl?`<a href="https://hub-6yrl.onrender.com${n.fileUrl}" target="_blank" class="pill-dl"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>`:''}
-        </div>
-      </div>`).join(''):empty('No notes available yet.');
-    lucide.createIcons();
-  }
-
-  async function loadAssignments(){
-    const box=document.getElementById('list-assignments');
-    box.innerHTML='<div class="skeleton h-20 w-full"></div>';
-    try{
-      const data=await apiFetch('/assignments');
-      box.innerHTML=data.length?data.map(a=>{
-        const due=a.dueDate?new Date(a.dueDate):null;
-        const od=due&&due<new Date();
-        return `<div class="card p-5">
-          <div class="flex items-start gap-3">
-            <div class="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center shrink-0"><i data-lucide="clipboard-list" class="w-5 h-5 text-orange-500"></i></div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-start justify-between gap-2 flex-wrap">
-                <p class="font-bold text-zinc-900 dark:text-white">${esc(a.title)}</p>
-                ${due?`<span class="text-xs font-semibold px-2.5 py-0.5 rounded-full ${od?'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400':'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400'}">Due ${fmtDate(a.dueDate)}</span>`:''}
-              </div>
-              ${a.description?`<p class="text-sm text-zinc-500 mt-1">${esc(a.description)}</p>`:''}
-              ${a.fileUrl?`<a href="https://hub-6yrl.onrender.com${a.fileUrl}" target="_blank" class="pill-dl mt-3 inline-flex"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>`:''}
-            </div>
-          </div>
-        </div>`;}).join(''):empty('No assignments posted yet.');
-      lucide.createIcons();
-    }catch{box.innerHTML=errCard();}
-  }
-
-  async function loadTimetable(){
-    const box=document.getElementById('list-timetable');
-    box.innerHTML='<div class="skeleton h-32 w-full"></div>';
-    try{
-      const data=await apiFetch('/timetable');
-      box.innerHTML=data.length?data.map(t=>`
-        <div class="card p-5">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center shrink-0"><i data-lucide="calendar-days" class="w-5 h-5 text-teal-600 dark:text-teal-400"></i></div>
-            <div><p class="font-bold text-zinc-900 dark:text-white">${esc(t.title)}</p><p class="text-xs text-zinc-400">${fmtDate(t.createdAt)}</p></div>
-          </div>
-          ${t.slots&&t.slots.length?`<div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="text-left text-xs text-zinc-400 border-b border-zinc-200 dark:border-zinc-800"><th class="pb-2 pr-4">Day</th><th class="pb-2 pr-4">Subject</th><th class="pb-2 pr-4">Time</th><th class="pb-2">Room</th></tr></thead><tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">${t.slots.map(s=>`<tr><td class="py-2 pr-4 font-medium text-zinc-900 dark:text-zinc-100">${esc(s.day||'-')}</td><td class="py-2 pr-4 text-zinc-600 dark:text-zinc-400">${esc(s.subject||'-')}</td><td class="py-2 pr-4 text-zinc-600 dark:text-zinc-400">${s.start&&s.end?esc(s.start+' – '+s.end):esc(s.time||'-')}</td><td class="py-2 text-zinc-600 dark:text-zinc-400">${esc(s.location||s.room||'-')}</td></tr>`).join('')}</tbody></table></div>`:'<p class="text-sm text-zinc-400">No slots added.</p>'}
-        </div>`).join(''):empty('No timetable posted yet.');
-      lucide.createIcons();
-    }catch{box.innerHTML=errCard();}
-  }
-
-  async function loadSyllabus(){
-    const box=document.getElementById('list-syllabus');
-    box.innerHTML='<div class="skeleton h-32 w-full"></div>';
-    try{
-      const data=await apiFetch('/syllabus');
-      box.innerHTML=data.length?data.map(s=>`
-        <div class="card p-5">
-          <div class="flex items-start gap-3">
-            <div class="w-10 h-10 rounded-xl bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center shrink-0 mt-0.5"><i data-lucide="book-open" class="w-5 h-5 text-pink-600 dark:text-pink-400"></i></div>
-            <div class="flex-1">
-              <p class="font-bold text-zinc-900 dark:text-white">${esc(s.title)}</p>
-              ${s.subject?`<span class="tag mt-1">${esc(s.subject)}</span>`:''}
-              ${s.description?`<p class="text-sm text-zinc-500 mt-2">${esc(s.description)}</p>`:''}
-              ${s.topics&&s.topics.length?`<div class="mt-3"><p class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Topics</p><ul class="space-y-1">${s.topics.map((t,i)=>`<li class="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400"><span class="w-5 h-5 rounded-full bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 text-xs font-bold flex items-center justify-center shrink-0">${i+1}</span>${esc(t)}</li>`).join('')}</ul></div>`:''}
-            </div>
-          </div>
-        </div>`).join(''):empty('No syllabus posted yet.');
-      lucide.createIcons();
-    }catch{box.innerHTML=errCard();}
-  }
-
-  async function loadPapers(){
-    const box=document.getElementById('list-papers');
-    box.innerHTML='<div class="skeleton h-32 w-full col-span-2"></div>';
-    try{
-      const data=await apiFetch('/papers');
-      box.innerHTML=data.length?data.map(p=>`
-        <div class="card p-5 flex flex-col gap-3 hover:border-emerald-300 dark:hover:border-emerald-700 transition-all">
-          <div class="flex items-start gap-3">
-            <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center shrink-0"><i data-lucide="file-text" class="w-5 h-5 text-emerald-600 dark:text-emerald-400"></i></div>
-            <div class="flex-1 min-w-0"><p class="font-bold text-zinc-900 dark:text-white">${esc(p.title)}</p><div class="flex gap-2 mt-1 flex-wrap">${p.subject?`<span class="tag">${esc(p.subject)}</span>`:''} ${p.year?`<span class="tag">${esc(p.year)}</span>`:''}</div></div>
-          </div>
-          <div class="flex items-center justify-between mt-auto pt-2 border-t border-zinc-100 dark:border-zinc-800">
-            <p class="text-xs text-zinc-400">${fmtDate(p.createdAt)}</p>
-            ${p.fileUrl?`<a href="https://hub-6yrl.onrender.com${p.fileUrl}" target="_blank" class="pill-dl"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download Paper</a>`:'<span class="text-xs text-zinc-400">No file</span>'}
-          </div>
-        </div>`).join(''):empty('No papers uploaded yet.');
-      lucide.createIcons();
-    }catch{box.innerHTML=errCard();}
-  }
-
-  function fmtDate(d){if(!d)return '';return new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});}
-  function esc(s){const d=document.createElement('div');d.innerText=String(s||'');return d.innerHTML;}
-  function empty(msg){return `<div class="col-span-2 flex flex-col items-center justify-center py-16 gap-3 text-zinc-400"><i data-lucide="inbox" class="w-10 h-10 opacity-40"></i><p class="text-sm">${msg}</p></div>`;}
-  function errCard(){return `<div class="col-span-2 text-center py-12 text-sm text-red-400"><i data-lucide="wifi-off" class="w-6 h-6 mx-auto mb-2 opacity-60"></i><p>Cannot connect to server. Is it running?</p></div>`;}
-</script>
-
-<!-- PWA Install Banner -->
+<script>eval(atob('Y29uc3QgQVBJPSdodHRwczovL2h1Yi02eXJsLm9ucmVuZGVyLmNvbS9hcGknOwogIGxldCB0b2tlbj1sb2NhbFN0b3JhZ2UuZ2V0'+'SXRlbSgnc190b2tlbicpfHwnJzsKICBsZXQgY3VycmVudFVzZXI9bnVsbCwgYWxsTm90ZXM9W107CgogIHdpbmRvdy5hZGRFdmVu'+'dExpc3RlbmVyKCdET01Db250ZW50TG9hZGVkJywoKT0+ewogICAgY29uc3QgZGFyaz1sb2NhbFN0b3JhZ2UuZ2V0SXRlbSgnc19k'+'YXJrJykhPT1udWxsP0pTT04ucGFyc2UobG9jYWxTdG9yYWdlLmdldEl0ZW0oJ3NfZGFyaycpKTp0cnVlOwogICAgYXBwbHlUaGVt'+'ZShkYXJrKTsgdG9rZW4/Y2hlY2tBdXRoKCk6c2hvd0F1dGgoKTsgbHVjaWRlLmNyZWF0ZUljb25zKCk7CiAgfSk7CgogIGZ1bmN0'+'aW9uIGFwcGx5VGhlbWUoZGFyayl7CiAgICBkb2N1bWVudC5kb2N1bWVudEVsZW1lbnQuY2xhc3NMaXN0LnRvZ2dsZSgnZGFyaycs'+'ZGFyayk7CiAgICBsb2NhbFN0b3JhZ2Uuc2V0SXRlbSgnc19kYXJrJyxkYXJrKTsKICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlk'+'KCdpY29uLXN1bicpLmNsYXNzTGlzdC50b2dnbGUoJ2hpZGRlbicsIWRhcmspOwogICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQo'+'J2ljb24tbW9vbicpLmNsYXNzTGlzdC50b2dnbGUoJ2hpZGRlbicsZGFyayk7CiAgICBjb25zdCBsYmw9ZG9jdW1lbnQuZ2V0RWxl'+'bWVudEJ5SWQoJ3RoZW1lLWxhYmVsJyk7CiAgICBpZihsYmwpIGxibC5pbm5lclRleHQ9ZGFyaz8nTGlnaHQgTW9kZSc6J0Rhcmsg'+'TW9kZSc7CiAgfQogIGZ1bmN0aW9uIHRvZ2dsZVRoZW1lKCl7YXBwbHlUaGVtZSghZG9jdW1lbnQuZG9jdW1lbnRFbGVtZW50LmNs'+'YXNzTGlzdC5jb250YWlucygnZGFyaycpKTt9CiAgZnVuY3Rpb24gdG9nZ2xlU2lkZWJhcihvcGVuKXsKICAgIGRvY3VtZW50Lmdl'+'dEVsZW1lbnRCeUlkKCdzaWRlYmFyJykuY2xhc3NMaXN0LnRvZ2dsZSgnLXRyYW5zbGF0ZS14LWZ1bGwnLCFvcGVuKTsKICAgIGRv'+'Y3VtZW50LmdldEVsZW1lbnRCeUlkKCdzaWRlYmFyLW92ZXJsYXknKS5jbGFzc0xpc3QudG9nZ2xlKCdoaWRkZW4nLCFvcGVuKTsK'+'ICB9CiAgZnVuY3Rpb24gc3dpdGNoVGFiKHRhYil7CiAgICBjb25zdCBpc0xvZ2luPXRhYj09PSdsb2dpbic7CiAgICBkb2N1bWVu'+'dC5nZXRFbGVtZW50QnlJZCgnbG9naW4tZm9ybScpLmNsYXNzTGlzdC50b2dnbGUoJ2hpZGRlbicsIWlzTG9naW4pOwogICAgZG9j'+'dW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3JlZ2lzdGVyLWZvcm0nKS5jbGFzc0xpc3QudG9nZ2xlKCdoaWRkZW4nLGlzTG9naW4pOwog'+'ICAgY29uc3Qgb249J2ZsZXgtMSBweS0xLjUgdGV4dC1zbSBmb250LXNlbWlib2xkIHJvdW5kZWQtbGcgYmctd2hpdGUgZGFyazpi'+'Zy16aW5jLTcwMCB0ZXh0LXppbmMtOTAwIGRhcms6dGV4dC13aGl0ZSBzaGFkb3ctc20gdHJhbnNpdGlvbi1hbGwnOwogICAgY29u'+'c3Qgb2ZmPSdmbGV4LTEgcHktMS41IHRleHQtc20gZm9udC1zZW1pYm9sZCByb3VuZGVkLWxnIHRleHQtemluYy01MDAgZGFyazp0'+'ZXh0LXppbmMtNDAwIHRyYW5zaXRpb24tYWxsJzsKICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCd0YWItbG9naW4nKS5jbGFz'+'c05hbWU9aXNMb2dpbj9vbjpvZmY7CiAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgndGFiLXJlZ2lzdGVyJykuY2xhc3NOYW1l'+'PSFpc0xvZ2luP29uOm9mZjsKICAgIGhpZGVBbGVydCgpOwogIH0KICBmdW5jdGlvbiBzaG93QXV0aCgpe2RvY3VtZW50LmdldEVs'+'ZW1lbnRCeUlkKCdhdXRoLXZpZXcnKS5jbGFzc0xpc3QucmVtb3ZlKCdoaWRkZW4nKTtkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgn'+'YXBwLXZpZXcnKS5jbGFzc0xpc3QuYWRkKCdoaWRkZW4nKTtsdWNpZGUuY3JlYXRlSWNvbnMoKTt9CiAgZnVuY3Rpb24gc2hvd0Fw'+'cCgpe2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdhdXRoLXZpZXcnKS5jbGFzc0xpc3QuYWRkKCdoaWRkZW4nKTtkb2N1bWVudC5n'+'ZXRFbGVtZW50QnlJZCgnYXBwLXZpZXcnKS5jbGFzc0xpc3QucmVtb3ZlKCdoaWRkZW4nKTtnb3RvKCdob21lJyk7bHVjaWRlLmNy'+'ZWF0ZUljb25zKCk7fQogIGZ1bmN0aW9uIHNob3dBbGVydChtc2cpe2NvbnN0IGVsPWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdh'+'dXRoLWFsZXJ0Jyk7ZWwuY2xhc3NMaXN0LnJlbW92ZSgnaGlkZGVuJyk7ZWwuY2xhc3NMaXN0LmFkZCgnZmxleCcpO2RvY3VtZW50'+'LmdldEVsZW1lbnRCeUlkKCdhdXRoLWFsZXJ0LW1zZycpLmlubmVyVGV4dD1tc2c7bHVjaWRlLmNyZWF0ZUljb25zKCk7fQogIGZ1'+'bmN0aW9uIGhpZGVBbGVydCgpe2NvbnN0IGVsPWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdhdXRoLWFsZXJ0Jyk7ZWwuY2xhc3NM'+'aXN0LmFkZCgnaGlkZGVuJyk7ZWwuY2xhc3NMaXN0LnJlbW92ZSgnZmxleCcpO30KCiAgYXN5bmMgZnVuY3Rpb24gY2hlY2tBdXRo'+'KCl7CiAgICB0cnl7CiAgICAgIGNvbnN0IHI9YXdhaXQgZmV0Y2goYCR7QVBJfS9hdXRoL21lYCx7aGVhZGVyczp7QXV0aG9yaXph'+'dGlvbjpgQmVhcmVyICR7dG9rZW59YH19KTsKICAgICAgaWYoIXIub2spdGhyb3cgbmV3IEVycm9yKCk7CiAgICAgIGN1cnJlbnRV'+'c2VyPWF3YWl0IHIuanNvbigpOwogICAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncy1uYW1lJykuaW5uZXJUZXh0PWN1cnJl'+'bnRVc2VyLm5hbWV8fGN1cnJlbnRVc2VyLnVzZXJuYW1lfHwnU3R1ZGVudCc7CiAgICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlk'+'KCdzLWVtYWlsJykuaW5uZXJUZXh0PWN1cnJlbnRVc2VyLmVtYWlsfHwnJzsKICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQo'+'J3MtYXZhdGFyJykuaW5uZXJUZXh0PShjdXJyZW50VXNlci5uYW1lfHwnUycpWzBdLnRvVXBwZXJDYXNlKCk7CiAgICAgIHNob3dB'+'cHAoKTsKICAgIH1jYXRjaHt0b2tlbj0nJztsb2NhbFN0b3JhZ2UucmVtb3ZlSXRlbSgnc190b2tlbicpO3Nob3dBdXRoKCk7fQog'+'IH0KCiAgYXN5bmMgZnVuY3Rpb24gaGFuZGxlTG9naW4oZSl7CiAgICBlLnByZXZlbnREZWZhdWx0KCk7aGlkZUFsZXJ0KCk7CiAg'+'ICBjb25zdCBidG49ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2xvZ2luLWJ0bicpOwogICAgYnRuLmRpc2FibGVkPXRydWU7CiAg'+'ICBjb25zdCBtYXhSZXRyaWVzPTM7CiAgICBmb3IobGV0IGF0dGVtcHQ9MTthdHRlbXB0PD1tYXhSZXRyaWVzO2F0dGVtcHQrKyl7'+'CiAgICAgIHRyeXsKICAgICAgICBpZihhdHRlbXB0PT09MSkgYnRuLmlubmVySFRNTD0nPHNwYW4+U2lnbmluZyBpbuKApjwvc3Bh'+'bj4nOwogICAgICAgIGVsc2UgYnRuLmlubmVySFRNTD1gPHNwYW4+4o+zIFNlcnZlciBzdGFydGluZ+KApiAoJHthdHRlbXB0fS8k'+'e21heFJldHJpZXN9KTwvc3Bhbj5gOwogICAgICAgIGNvbnN0IHI9YXdhaXQgZmV0Y2goYCR7QVBJfS9hdXRoL2xvZ2luYCx7bWV0'+'aG9kOidQT1NUJyxoZWFkZXJzOnsnQ29udGVudC1UeXBlJzonYXBwbGljYXRpb24vanNvbid9LGJvZHk6SlNPTi5zdHJpbmdpZnko'+'e2VtYWlsOmRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdsb2dpbi1lbWFpbCcpLnZhbHVlLHBhc3N3b3JkOmRvY3VtZW50LmdldEVs'+'ZW1lbnRCeUlkKCdsb2dpbi1wYXNzd29yZCcpLnZhbHVlfSl9KTsKICAgICAgICBjb25zdCBkYXRhPWF3YWl0IHIuanNvbigpOwog'+'ICAgICAgIGlmKCFyLm9rKXRocm93IG5ldyBFcnJvcihkYXRhLmVycm9ycz8uWzBdPy5tc2d8fCdMb2dpbiBmYWlsZWQnKTsKICAg'+'ICAgICB0b2tlbj1kYXRhLnRva2VuO2xvY2FsU3RvcmFnZS5zZXRJdGVtKCdzX3Rva2VuJyx0b2tlbik7YXdhaXQgY2hlY2tBdXRo'+'KCk7CiAgICAgICAgcmV0dXJuOwogICAgICB9Y2F0Y2goZXJyKXsKICAgICAgICBjb25zdCBpc05ldHdvcmtFcnI9ZXJyLm1lc3Nh'+'Z2U9PT0nRmFpbGVkIHRvIGZldGNoJ3x8ZXJyLm5hbWU9PT0nVHlwZUVycm9yJzsKICAgICAgICBpZihpc05ldHdvcmtFcnIgJiYg'+'YXR0ZW1wdDxtYXhSZXRyaWVzKXsKICAgICAgICAgIHNob3dBbGVydChg4o+zIFNlcnZlciB3YWtpbmcgdXAuLi4gcGxlYXNlIHdh'+'aXQgKCR7YXR0ZW1wdH0vJHttYXhSZXRyaWVzfSlgKTsKICAgICAgICAgIGF3YWl0IG5ldyBQcm9taXNlKHI9PnNldFRpbWVvdXQo'+'cixhdHRlbXB0KjgwMDApKTsKICAgICAgICB9IGVsc2UgewogICAgICAgICAgc2hvd0FsZXJ0KGlzTmV0d29ya0Vycj8n4p2MIFNl'+'cnZlciBvZmZsaW5lLiBQbGVhc2UgdHJ5IGFnYWluIGluIDMwIHNlY29uZHMuJzplcnIubWVzc2FnZSk7CiAgICAgICAgICBicmVh'+'azsKICAgICAgICB9CiAgICAgIH0KICAgIH0KICAgIGJ0bi5kaXNhYmxlZD1mYWxzZTtidG4uaW5uZXJIVE1MPSc8aSBkYXRhLWx1'+'Y2lkZT0ibG9nLWluIiBjbGFzcz0idy00IGgtNCI+PC9pPjxzcGFuPlNpZ24gSW48L3NwYW4+JztsdWNpZGUuY3JlYXRlSWNvbnMo'+'KTsKICB9CgoKICBhc3luYyBmdW5jdGlvbiBoYW5kbGVSZWdpc3RlcihlKXsKICAgIGUucHJldmVudERlZmF1bHQoKTtoaWRlQWxl'+'cnQoKTsKICAgIGNvbnN0IGJ0bj1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncmVnLWJ0bicpOwogICAgYnRuLmRpc2FibGVkPXRy'+'dWU7YnRuLmlubmVySFRNTD0nPHNwYW4+Q3JlYXRpbmfigKY8L3NwYW4+JzsKICAgIHRyeXsKICAgICAgY29uc3Qgcj1hd2FpdCBm'+'ZXRjaChgJHtBUEl9L2F1dGgvcmVnaXN0ZXJgLHttZXRob2Q6J1BPU1QnLGhlYWRlcnM6eydDb250ZW50LVR5cGUnOidhcHBsaWNh'+'dGlvbi9qc29uJ30sYm9keTpKU09OLnN0cmluZ2lmeSh7bmFtZTpkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncmVnLW5hbWUnKS52'+'YWx1ZSxlbWFpbDpkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncmVnLWVtYWlsJykudmFsdWUsdXNlcm5hbWU6ZG9jdW1lbnQuZ2V0'+'RWxlbWVudEJ5SWQoJ3JlZy11c2VybmFtZScpLnZhbHVlLHBhc3N3b3JkOmRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdyZWctcGFz'+'c3dvcmQnKS52YWx1ZX0pfSk7CiAgICAgIGNvbnN0IGRhdGE9YXdhaXQgci5qc29uKCk7CiAgICAgIGlmKCFyLm9rKXRocm93IG5l'+'dyBFcnJvcihkYXRhLmVycm9ycz8uWzBdPy5tc2d8fCdSZWdpc3RyYXRpb24gZmFpbGVkJyk7CiAgICAgIHRva2VuPWRhdGEudG9r'+'ZW47bG9jYWxTdG9yYWdlLnNldEl0ZW0oJ3NfdG9rZW4nLHRva2VuKTthd2FpdCBjaGVja0F1dGgoKTsKICAgIH1jYXRjaChlcnIp'+'e3Nob3dBbGVydChlcnIubWVzc2FnZSk7fQogICAgZmluYWxseXtidG4uZGlzYWJsZWQ9ZmFsc2U7YnRuLmlubmVySFRNTD0nPGkg'+'ZGF0YS1sdWNpZGU9InVzZXItcGx1cyIgY2xhc3M9InctNCBoLTQiPjwvaT48c3Bhbj5DcmVhdGUgQWNjb3VudDwvc3Bhbj4nO2x1'+'Y2lkZS5jcmVhdGVJY29ucygpO30KICB9CgogIGZ1bmN0aW9uIGhhbmRsZUxvZ291dCgpe3Rva2VuPScnO2N1cnJlbnRVc2VyPW51'+'bGw7bG9jYWxTdG9yYWdlLnJlbW92ZUl0ZW0oJ3NfdG9rZW4nKTtzaG93QXV0aCgpO30KCiAgY29uc3QgdGl0bGVzPXtob21lOlsn'+'V2VsY29tZSBcdUQ4M0RcdURDNEInLCdIZXJlXCdzIHdoYXRcJ3MgbmV3IHRvZGF5J10sYW5ub3VuY2VtZW50czpbJ0Fubm91bmNl'+'bWVudHMgXHVEODNEXHVEQ0UyJywnTGF0ZXN0IHVwZGF0ZXMgZnJvbSBpbnN0aXR1dGlvbiddLG5vdGVzOlsnU3R1ZHkgTm90ZXMg'+'XHVEODNEXHVEQ0REJywnRG93bmxvYWQgYW5kIHJlYWQgc3R1ZHkgbWF0ZXJpYWxzJ10sYXNzaWdubWVudHM6WydBc3NpZ25tZW50'+'cyBcdUQ4M0RcdURDQ0InLCdZb3VyIHRhc2tzIGFuZCBkZWFkbGluZXMnXSx0aW1ldGFibGU6WydUaW1ldGFibGUgXHVEODNEXHVE'+'REQzXHVGRTBGJywnWW91ciB3ZWVrbHkgY2xhc3Mgc2NoZWR1bGUnXSxzeWxsYWJ1czpbJ1N5bGxhYnVzIFx1RDgzRFx1RENEQScs'+'J0NvdXJzZSB0b3BpY3MgYW5kIGNvbnRlbnQnXSxwYXBlcnM6WydQcmV2aW91cyBQYXBlcnMgXHVEODNEXHVEQ0M0JywnUGFzdCBl'+'eGFtIHBhcGVycyBmb3IgcHJhY3RpY2UnXX07CgogIGZ1bmN0aW9uIGdvdG8odmlldyl7CiAgICBkb2N1bWVudC5xdWVyeVNlbGVj'+'dG9yQWxsKCdbaWRePSJ2aWV3LSJdJykuZm9yRWFjaChzPT5zLmNsYXNzTGlzdC5hZGQoJ2hpZGRlbicpKTsKICAgIGRvY3VtZW50'+'LnF1ZXJ5U2VsZWN0b3JBbGwoJ1tpZF49Im5hdi0iXScpLmZvckVhY2goYj0+Yi5jbGFzc0xpc3QucmVtb3ZlKCdhY3RpdmUnKSk7'+'CiAgICBjb25zdCBzZWM9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3ZpZXctJyt2aWV3KTtpZihzZWMpc2VjLmNsYXNzTGlzdC5y'+'ZW1vdmUoJ2hpZGRlbicpOwogICAgY29uc3QgbmF2PWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCduYXYtJyt2aWV3KTtpZihuYXYp'+'bmF2LmNsYXNzTGlzdC5hZGQoJ2FjdGl2ZScpOwogICAgdG9nZ2xlU2lkZWJhcihmYWxzZSk7CiAgICBkb2N1bWVudC5nZXRFbGVt'+'ZW50QnlJZCgncGFnZS10aXRsZScpLmlubmVyVGV4dD10aXRsZXNbdmlld10/LlswXXx8Jyc7CiAgICBkb2N1bWVudC5nZXRFbGVt'+'ZW50QnlJZCgncGFnZS1zdWInKS5pbm5lclRleHQ9dGl0bGVzW3ZpZXddPy5bMV18fCcnOwogICAgbG9hZFZpZXcodmlldyk7CiAg'+'fQoKICBjb25zdCBsb2FkZWQ9e307CiAgYXN5bmMgZnVuY3Rpb24gbG9hZFZpZXcodil7CiAgICBpZih2PT09J2hvbWUnKXtsb2Fk'+'SG9tZSgpO3JldHVybjt9CiAgICBpZihsb2FkZWRbdl0pcmV0dXJuOwogICAgY29uc3QgbWFwPXthbm5vdW5jZW1lbnRzOmxvYWRB'+'bm5vdW5jZW1lbnRzLG5vdGVzOmxvYWROb3Rlcyxhc3NpZ25tZW50czpsb2FkQXNzaWdubWVudHMsdGltZXRhYmxlOmxvYWRUaW1l'+'dGFibGUsc3lsbGFidXM6bG9hZFN5bGxhYnVzLHBhcGVyczpsb2FkUGFwZXJzfTsKICAgIGlmKG1hcFt2XSl7YXdhaXQgbWFwW3Zd'+'KCk7bG9hZGVkW3ZdPXRydWU7fQogIH0KCiAgYXN5bmMgZnVuY3Rpb24gYXBpRmV0Y2goZXApewogICAgY29uc3Qgcj1hd2FpdCBm'+'ZXRjaChgJHtBUEl9JHtlcH1gLHtoZWFkZXJzOnRva2VuP3tBdXRob3JpemF0aW9uOmBCZWFyZXIgJHt0b2tlbn1gfTp7fX0pOwog'+'ICAgaWYoIXIub2spdGhyb3cgbmV3IEVycm9yKCdGYWlsZWQnKTtyZXR1cm4gci5qc29uKCk7CiAgfQoKICBhc3luYyBmdW5jdGlv'+'biBsb2FkSG9tZSgpewogICAgdHJ5ewogICAgICBjb25zdFtub3Rlcyxhc2duLGFubixwYXBlcnNdPWF3YWl0IFByb21pc2UuYWxs'+'KFthcGlGZXRjaCgnL25vdGVzJyksYXBpRmV0Y2goJy9hc3NpZ25tZW50cycpLGFwaUZldGNoKCcvYW5ub3VuY2VtZW50cycpLGFw'+'aUZldGNoKCcvcGFwZXJzJyldKTsKICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3N0YXQtbm90ZXMnKS5pbm5lclRleHQ9'+'bm90ZXMubGVuZ3RoOwogICAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnc3RhdC1hc2duJykuaW5uZXJUZXh0PWFzZ24ubGVu'+'Z3RoOwogICAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnc3RhdC1hbm4nKS5pbm5lclRleHQ9YW5uLmxlbmd0aDsKICAgICAg'+'ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3N0YXQtcGFwZXJzJykuaW5uZXJUZXh0PXBhcGVycy5sZW5ndGg7CiAgICAgIGRvY3Vt'+'ZW50LmdldEVsZW1lbnRCeUlkKCdob21lLWFubicpLmlubmVySFRNTD1hbm4uc2xpY2UoMCwzKS5tYXAoYT0+YAogICAgICAgIDxk'+'aXYgY2xhc3M9ImZsZXggZ2FwLTMgcC0zIGJnLXZpb2xldC01MCBkYXJrOmJnLXZpb2xldC05MDAvMTAgYm9yZGVyIGJvcmRlci12'+'aW9sZXQtMTAwIGRhcms6Ym9yZGVyLXZpb2xldC04MDAvMzAgcm91bmRlZC14bCI+CiAgICAgICAgICA8ZGl2IGNsYXNzPSJ3LTgg'+'aC04IHJvdW5kZWQtbGcgYmctdmlvbGV0LTEwMCBkYXJrOmJnLXZpb2xldC05MDAvNDAgZmxleCBpdGVtcy1jZW50ZXIganVzdGlm'+'eS1jZW50ZXIgc2hyaW5rLTAgbXQtMC41Ij48aSBkYXRhLWx1Y2lkZT0ibWVnYXBob25lIiBjbGFzcz0idy00IGgtNCB0ZXh0LXZp'+'b2xldC02MDAgZGFyazp0ZXh0LXZpb2xldC00MDAiPjwvaT48L2Rpdj4KICAgICAgICAgIDxkaXY+PHAgY2xhc3M9ImZvbnQtc2Vt'+'aWJvbGQgdGV4dC1zbSB0ZXh0LXppbmMtOTAwIGRhcms6dGV4dC13aGl0ZSI+JHtlc2MoYS50aXRsZSl9PC9wPjxwIGNsYXNzPSJ0'+'ZXh0LXhzIHRleHQtemluYy01MDAgbXQtMC41IGxpbmUtY2xhbXAtMiI+JHtlc2MoYS5tZXNzYWdlfHwnJyl9PC9wPjwvZGl2Pgog'+'ICAgICAgIDwvZGl2PmApLmpvaW4oJycpfHwnPHAgY2xhc3M9InRleHQtc20gdGV4dC16aW5jLTQwMCB0ZXh0LWNlbnRlciBweS02'+'Ij5ObyBhbm5vdW5jZW1lbnRzIHlldC48L3A+JzsKICAgICAgbHVjaWRlLmNyZWF0ZUljb25zKCk7CiAgICB9Y2F0Y2h7fQogIH0K'+'CiAgYXN5bmMgZnVuY3Rpb24gbG9hZEFubm91bmNlbWVudHMoKXsKICAgIGNvbnN0IGJveD1kb2N1bWVudC5nZXRFbGVtZW50QnlJ'+'ZCgnbGlzdC1hbm5vdW5jZW1lbnRzJyk7CiAgICBib3guaW5uZXJIVE1MPSc8ZGl2IGNsYXNzPSJza2VsZXRvbiBoLTIwIHctZnVs'+'bCI+PC9kaXY+PGRpdiBjbGFzcz0ic2tlbGV0b24gaC0yMCB3LWZ1bGwgbXQtNCI+PC9kaXY+JzsKICAgIHRyeXsKICAgICAgY29u'+'c3QgZGF0YT1hd2FpdCBhcGlGZXRjaCgnL2Fubm91bmNlbWVudHMnKTsKICAgICAgYm94LmlubmVySFRNTD1kYXRhLmxlbmd0aD9k'+'YXRhLm1hcChhPT5gCiAgICAgICAgPGRpdiBjbGFzcz0iY2FyZCBwLTUgYm9yZGVyLWwtNCBib3JkZXItdmlvbGV0LTUwMCI+CiAg'+'ICAgICAgICA8ZGl2IGNsYXNzPSJmbGV4IGl0ZW1zLXN0YXJ0IGdhcC0zIj4KICAgICAgICAgICAgPGRpdiBjbGFzcz0idy0xMCBo'+'LTEwIHJvdW5kZWQteGwgYmctdmlvbGV0LTEwMCBkYXJrOmJnLXZpb2xldC05MDAvMzAgZmxleCBpdGVtcy1jZW50ZXIganVzdGlm'+'eS1jZW50ZXIgc2hyaW5rLTAiPjxpIGRhdGEtbHVjaWRlPSJtZWdhcGhvbmUiIGNsYXNzPSJ3LTUgaC01IHRleHQtdmlvbGV0LTYw'+'MCBkYXJrOnRleHQtdmlvbGV0LTQwMCI+PC9pPjwvZGl2PgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJmbGV4LTEiPjxwIGNsYXNz'+'PSJmb250LWJvbGQgdGV4dC16aW5jLTkwMCBkYXJrOnRleHQtd2hpdGUiPiR7ZXNjKGEudGl0bGUpfTwvcD48cCBjbGFzcz0idGV4'+'dC1zbSB0ZXh0LXppbmMtNjAwIGRhcms6dGV4dC16aW5jLTQwMCBtdC0xIHdoaXRlc3BhY2UtcHJlLXdyYXAiPiR7ZXNjKGEubWVz'+'c2FnZXx8JycpfTwvcD48cCBjbGFzcz0idGV4dC14cyB0ZXh0LXppbmMtNDAwIG10LTIiPiR7Zm10RGF0ZShhLmNyZWF0ZWRBdCl9'+'PC9wPjwvZGl2PgogICAgICAgICAgPC9kaXY+CiAgICAgICAgPC9kaXY+YCkuam9pbignJyk6ZW1wdHkoJ05vIGFubm91bmNlbWVu'+'dHMgeWV0LicpOwogICAgICBsdWNpZGUuY3JlYXRlSWNvbnMoKTsKICAgIH1jYXRjaHtib3guaW5uZXJIVE1MPWVyckNhcmQoKTt9'+'CiAgfQoKICBhc3luYyBmdW5jdGlvbiBsb2FkTm90ZXMoKXsKICAgIGNvbnN0IGJveD1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgn'+'bGlzdC1ub3RlcycpOwogICAgYm94LmlubmVySFRNTD0nPGRpdiBjbGFzcz0ic2tlbGV0b24gaC0zMiB3LWZ1bGwgY29sLXNwYW4t'+'MiI+PC9kaXY+JzsKICAgIHRyeXsKICAgICAgYWxsTm90ZXM9YXdhaXQgYXBpRmV0Y2goJy9ub3RlcycpO3JlbmRlck5vdGVzKGFs'+'bE5vdGVzKTsKICAgIH1jYXRjaHtib3guaW5uZXJIVE1MPWVyckNhcmQoKTt9CiAgfQogIGZ1bmN0aW9uIGZpbHRlck5vdGVzKCl7'+'CiAgICBjb25zdCBxPWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdub3Rlcy1zZWFyY2gnKS52YWx1ZS50b0xvd2VyQ2FzZSgpOwog'+'ICAgcmVuZGVyTm90ZXMoYWxsTm90ZXMuZmlsdGVyKG49PihuLnRpdGxlfHwnJykudG9Mb3dlckNhc2UoKS5pbmNsdWRlcyhxKXx8'+'KG4uZGVzY3JpcHRpb258fCcnKS50b0xvd2VyQ2FzZSgpLmluY2x1ZGVzKHEpKSk7CiAgfQogIGZ1bmN0aW9uIHJlbmRlck5vdGVz'+'KGRhdGEpewogICAgY29uc3QgYm94PWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdsaXN0LW5vdGVzJyk7CiAgICBib3guaW5uZXJI'+'VE1MPWRhdGEubGVuZ3RoP2RhdGEubWFwKG49PmAKICAgICAgPGRpdiBjbGFzcz0iY2FyZCBwLTUgZmxleCBmbGV4LWNvbCBnYXAt'+'MyBob3Zlcjpib3JkZXItYmx1ZS0zMDAgZGFyazpob3Zlcjpib3JkZXItYmx1ZS03MDAgdHJhbnNpdGlvbi1hbGwiPgogICAgICAg'+'IDxkaXYgY2xhc3M9ImZsZXggaXRlbXMtc3RhcnQgZ2FwLTMiPgogICAgICAgICAgPGRpdiBjbGFzcz0idy0xMCBoLTEwIHJvdW5k'+'ZWQteGwgYmctYmx1ZS0xMDAgZGFyazpiZy1ibHVlLTkwMC8zMCBmbGV4IGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciBzaHJp'+'bmstMCI+PGkgZGF0YS1sdWNpZGU9Im5vdGVib29rLXRleHQiIGNsYXNzPSJ3LTUgaC01IHRleHQtYmx1ZS02MDAgZGFyazp0ZXh0'+'LWJsdWUtNDAwIj48L2k+PC9kaXY+CiAgICAgICAgICA8ZGl2IGNsYXNzPSJmbGV4LTEgbWluLXctMCI+PHAgY2xhc3M9ImZvbnQt'+'Ym9sZCB0ZXh0LXppbmMtOTAwIGRhcms6dGV4dC13aGl0ZSB0cnVuY2F0ZSI+JHtlc2Mobi50aXRsZSl9PC9wPiR7bi5jYXRlZ29y'+'eT9gPHNwYW4gY2xhc3M9InRhZyBtdC0xIj4ke2VzYyhuLmNhdGVnb3J5KX08L3NwYW4+YDonJ308L2Rpdj4KICAgICAgICA8L2Rp'+'dj4KICAgICAgICAke24uZGVzY3JpcHRpb24/YDxwIGNsYXNzPSJ0ZXh0LXNtIHRleHQtemluYy02MDAgZGFyazp0ZXh0LXppbmMt'+'NDAwIGxpbmUtY2xhbXAtMyI+JHtlc2Mobi5kZXNjcmlwdGlvbil9PC9wPmA6Jyd9CiAgICAgICAgPGRpdiBjbGFzcz0iZmxleCBp'+'dGVtcy1jZW50ZXIganVzdGlmeS1iZXR3ZWVuIG10LWF1dG8gcHQtMiBib3JkZXItdCBib3JkZXItemluYy0xMDAgZGFyazpib3Jk'+'ZXItemluYy04MDAiPgogICAgICAgICAgPHAgY2xhc3M9InRleHQteHMgdGV4dC16aW5jLTQwMCI+JHtmbXREYXRlKG4uY3JlYXRl'+'ZEF0KX08L3A+CiAgICAgICAgICAke24uZmlsZVVybD9gPGEgaHJlZj0iaHR0cHM6Ly9odWItNnlybC5vbnJlbmRlci5jb20ke24u'+'ZmlsZVVybH0iIHRhcmdldD0iX2JsYW5rIiBjbGFzcz0icGlsbC1kbCI+PGkgZGF0YS1sdWNpZGU9ImRvd25sb2FkIiBjbGFzcz0i'+'dy0zLjUgaC0zLjUiPjwvaT5Eb3dubG9hZDwvYT5gOicnfQogICAgICAgIDwvZGl2PgogICAgICA8L2Rpdj5gKS5qb2luKCcnKTpl'+'bXB0eSgnTm8gbm90ZXMgYXZhaWxhYmxlIHlldC4nKTsKICAgIGx1Y2lkZS5jcmVhdGVJY29ucygpOwogIH0KCiAgYXN5bmMgZnVu'+'Y3Rpb24gbG9hZEFzc2lnbm1lbnRzKCl7CiAgICBjb25zdCBib3g9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2xpc3QtYXNzaWdu'+'bWVudHMnKTsKICAgIGJveC5pbm5lckhUTUw9JzxkaXYgY2xhc3M9InNrZWxldG9uIGgtMjAgdy1mdWxsIj48L2Rpdj4nOwogICAg'+'dHJ5ewogICAgICBjb25zdCBkYXRhPWF3YWl0IGFwaUZldGNoKCcvYXNzaWdubWVudHMnKTsKICAgICAgYm94LmlubmVySFRNTD1k'+'YXRhLmxlbmd0aD9kYXRhLm1hcChhPT57CiAgICAgICAgY29uc3QgZHVlPWEuZHVlRGF0ZT9uZXcgRGF0ZShhLmR1ZURhdGUpOm51'+'bGw7CiAgICAgICAgY29uc3Qgb2Q9ZHVlJiZkdWU8bmV3IERhdGUoKTsKICAgICAgICByZXR1cm4gYDxkaXYgY2xhc3M9ImNhcmQg'+'cC01Ij4KICAgICAgICAgIDxkaXYgY2xhc3M9ImZsZXggaXRlbXMtc3RhcnQgZ2FwLTMiPgogICAgICAgICAgICA8ZGl2IGNsYXNz'+'PSJ3LTEwIGgtMTAgcm91bmRlZC14bCBiZy1vcmFuZ2UtMTAwIGRhcms6Ymctb3JhbmdlLTkwMC8zMCBmbGV4IGl0ZW1zLWNlbnRl'+'ciBqdXN0aWZ5LWNlbnRlciBzaHJpbmstMCI+PGkgZGF0YS1sdWNpZGU9ImNsaXBib2FyZC1saXN0IiBjbGFzcz0idy01IGgtNSB0'+'ZXh0LW9yYW5nZS01MDAiPjwvaT48L2Rpdj4KICAgICAgICAgICAgPGRpdiBjbGFzcz0iZmxleC0xIG1pbi13LTAiPgogICAgICAg'+'ICAgICAgIDxkaXYgY2xhc3M9ImZsZXggaXRlbXMtc3RhcnQganVzdGlmeS1iZXR3ZWVuIGdhcC0yIGZsZXgtd3JhcCI+CiAgICAg'+'ICAgICAgICAgICA8cCBjbGFzcz0iZm9udC1ib2xkIHRleHQtemluYy05MDAgZGFyazp0ZXh0LXdoaXRlIj4ke2VzYyhhLnRpdGxl'+'KX08L3A+CiAgICAgICAgICAgICAgICAke2R1ZT9gPHNwYW4gY2xhc3M9InRleHQteHMgZm9udC1zZW1pYm9sZCBweC0yLjUgcHkt'+'MC41IHJvdW5kZWQtZnVsbCAke29kPydiZy1yZWQtMTAwIGRhcms6YmctcmVkLTkwMC8zMCB0ZXh0LXJlZC02MDAgZGFyazp0ZXh0'+'LXJlZC00MDAnOidiZy1lbWVyYWxkLTEwMCBkYXJrOmJnLWVtZXJhbGQtOTAwLzMwIHRleHQtZW1lcmFsZC03MDAgZGFyazp0ZXh0'+'LWVtZXJhbGQtNDAwJ30iPkR1ZSAke2ZtdERhdGUoYS5kdWVEYXRlKX08L3NwYW4+YDonJ30KICAgICAgICAgICAgICA8L2Rpdj4K'+'ICAgICAgICAgICAgICAke2EuZGVzY3JpcHRpb24/YDxwIGNsYXNzPSJ0ZXh0LXNtIHRleHQtemluYy01MDAgbXQtMSI+JHtlc2Mo'+'YS5kZXNjcmlwdGlvbil9PC9wPmA6Jyd9CiAgICAgICAgICAgICAgJHthLmZpbGVVcmw/YDxhIGhyZWY9Imh0dHBzOi8vaHViLTZ5'+'cmwub25yZW5kZXIuY29tJHthLmZpbGVVcmx9IiB0YXJnZXQ9Il9ibGFuayIgY2xhc3M9InBpbGwtZGwgbXQtMyBpbmxpbmUtZmxl'+'eCI+PGkgZGF0YS1sdWNpZGU9ImRvd25sb2FkIiBjbGFzcz0idy0zLjUgaC0zLjUiPjwvaT5Eb3dubG9hZDwvYT5gOicnfQogICAg'+'ICAgICAgICA8L2Rpdj4KICAgICAgICAgIDwvZGl2PgogICAgICAgIDwvZGl2PmA7fSkuam9pbignJyk6ZW1wdHkoJ05vIGFzc2ln'+'bm1lbnRzIHBvc3RlZCB5ZXQuJyk7CiAgICAgIGx1Y2lkZS5jcmVhdGVJY29ucygpOwogICAgfWNhdGNoe2JveC5pbm5lckhUTUw9'+'ZXJyQ2FyZCgpO30KICB9CgogIGFzeW5jIGZ1bmN0aW9uIGxvYWRUaW1ldGFibGUoKXsKICAgIGNvbnN0IGJveD1kb2N1bWVudC5n'+'ZXRFbGVtZW50QnlJZCgnbGlzdC10aW1ldGFibGUnKTsKICAgIGJveC5pbm5lckhUTUw9JzxkaXYgY2xhc3M9InNrZWxldG9uIGgt'+'MzIgdy1mdWxsIj48L2Rpdj4nOwogICAgdHJ5ewogICAgICBjb25zdCBkYXRhPWF3YWl0IGFwaUZldGNoKCcvdGltZXRhYmxlJyk7'+'CiAgICAgIGJveC5pbm5lckhUTUw9ZGF0YS5sZW5ndGg/ZGF0YS5tYXAodD0+YAogICAgICAgIDxkaXYgY2xhc3M9ImNhcmQgcC01'+'Ij4KICAgICAgICAgIDxkaXYgY2xhc3M9ImZsZXggaXRlbXMtY2VudGVyIGdhcC0zIG1iLTQiPgogICAgICAgICAgICA8ZGl2IGNs'+'YXNzPSJ3LTEwIGgtMTAgcm91bmRlZC14bCBiZy10ZWFsLTEwMCBkYXJrOmJnLXRlYWwtOTAwLzMwIGZsZXggaXRlbXMtY2VudGVy'+'IGp1c3RpZnktY2VudGVyIHNocmluay0wIj48aSBkYXRhLWx1Y2lkZT0iY2FsZW5kYXItZGF5cyIgY2xhc3M9InctNSBoLTUgdGV4'+'dC10ZWFsLTYwMCBkYXJrOnRleHQtdGVhbC00MDAiPjwvaT48L2Rpdj4KICAgICAgICAgICAgPGRpdj48cCBjbGFzcz0iZm9udC1i'+'b2xkIHRleHQtemluYy05MDAgZGFyazp0ZXh0LXdoaXRlIj4ke2VzYyh0LnRpdGxlKX08L3A+PHAgY2xhc3M9InRleHQteHMgdGV4'+'dC16aW5jLTQwMCI+JHtmbXREYXRlKHQuY3JlYXRlZEF0KX08L3A+PC9kaXY+CiAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICR7'+'dC5zbG90cyYmdC5zbG90cy5sZW5ndGg/YDxkaXYgY2xhc3M9Im92ZXJmbG93LXgtYXV0byI+PHRhYmxlIGNsYXNzPSJ3LWZ1bGwg'+'dGV4dC1zbSI+PHRoZWFkPjx0ciBjbGFzcz0idGV4dC1sZWZ0IHRleHQteHMgdGV4dC16aW5jLTQwMCBib3JkZXItYiBib3JkZXIt'+'emluYy0yMDAgZGFyazpib3JkZXItemluYy04MDAiPjx0aCBjbGFzcz0icGItMiBwci00Ij5EYXk8L3RoPjx0aCBjbGFzcz0icGIt'+'MiBwci00Ij5TdWJqZWN0PC90aD48dGggY2xhc3M9InBiLTIgcHItNCI+VGltZTwvdGg+PHRoIGNsYXNzPSJwYi0yIj5Sb29tPC90'+'aD48L3RyPjwvdGhlYWQ+PHRib2R5IGNsYXNzPSJkaXZpZGUteSBkaXZpZGUtemluYy0xMDAgZGFyazpkaXZpZGUtemluYy04MDAi'+'PiR7dC5zbG90cy5tYXAocz0+YDx0cj48dGQgY2xhc3M9InB5LTIgcHItNCBmb250LW1lZGl1bSB0ZXh0LXppbmMtOTAwIGRhcms6'+'dGV4dC16aW5jLTEwMCI+JHtlc2Mocy5kYXl8fCctJyl9PC90ZD48dGQgY2xhc3M9InB5LTIgcHItNCB0ZXh0LXppbmMtNjAwIGRh'+'cms6dGV4dC16aW5jLTQwMCI+JHtlc2Mocy5zdWJqZWN0fHwnLScpfTwvdGQ+PHRkIGNsYXNzPSJweS0yIHByLTQgdGV4dC16aW5j'+'LTYwMCBkYXJrOnRleHQtemluYy00MDAiPiR7cy5zdGFydCYmcy5lbmQ/ZXNjKHMuc3RhcnQrJyDigJMgJytzLmVuZCk6ZXNjKHMu'+'dGltZXx8Jy0nKX08L3RkPjx0ZCBjbGFzcz0icHktMiB0ZXh0LXppbmMtNjAwIGRhcms6dGV4dC16aW5jLTQwMCI+JHtlc2Mocy5s'+'b2NhdGlvbnx8cy5yb29tfHwnLScpfTwvdGQ+PC90cj5gKS5qb2luKCcnKX08L3Rib2R5PjwvdGFibGU+PC9kaXY+YDonPHAgY2xh'+'c3M9InRleHQtc20gdGV4dC16aW5jLTQwMCI+Tm8gc2xvdHMgYWRkZWQuPC9wPid9CiAgICAgICAgPC9kaXY+YCkuam9pbignJyk6'+'ZW1wdHkoJ05vIHRpbWV0YWJsZSBwb3N0ZWQgeWV0LicpOwogICAgICBsdWNpZGUuY3JlYXRlSWNvbnMoKTsKICAgIH1jYXRjaHti'+'b3guaW5uZXJIVE1MPWVyckNhcmQoKTt9CiAgfQoKICBhc3luYyBmdW5jdGlvbiBsb2FkU3lsbGFidXMoKXsKICAgIGNvbnN0IGJv'+'eD1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnbGlzdC1zeWxsYWJ1cycpOwogICAgYm94LmlubmVySFRNTD0nPGRpdiBjbGFzcz0i'+'c2tlbGV0b24gaC0zMiB3LWZ1bGwiPjwvZGl2Pic7CiAgICB0cnl7CiAgICAgIGNvbnN0IGRhdGE9YXdhaXQgYXBpRmV0Y2goJy9z'+'eWxsYWJ1cycpOwogICAgICBib3guaW5uZXJIVE1MPWRhdGEubGVuZ3RoP2RhdGEubWFwKHM9PmAKICAgICAgICA8ZGl2IGNsYXNz'+'PSJjYXJkIHAtNSI+CiAgICAgICAgICA8ZGl2IGNsYXNzPSJmbGV4IGl0ZW1zLXN0YXJ0IGdhcC0zIj4KICAgICAgICAgICAgPGRp'+'diBjbGFzcz0idy0xMCBoLTEwIHJvdW5kZWQteGwgYmctcGluay0xMDAgZGFyazpiZy1waW5rLTkwMC8zMCBmbGV4IGl0ZW1zLWNl'+'bnRlciBqdXN0aWZ5LWNlbnRlciBzaHJpbmstMCBtdC0wLjUiPjxpIGRhdGEtbHVjaWRlPSJib29rLW9wZW4iIGNsYXNzPSJ3LTUg'+'aC01IHRleHQtcGluay02MDAgZGFyazp0ZXh0LXBpbmstNDAwIj48L2k+PC9kaXY+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImZs'+'ZXgtMSI+CiAgICAgICAgICAgICAgPHAgY2xhc3M9ImZvbnQtYm9sZCB0ZXh0LXppbmMtOTAwIGRhcms6dGV4dC13aGl0ZSI+JHtl'+'c2Mocy50aXRsZSl9PC9wPgogICAgICAgICAgICAgICR7cy5zdWJqZWN0P2A8c3BhbiBjbGFzcz0idGFnIG10LTEiPiR7ZXNjKHMu'+'c3ViamVjdCl9PC9zcGFuPmA6Jyd9CiAgICAgICAgICAgICAgJHtzLmRlc2NyaXB0aW9uP2A8cCBjbGFzcz0idGV4dC1zbSB0ZXh0'+'LXppbmMtNTAwIG10LTIiPiR7ZXNjKHMuZGVzY3JpcHRpb24pfTwvcD5gOicnfQogICAgICAgICAgICAgICR7cy50b3BpY3MmJnMu'+'dG9waWNzLmxlbmd0aD9gPGRpdiBjbGFzcz0ibXQtMyI+PHAgY2xhc3M9InRleHQteHMgZm9udC1zZW1pYm9sZCB0ZXh0LXppbmMt'+'NDAwIHVwcGVyY2FzZSB0cmFja2luZy13aWRlciBtYi0yIj5Ub3BpY3M8L3A+PHVsIGNsYXNzPSJzcGFjZS15LTEiPiR7cy50b3Bp'+'Y3MubWFwKCh0LGkpPT5gPGxpIGNsYXNzPSJmbGV4IGl0ZW1zLWNlbnRlciBnYXAtMiB0ZXh0LXNtIHRleHQtemluYy02MDAgZGFy'+'azp0ZXh0LXppbmMtNDAwIj48c3BhbiBjbGFzcz0idy01IGgtNSByb3VuZGVkLWZ1bGwgYmctcGluay0xMDAgZGFyazpiZy1waW5r'+'LTkwMC8zMCB0ZXh0LXBpbmstNjAwIGRhcms6dGV4dC1waW5rLTQwMCB0ZXh0LXhzIGZvbnQtYm9sZCBmbGV4IGl0ZW1zLWNlbnRl'+'ciBqdXN0aWZ5LWNlbnRlciBzaHJpbmstMCI+JHtpKzF9PC9zcGFuPiR7ZXNjKHQpfTwvbGk+YCkuam9pbignJyl9PC91bD48L2Rp'+'dj5gOicnfQogICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgIDwvZGl2PgogICAgICAgIDwvZGl2PmApLmpvaW4oJycpOmVtcHR5'+'KCdObyBzeWxsYWJ1cyBwb3N0ZWQgeWV0LicpOwogICAgICBsdWNpZGUuY3JlYXRlSWNvbnMoKTsKICAgIH1jYXRjaHtib3guaW5u'+'ZXJIVE1MPWVyckNhcmQoKTt9CiAgfQoKICBhc3luYyBmdW5jdGlvbiBsb2FkUGFwZXJzKCl7CiAgICBjb25zdCBib3g9ZG9jdW1l'+'bnQuZ2V0RWxlbWVudEJ5SWQoJ2xpc3QtcGFwZXJzJyk7CiAgICBib3guaW5uZXJIVE1MPSc8ZGl2IGNsYXNzPSJza2VsZXRvbiBo'+'LTMyIHctZnVsbCBjb2wtc3Bhbi0yIj48L2Rpdj4nOwogICAgdHJ5ewogICAgICBjb25zdCBkYXRhPWF3YWl0IGFwaUZldGNoKCcv'+'cGFwZXJzJyk7CiAgICAgIGJveC5pbm5lckhUTUw9ZGF0YS5sZW5ndGg/ZGF0YS5tYXAocD0+YAogICAgICAgIDxkaXYgY2xhc3M9'+'ImNhcmQgcC01IGZsZXggZmxleC1jb2wgZ2FwLTMgaG92ZXI6Ym9yZGVyLWVtZXJhbGQtMzAwIGRhcms6aG92ZXI6Ym9yZGVyLWVt'+'ZXJhbGQtNzAwIHRyYW5zaXRpb24tYWxsIj4KICAgICAgICAgIDxkaXYgY2xhc3M9ImZsZXggaXRlbXMtc3RhcnQgZ2FwLTMiPgog'+'ICAgICAgICAgICA8ZGl2IGNsYXNzPSJ3LTEwIGgtMTAgcm91bmRlZC14bCBiZy1lbWVyYWxkLTEwMCBkYXJrOmJnLWVtZXJhbGQt'+'OTAwLzMwIGZsZXggaXRlbXMtY2VudGVyIGp1c3RpZnktY2VudGVyIHNocmluay0wIj48aSBkYXRhLWx1Y2lkZT0iZmlsZS10ZXh0'+'IiBjbGFzcz0idy01IGgtNSB0ZXh0LWVtZXJhbGQtNjAwIGRhcms6dGV4dC1lbWVyYWxkLTQwMCI+PC9pPjwvZGl2PgogICAgICAg'+'ICAgICA8ZGl2IGNsYXNzPSJmbGV4LTEgbWluLXctMCI+PHAgY2xhc3M9ImZvbnQtYm9sZCB0ZXh0LXppbmMtOTAwIGRhcms6dGV4'+'dC13aGl0ZSI+JHtlc2MocC50aXRsZSl9PC9wPjxkaXYgY2xhc3M9ImZsZXggZ2FwLTIgbXQtMSBmbGV4LXdyYXAiPiR7cC5zdWJq'+'ZWN0P2A8c3BhbiBjbGFzcz0idGFnIj4ke2VzYyhwLnN1YmplY3QpfTwvc3Bhbj5gOicnfSAke3AueWVhcj9gPHNwYW4gY2xhc3M9'+'InRhZyI+JHtlc2MocC55ZWFyKX08L3NwYW4+YDonJ308L2Rpdj48L2Rpdj4KICAgICAgICAgIDwvZGl2PgogICAgICAgICAgPGRp'+'diBjbGFzcz0iZmxleCBpdGVtcy1jZW50ZXIganVzdGlmeS1iZXR3ZWVuIG10LWF1dG8gcHQtMiBib3JkZXItdCBib3JkZXItemlu'+'Yy0xMDAgZGFyazpib3JkZXItemluYy04MDAiPgogICAgICAgICAgICA8cCBjbGFzcz0idGV4dC14cyB0ZXh0LXppbmMtNDAwIj4k'+'e2ZtdERhdGUocC5jcmVhdGVkQXQpfTwvcD4KICAgICAgICAgICAgJHtwLmZpbGVVcmw/YDxhIGhyZWY9Imh0dHBzOi8vaHViLTZ5'+'cmwub25yZW5kZXIuY29tJHtwLmZpbGVVcmx9IiB0YXJnZXQ9Il9ibGFuayIgY2xhc3M9InBpbGwtZGwiPjxpIGRhdGEtbHVjaWRl'+'PSJkb3dubG9hZCIgY2xhc3M9InctMy41IGgtMy41Ij48L2k+RG93bmxvYWQgUGFwZXI8L2E+YDonPHNwYW4gY2xhc3M9InRleHQt'+'eHMgdGV4dC16aW5jLTQwMCI+Tm8gZmlsZTwvc3Bhbj4nfQogICAgICAgICAgPC9kaXY+CiAgICAgICAgPC9kaXY+YCkuam9pbign'+'Jyk6ZW1wdHkoJ05vIHBhcGVycyB1cGxvYWRlZCB5ZXQuJyk7CiAgICAgIGx1Y2lkZS5jcmVhdGVJY29ucygpOwogICAgfWNhdGNo'+'e2JveC5pbm5lckhUTUw9ZXJyQ2FyZCgpO30KICB9CgogIGZ1bmN0aW9uIGZtdERhdGUoZCl7aWYoIWQpcmV0dXJuICcnO3JldHVy'+'biBuZXcgRGF0ZShkKS50b0xvY2FsZURhdGVTdHJpbmcoJ2VuLUlOJyx7ZGF5OidudW1lcmljJyxtb250aDonc2hvcnQnLHllYXI6'+'J251bWVyaWMnfSk7fQogIGZ1bmN0aW9uIGVzYyhzKXtjb25zdCBkPWRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO2QuaW5u'+'ZXJUZXh0PVN0cmluZyhzfHwnJyk7cmV0dXJuIGQuaW5uZXJIVE1MO30KICBmdW5jdGlvbiBlbXB0eShtc2cpe3JldHVybiBgPGRp'+'diBjbGFzcz0iY29sLXNwYW4tMiBmbGV4IGZsZXgtY29sIGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciBweS0xNiBnYXAtMyB0'+'ZXh0LXppbmMtNDAwIj48aSBkYXRhLWx1Y2lkZT0iaW5ib3giIGNsYXNzPSJ3LTEwIGgtMTAgb3BhY2l0eS00MCI+PC9pPjxwIGNs'+'YXNzPSJ0ZXh0LXNtIj4ke21zZ308L3A+PC9kaXY+YDt9CiAgZnVuY3Rpb24gZXJyQ2FyZCgpe3JldHVybiBgPGRpdiBjbGFzcz0i'+'Y29sLXNwYW4tMiB0ZXh0LWNlbnRlciBweS0xMiB0ZXh0LXNtIHRleHQtcmVkLTQwMCI+PGkgZGF0YS1sdWNpZGU9IndpZmktb2Zm'+'IiBjbGFzcz0idy02IGgtNiBteC1hdXRvIG1iLTIgb3BhY2l0eS02MCI+PC9pPjxwPkNhbm5vdCBjb25uZWN0IHRvIHNlcnZlci4g'+'SXMgaXQgcnVubmluZz88L3A+PC9kaXY+YDt9'))</script>
 <div id="pwa-banner" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;width:calc(100% - 48px);max-width:420px;background:linear-gradient(135deg,rgba(20,5,30,0.95),rgba(10,10,40,0.95));border:1px solid transparent;border-radius:1.25rem;padding:16px 20px;box-shadow:0 20px 60px rgba(0,0,0,0.6);backdrop-filter:blur(24px);animation:slideUpPWA 0.4s ease;background-clip:padding-box">
   <div style="position:absolute;inset:0;border-radius:1.25rem;padding:1px;background:linear-gradient(90deg,#f43f5e,#f97316,#eab308,#22c55e,#06b6d4,#a855f7,#ec4899);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;animation:rainbowBorder 3s linear infinite;background-size:200% auto"></div>
   <style>
@@ -663,42 +326,6 @@
     <button class="pwa-install-btn" onclick="installStudentPWA()">📲 Install App — Free!</button>
   </div>
 </div>
-<script>
-  let _studentPwaPrompt=null;
-  window.addEventListener('beforeinstallprompt',e=>{
-    e.preventDefault();
-    _studentPwaPrompt=e;
-    setTimeout(()=>{document.getElementById('pwa-banner').style.display='block';},1500);
-  });
-  async function installStudentPWA(){
-    if(!_studentPwaPrompt)return;
-    _studentPwaPrompt.prompt();
-    const{outcome}=await _studentPwaPrompt.userChoice;
-    _studentPwaPrompt=null;
-    document.getElementById('pwa-banner').style.display='none';
-  }
-  window.addEventListener('appinstalled',()=>{
-    document.getElementById('pwa-banner').style.display='none';
-  });
-  async function forceReset(e){
-    if(e) e.preventDefault();
-    if('serviceWorker' in navigator){
-      try {
-        const regs = await navigator.serviceWorker.getRegistrations();
-        for(let r of regs) { await r.unregister(); }
-      } catch(err) { console.error(err); }
-    }
-    if('caches' in window){
-      try {
-        const keys = await caches.keys();
-        for(let k of keys) { await caches.delete(k); }
-      } catch(err) { console.error(err); }
-    }
-    localStorage.clear();
-    sessionStorage.clear();
-    alert('App Cache & Data Cleared! Reloading...');
-    window.location.reload(true);
-  }
-</script>
+<script>eval(atob('bGV0IF9zdHVkZW50UHdhUHJvbXB0PW51bGw7CiAgd2luZG93LmFkZEV2ZW50TGlzdGVuZXIoJ2JlZm9yZWluc3RhbGxwcm9tcHQn'+'LGU9PnsKICAgIGUucHJldmVudERlZmF1bHQoKTsKICAgIF9zdHVkZW50UHdhUHJvbXB0PWU7CiAgICBzZXRUaW1lb3V0KCgpPT57'+'ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3B3YS1iYW5uZXInKS5zdHlsZS5kaXNwbGF5PSdibG9jayc7fSwxNTAwKTsKICB9KTsK'+'ICBhc3luYyBmdW5jdGlvbiBpbnN0YWxsU3R1ZGVudFBXQSgpewogICAgaWYoIV9zdHVkZW50UHdhUHJvbXB0KXJldHVybjsKICAg'+'IF9zdHVkZW50UHdhUHJvbXB0LnByb21wdCgpOwogICAgY29uc3R7b3V0Y29tZX09YXdhaXQgX3N0dWRlbnRQd2FQcm9tcHQudXNl'+'ckNob2ljZTsKICAgIF9zdHVkZW50UHdhUHJvbXB0PW51bGw7CiAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncHdhLWJhbm5l'+'cicpLnN0eWxlLmRpc3BsYXk9J25vbmUnOwogIH0KICB3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcignYXBwaW5zdGFsbGVkJywoKT0+'+'ewogICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3B3YS1iYW5uZXInKS5zdHlsZS5kaXNwbGF5PSdub25lJzsKICB9KTsKICBh'+'c3luYyBmdW5jdGlvbiBmb3JjZVJlc2V0KGUpewogICAgaWYoZSkgZS5wcmV2ZW50RGVmYXVsdCgpOwogICAgaWYoJ3NlcnZpY2VX'+'b3JrZXInIGluIG5hdmlnYXRvcil7CiAgICAgIHRyeSB7CiAgICAgICAgY29uc3QgcmVncyA9IGF3YWl0IG5hdmlnYXRvci5zZXJ2'+'aWNlV29ya2VyLmdldFJlZ2lzdHJhdGlvbnMoKTsKICAgICAgICBmb3IobGV0IHIgb2YgcmVncykgeyBhd2FpdCByLnVucmVnaXN0'+'ZXIoKTsgfQogICAgICB9IGNhdGNoKGVycikgeyBjb25zb2xlLmVycm9yKGVycik7IH0KICAgIH0KICAgIGlmKCdjYWNoZXMnIGlu'+'IHdpbmRvdyl7CiAgICAgIHRyeSB7CiAgICAgICAgY29uc3Qga2V5cyA9IGF3YWl0IGNhY2hlcy5rZXlzKCk7CiAgICAgICAgZm9y'+'KGxldCBrIG9mIGtleXMpIHsgYXdhaXQgY2FjaGVzLmRlbGV0ZShrKTsgfQogICAgICB9IGNhdGNoKGVycikgeyBjb25zb2xlLmVy'+'cm9yKGVycik7IH0KICAgIH0KICAgIGxvY2FsU3RvcmFnZS5jbGVhcigpOwogICAgc2Vzc2lvblN0b3JhZ2UuY2xlYXIoKTsKICAg'+'IGFsZXJ0KCdBcHAgQ2FjaGUgJiBEYXRhIENsZWFyZWQhIFJlbG9hZGluZy4uLicpOwogICAgd2luZG93LmxvY2F0aW9uLnJlbG9h'+'ZCh0cnVlKTsKICB9'))</script>
 </body>
 </html>

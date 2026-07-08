@@ -4,56 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Hub - Admin Panel</title>
-    <!-- Tailwind CSS Play CDN -->
     <link rel="manifest" href="./admin-manifest.json" />
   <meta name="theme-color" content="#7c3aed" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="Hub Admin" />
-  <script>
-    if('serviceWorker' in navigator){
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=4').then(reg => {
-          reg.update();
-        }).catch(err => console.error('SW registration failed:', err));
-      });
-    }
-  </script>
+  <script>eval(atob('aWYoJ3NlcnZpY2VXb3JrZXInIGluIG5hdmlnYXRvcil7CiAgICAgIHdpbmRvdy5hZGRFdmVudExpc3RlbmVyKCdsb2FkJywgKCkg'+'PT4gewogICAgICAgIG5hdmlnYXRvci5zZXJ2aWNlV29ya2VyLnJlZ2lzdGVyKCcuL3N3LmpzP3Y9NScpLnRoZW4ocmVnID0+IHsK'+'ICAgICAgICAgIHJlZy51cGRhdGUoKTsKICAgICAgICAgIHJlZy5vbnVwZGF0ZWZvdW5kID0gKCkgPT4gewogICAgICAgICAgICBj'+'b25zdCBpbnN0YWxsaW5nV29ya2VyID0gcmVnLmluc3RhbGxpbmc7CiAgICAgICAgICAgIGluc3RhbGxpbmdXb3JrZXIub25zdGF0'+'ZWNoYW5nZSA9ICgpID0+IHsKICAgICAgICAgICAgICBpZiAoaW5zdGFsbGluZ1dvcmtlci5zdGF0ZSA9PT0gJ2luc3RhbGxlZCcp'+'IHsKICAgICAgICAgICAgICAgIGlmIChuYXZpZ2F0b3Iuc2VydmljZVdvcmtlci5jb250cm9sbGVyKSB7CiAgICAgICAgICAgICAg'+'ICAgIHdpbmRvdy5sb2NhdGlvbi5yZWxvYWQoKTsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICB9CiAgICAgICAgICAg'+'IH07CiAgICAgICAgICB9OwogICAgICAgIH0pLmNhdGNoKGVyciA9PiBjb25zb2xlLmVycm9yKCdTVyByZWdpc3RyYXRpb24gZmFp'+'bGVkOicsIGVycikpOwogICAgICB9KTsKICAgIH0='))</script>
   <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {
-            colors: {
-              primary: {
-                50: '#f5f3ff',
-                100: '#ede9fe',
-                200: '#ddd6fe',
-                300: '#c4b5fd',
-                400: '#a78bfa',
-                500: '#8b5cf6',
-                600: '#7c3aed',
-                700: '#6d28d9',
-                800: '#5b21b6',
-                900: '#4c1d95',
-                950: '#2e1065',
-              }
-            },
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-              display: ['Outfit', 'sans-serif'],
-              mono: ['JetBrains Mono', 'monospace'],
-            }
-          }
-        }
-      }
-    </script>
-    <!-- Google Fonts -->
+    <script>eval(atob('dGFpbHdpbmQuY29uZmlnID0gewogICAgICAgIGRhcmtNb2RlOiAnY2xhc3MnLAogICAgICAgIHRoZW1lOiB7CiAgICAgICAgICBl'+'eHRlbmQ6IHsKICAgICAgICAgICAgY29sb3JzOiB7CiAgICAgICAgICAgICAgcHJpbWFyeTogewogICAgICAgICAgICAgICAgNTA6'+'ICcjZjVmM2ZmJywKICAgICAgICAgICAgICAgIDEwMDogJyNlZGU5ZmUnLAogICAgICAgICAgICAgICAgMjAwOiAnI2RkZDZmZScs'+'CiAgICAgICAgICAgICAgICAzMDA6ICcjYzRiNWZkJywKICAgICAgICAgICAgICAgIDQwMDogJyNhNzhiZmEnLAogICAgICAgICAg'+'ICAgICAgNTAwOiAnIzhiNWNmNicsCiAgICAgICAgICAgICAgICA2MDA6ICcjN2MzYWVkJywKICAgICAgICAgICAgICAgIDcwMDog'+'JyM2ZDI4ZDknLAogICAgICAgICAgICAgICAgODAwOiAnIzViMjFiNicsCiAgICAgICAgICAgICAgICA5MDA6ICcjNGMxZDk1JywK'+'ICAgICAgICAgICAgICAgIDk1MDogJyMyZTEwNjUnLAogICAgICAgICAgICAgIH0KICAgICAgICAgICAgfSwKICAgICAgICAgICAg'+'Zm9udEZhbWlseTogewogICAgICAgICAgICAgIHNhbnM6IFsnSW50ZXInLCAnc2Fucy1zZXJpZiddLAogICAgICAgICAgICAgIGRp'+'c3BsYXk6IFsnT3V0Zml0JywgJ3NhbnMtc2VyaWYnXSwKICAgICAgICAgICAgICBtb25vOiBbJ0pldEJyYWlucyBNb25vJywgJ21v'+'bm9zcGFjZSddLAogICAgICAgICAgICB9CiAgICAgICAgICB9CiAgICAgICAgfQogICAgICB9'))</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
       body {
@@ -86,16 +47,12 @@
     </style>
   </head>
   <body class="bg-zinc-50 text-zinc-950 dark:bg-[#09090b] dark:text-zinc-50 transition-colors duration-200 min-h-screen">
-    
-    <!-- Full-screen Loading Spinner -->
     <div id="app-loader" class="fixed inset-0 z-50 flex items-center justify-center bg-zinc-50 dark:bg-[#09090b]">
       <div class="flex flex-col items-center">
         <div class="w-12 h-12 border-4 border-t-purple-600 border-zinc-200 dark:border-zinc-800 rounded-full animate-spin"></div>
         <p class="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mt-4">Initializing Admin Panel...</p>
       </div>
     </div>
-
-    <!-- Auth View Container -->
     <div id="auth-view" class="hidden min-h-screen flex items-center justify-center px-4 py-12">
       <div class="w-full max-w-md bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-8 shadow-xl">
         <div class="flex flex-col items-center mb-6">
@@ -105,16 +62,11 @@
           <h2 class="text-3xl font-extrabold tracking-tight font-display text-zinc-950 dark:text-zinc-50">Student Hub</h2>
           <p class="text-sm text-zinc-400 mt-1">Administration Control Center</p>
         </div>
-
-        <!-- Auth Notification Toast -->
         <div id="auth-alert" class="hidden flex items-start gap-3 p-4 rounded-lg border mb-6 text-sm">
           <i data-lucide="alert-circle" class="w-5 h-5 shrink-0 text-rose-500"></i>
           <div id="auth-alert-msg" class="flex-1 font-medium leading-5"></div>
         </div>
-
-        <!-- Form -->
         <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4">
-
           <div class="flex flex-col gap-1.5">
             <label class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Username / Email</label>
             <div class="relative">
@@ -124,7 +76,6 @@
               <input type="text" id="auth-email" required value="mohammedshakib663" placeholder="admin@studenthub.com" class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded-lg pl-10 pr-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 text-zinc-950 dark:text-zinc-100" />
             </div>
           </div>
-
           <div class="flex flex-col gap-1.5">
             <label class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Password</label>
             <div class="relative">
@@ -134,18 +85,13 @@
               <input type="password" id="auth-password" required value="MOHDshakib@123" placeholder="••••••••" class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded-lg pl-10 pr-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 text-zinc-950 dark:text-zinc-100" />
             </div>
           </div>
-
           <button type="submit" id="auth-submit-btn" class="w-full mt-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-4 py-2.5 font-semibold transition-colors shadow-sm flex items-center justify-center gap-2">
             <span>Sign In as Admin</span>
           </button>
         </form>
       </div>
     </div>
-
-    <!-- Dashboard App View Container (Hidden before Auth) -->
     <div id="app-view" class="hidden min-h-screen flex flex-col md:flex-row">
-      
-      <!-- Mobile Navbar -->
       <header class="md:hidden flex items-center justify-between px-6 py-4 bg-white dark:bg-[#0c0c0f] border-b border-zinc-200 dark:border-zinc-800 sticky top-0 z-40 shadow-sm">
         <div class="flex items-center gap-2">
           <span class="font-extrabold text-xl font-display text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-600">Student Hub</span>
@@ -161,8 +107,6 @@
           </button>
         </div>
       </header>
-
-      <!-- Sidebar -->
       <aside id="sidebar" class="fixed md:sticky md:top-0 left-0 top-0 bottom-0 w-64 z-50 bg-white dark:bg-[#0c0c0f] border-r border-zinc-200 dark:border-zinc-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between shadow-lg md:shadow-none">
         <div class="flex flex-col h-full">
           <div class="h-16 flex items-center justify-between px-6 border-b border-zinc-200 dark:border-zinc-800">
@@ -174,8 +118,6 @@
               <i data-lucide="x" class="w-5 h-5"></i>
             </button>
           </div>
-
-          <!-- Navigation Links -->
           <nav class="flex-1 overflow-y-auto px-4 py-6 space-y-1.5">
             <button onclick="navigateTo('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-purple-650 bg-purple-100 dark:bg-purple-900/30 dark:text-purple-400">
               <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
@@ -215,16 +157,11 @@
             </button>
           </nav>
         </div>
-
-        <!-- Sidebar Footer Settings -->
         <div class="p-4 border-t border-zinc-200 dark:border-zinc-800 space-y-3">
-          
-          <!-- API configuration -->
           <div class="space-y-1">
             <label class="text-[10px] font-bold text-zinc-400 uppercase">Backend API URL</label>
             <input type="text" id="api-url-input" onchange="updateApiBaseUrl(this.value)" class="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-250 dark:border-zinc-800 rounded px-2 py-1 text-xs text-zinc-800 dark:text-zinc-200 font-mono focus:outline-none focus:border-purple-500" />
           </div>
-
           <div class="flex items-center gap-3 pt-2">
             <div class="w-9 h-9 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-650 dark:text-purple-400 font-bold" id="user-avatar-initial">A</div>
             <div class="flex-1 min-w-0">
@@ -232,7 +169,6 @@
               <p class="text-[10px] text-zinc-400 truncate" id="user-display-email">admin@studenthub.com</p>
             </div>
           </div>
-
           <div class="flex gap-2 pt-1">
             <button onclick="toggleDarkMode()" class="hidden md:flex flex-1 items-center justify-center p-2 rounded-lg bg-zinc-50 dark:bg-zinc-900/50 hover:bg-zinc-100 dark:hover:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400" title="Toggle Theme">
               <i data-lucide="sun" id="sidebar-theme-icon-sun" class="w-4 h-4 hidden"></i>
@@ -245,11 +181,7 @@
           </div>
         </div>
       </aside>
-
-      <!-- Main Layout -->
       <div class="flex-1 flex flex-col min-w-0">
-        
-        <!-- Desktop Header -->
         <header class="hidden md:flex items-center justify-between h-16 px-8 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#0c0c0f] sticky top-0 z-30">
           <h2 id="view-title" class="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 font-display">Dashboard</h2>
           <div class="flex items-center gap-4">
@@ -260,22 +192,13 @@
             <div class="w-9 h-9 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold" id="header-user-avatar">A</div>
           </div>
         </header>
-
-        <!-- Main Content Area -->
         <main class="flex-1 p-6 md:p-8 max-w-[1600px] w-full mx-auto overflow-y-auto">
-          
-          <!-- Alert Toast for Actions -->
           <div id="action-alert" class="hidden flex items-start gap-3 p-4 rounded-lg border mb-6 text-sm">
             <div id="action-alert-icon"></div>
             <div id="action-alert-msg" class="flex-1 font-medium leading-5"></div>
             <button onclick="hideActionAlert()" class="p-0.5 rounded-md hover:opacity-75"><i data-lucide="x" class="w-4 h-4"></i></button>
           </div>
-
-          <!-- ============================================== -->
-          <!-- 1. DASHBOARD VIEW -->
-          <!-- ============================================== -->
           <div id="view-dashboard" class="view-section space-y-6">
-            <!-- Stats cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <div onclick="navigateTo('students')" class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm hover:border-purple-500/50 cursor-pointer flex items-start gap-4 transition-all">
                 <div class="p-3 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 rounded-lg"><i data-lucide="users" class="w-6 h-6"></i></div>
@@ -306,8 +229,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- Quick Link Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <div onclick="navigateTo('timetables')" class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 hover:border-purple-500/50 cursor-pointer flex items-center justify-between transition-all">
                 <div class="flex items-center gap-3">
@@ -340,8 +261,6 @@
                 <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-400"></i>
               </div>
             </div>
-
-            <!-- Recent list splits -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm">
                 <div class="flex justify-between items-center mb-4">
@@ -354,7 +273,6 @@
                   <p class="text-xs text-zinc-400 py-4 text-center">Loading notes...</p>
                 </div>
               </div>
-
               <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm">
                 <div class="flex justify-between items-center mb-4">
                   <h3 class="text-lg font-bold font-display text-zinc-950 dark:text-zinc-50">Recent Assignments</h3>
@@ -368,10 +286,6 @@
               </div>
             </div>
           </div>
-
-          <!-- ============================================== -->
-          <!-- 2. STUDENTS VIEW -->
-          <!-- ============================================== -->
           <div id="view-students" class="view-section hidden space-y-6">
             <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
               <div class="relative w-full sm:max-w-xs">
@@ -382,7 +296,6 @@
               </div>
               <div id="students-count-lbl" class="text-xs font-semibold text-zinc-500">Loading student count...</div>
             </div>
-
             <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
               <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
@@ -402,10 +315,6 @@
               </div>
             </div>
           </div>
-
-          <!-- ============================================== -->
-          <!-- 3. NOTES VIEW -->
-          <!-- ============================================== -->
           <div id="view-notes" class="view-section hidden space-y-6">
             <div class="flex flex-col lg:flex-row gap-8 animate-fade-in">
               <div class="flex-1 space-y-6">
@@ -421,7 +330,6 @@
                     <span>Upload Note</span>
                   </button>
                 </div>
-
                 <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
                   <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -441,8 +349,6 @@
                   </div>
                 </div>
               </div>
-
-              <!-- Side panel Note -->
               <div id="note-side-panel" class="hidden w-full lg:w-80 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm h-fit">
                 <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
                   <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">Upload Study Note</h3>
@@ -468,10 +374,6 @@
               </div>
             </div>
           </div>
-
-          <!-- ============================================== -->
-          <!-- 4. ASSIGNMENTS VIEW -->
-          <!-- ============================================== -->
           <div id="view-assignments" class="view-section hidden space-y-6">
             <div class="flex flex-col lg:flex-row gap-8">
               <div class="flex-1 space-y-6">
@@ -487,7 +389,6 @@
                     <span>New Assignment</span>
                   </button>
                 </div>
-
                 <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
                   <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -507,8 +408,6 @@
                   </div>
                 </div>
               </div>
-
-              <!-- Side panel Assignment -->
               <div id="asg-side-panel" class="hidden w-full lg:w-80 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm h-fit">
                 <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
                   <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">Create Assignment</h3>
@@ -538,10 +437,6 @@
               </div>
             </div>
           </div>
-
-          <!-- ============================================== -->
-          <!-- 5. ANNOUNCEMENTS VIEW -->
-          <!-- ============================================== -->
           <div id="view-announcements" class="view-section hidden space-y-6">
             <div class="flex flex-col lg:flex-row gap-8">
               <div class="flex-1 space-y-6">
@@ -556,8 +451,6 @@
                   <p class="text-sm text-zinc-400 text-center py-10">Loading notices list...</p>
                 </div>
               </div>
-
-              <!-- Side panel Announcement -->
               <div id="ann-side-panel" class="hidden w-full lg:w-80 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm h-fit">
                 <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
                   <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">New Announcement</h3>
@@ -579,10 +472,6 @@
               </div>
             </div>
           </div>
-
-          <!-- ============================================== -->
-          <!-- 6. TIMETABLES VIEW -->
-          <!-- ============================================== -->
           <div id="view-timetables" class="view-section hidden space-y-6">
             <div class="flex flex-col lg:flex-row gap-8">
               <div class="flex-1 space-y-6">
@@ -597,8 +486,6 @@
                   <p class="text-sm text-zinc-400 text-center py-10 col-span-2">Loading timetables list...</p>
                 </div>
               </div>
-
-              <!-- Side panel Timetable -->
               <div id="tt-side-panel" class="hidden w-full lg:w-96 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm h-fit max-h-[80vh] overflow-y-auto">
                 <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
                   <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">Create Timetable</h3>
@@ -609,17 +496,14 @@
                     <label class="text-xs font-bold text-zinc-400 uppercase">Class/Name</label>
                     <input type="text" id="tt-title" required placeholder="e.g. Computer Science - Sem 3" class="w-full bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" />
                   </div>
-                  
                   <div class="space-y-3 pt-2 border-t border-zinc-100 dark:border-zinc-800">
                     <div class="flex justify-between items-center">
                       <label class="text-[10px] font-bold text-zinc-400 uppercase">Periods / Slots</label>
                       <button type="button" onclick="addFormPeriodRow()" class="text-xs text-purple-650 font-bold hover:underline flex items-center gap-1"><i data-lucide="plus" class="w-3 h-3"></i>Add Row</button>
                     </div>
                     <div id="tt-period-rows" class="space-y-3">
-                      <!-- Dynamically rendered rows -->
                     </div>
                   </div>
-
                   <button type="submit" id="tt-submit-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded py-2 text-sm font-semibold transition-colors flex items-center justify-center gap-1.5">
                     Save Timetable
                   </button>
@@ -627,10 +511,6 @@
               </div>
             </div>
           </div>
-
-          <!-- ============================================== -->
-          <!-- 7. SYLLABUS VIEW -->
-          <!-- ============================================== -->
           <div id="view-syllabus" class="view-section hidden space-y-6">
             <div class="flex flex-col lg:flex-row gap-8">
               <div class="flex-1 space-y-6">
@@ -645,8 +525,6 @@
                   <p class="text-sm text-zinc-400 text-center py-10 col-span-2">Loading syllabus lists...</p>
                 </div>
               </div>
-
-              <!-- Side panel Syllabus -->
               <div id="syl-side-panel" class="hidden w-full lg:w-80 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm h-fit">
                 <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
                   <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">New Syllabus</h3>
@@ -672,10 +550,6 @@
               </div>
             </div>
           </div>
-
-          <!-- ============================================== -->
-          <!-- 8. PAPERS VIEW -->
-          <!-- ============================================== -->
           <div id="view-papers" class="view-section hidden space-y-6">
             <div class="flex flex-col lg:flex-row gap-8">
               <div class="flex-1 space-y-6">
@@ -691,7 +565,6 @@
                     <span>Upload Paper</span>
                   </button>
                 </div>
-
                 <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
                   <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -711,8 +584,6 @@
                   </div>
                 </div>
               </div>
-
-              <!-- Side panel Paper -->
               <div id="paper-side-panel" class="hidden w-full lg:w-80 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm h-fit">
                 <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
                   <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">Upload Exam Paper</h3>
@@ -738,10 +609,6 @@
               </div>
             </div>
           </div>
-
-          <!-- ============================================== -->
-          <!-- 9. CATEGORIES VIEW -->
-          <!-- ============================================== -->
           <div id="view-categories" class="view-section hidden space-y-6">
             <div class="flex flex-col lg:flex-row gap-8">
               <div class="flex-1 space-y-6">
@@ -756,8 +623,6 @@
                   <p class="text-sm text-zinc-400 text-center py-10 col-span-2">Loading categories list...</p>
                 </div>
               </div>
-
-              <!-- Side panel Category -->
               <div id="cat-side-panel" class="hidden w-full lg:w-80 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm h-fit">
                 <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
                   <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50">New Category</h3>
@@ -779,15 +644,10 @@
               </div>
             </div>
           </div>
-
         </main>
       </div>
-
-      <!-- Mobile Sidebar Overlay background drawer -->
       <div id="sidebar-overlay" onclick="toggleMobileSidebar(false)" class="hidden md:hidden fixed inset-0 z-40 bg-zinc-950/50 backdrop-blur-xs"></div>
     </div>
-
-    <!-- Global Confirmation Modal dialog -->
     <div id="confirm-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
       <div class="fixed inset-0 bg-zinc-950/60 backdrop-blur-sm" onclick="closeConfirmModal()"></div>
       <div class="relative w-full max-w-sm bg-white dark:bg-[#0c0c0f] border border-zinc-250 dark:border-zinc-800 rounded-xl p-6 shadow-2xl animate-in zoom-in-95 duration-200">
@@ -799,1313 +659,7 @@
         </div>
       </div>
     </div>
-
-    <!-- ============================================== -->
-    <!-- SCRIPT SECTION -->
-    <!-- ============================================== -->
-    <script>
-      // Global App States
-      let activeView = 'dashboard';
-      let apiBaseUrl = 'https://hub-6yrl.onrender.com/api';
-      let token = localStorage.getItem('token') || '';
-      let user = null;
-
-      // In-Memory Data Arrays
-      let students = [];
-      let notes = [];
-      let assignments = [];
-      let announcements = [];
-      let timetables = [];
-      let syllabi = [];
-      let papers = [];
-      let categories = [];
-
-      // Confirm modal callback
-      let confirmCallback = null;
-
-      // App Initialization
-      window.addEventListener('DOMContentLoaded', () => {
-        // Initialize API inputs
-        document.getElementById('api-url-input').value = apiBaseUrl;
-        
-        // Sync theme with system / saved setting
-        const savedDarkMode = localStorage.getItem('darkMode');
-        const isDark = savedDarkMode ? JSON.parse(savedDarkMode) : true;
-        if (isDark) {
-          document.documentElement.classList.add('dark');
-          showThemeIcons(true);
-        } else {
-          document.documentElement.classList.remove('dark');
-          showThemeIcons(false);
-        }
-
-        // Check Auth Status
-        checkAuthentication();
-      });
-
-      // API base URL configuration updater
-      function updateApiBaseUrl(val) {
-        if (!val.trim()) return;
-        apiBaseUrl = val.trim();
-        localStorage.setItem('apiBaseUrl', apiBaseUrl);
-        showActionAlert('success', `API URL configured to: ${apiBaseUrl}`);
-        if (token) {
-          checkAuthentication(); // reload with new API URL
-        }
-      }
-
-      // Theme toggle handlers
-      function toggleDarkMode() {
-        const root = document.documentElement;
-        const isDarkNow = root.classList.contains('dark');
-        if (isDarkNow) {
-          root.classList.remove('dark');
-          localStorage.setItem('darkMode', 'false');
-          showThemeIcons(false);
-        } else {
-          root.classList.add('dark');
-          localStorage.setItem('darkMode', 'true');
-          showThemeIcons(true);
-        }
-      }
-
-      function showThemeIcons(isDark) {
-        if (isDark) {
-          document.getElementById('sidebar-theme-icon-sun').classList.remove('hidden');
-          document.getElementById('sidebar-theme-icon-moon').classList.add('hidden');
-          document.getElementById('mobile-theme-icon-sun').classList.remove('hidden');
-          document.getElementById('mobile-theme-icon-moon').classList.add('hidden');
-        } else {
-          document.getElementById('sidebar-theme-icon-sun').classList.add('hidden');
-          document.getElementById('sidebar-theme-icon-moon').classList.remove('hidden');
-          document.getElementById('mobile-theme-icon-sun').classList.add('hidden');
-          document.getElementById('mobile-theme-icon-moon').classList.remove('hidden');
-        }
-      }
-
-      // Mobile Sidebar open/close
-      function toggleMobileSidebar(open) {
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebar-overlay');
-        if (open) {
-          sidebar.classList.remove('-translate-x-full');
-          overlay.classList.remove('hidden');
-        } else {
-          sidebar.classList.add('-translate-x-full');
-          overlay.classList.add('hidden');
-        }
-      }
-
-      // Navigation handler (hashless router)
-      function navigateTo(viewName) {
-        // Hide all views
-        document.querySelectorAll('.view-section').forEach(view => {
-          view.classList.add('hidden');
-        });
-        
-        // Show selected view
-        const currentView = document.getElementById(`view-${viewName}`);
-        if (currentView) {
-          currentView.classList.remove('hidden');
-        }
-
-        // Update active class in sidebar nav buttons
-        document.querySelectorAll('aside nav button').forEach(btn => {
-          btn.className = "w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50";
-        });
-        
-        const activeNavBtn = document.getElementById(`nav-${viewName}`);
-        if (activeNavBtn) {
-          activeNavBtn.className = "w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-purple-650 bg-purple-100 dark:bg-purple-900/30 dark:text-purple-400";
-        }
-
-        // Set top header title
-        const titles = {
-          dashboard: 'System Overview',
-          students: 'Student Profiles',
-          notes: 'Study Notes Library',
-          assignments: 'Class Projects & Assignments',
-          announcements: 'Push Announcements',
-          timetables: 'Class Timetables & Hours',
-          syllabus: 'Course Syllabus Lists',
-          papers: 'Previous Exam Papers',
-          categories: 'Notes & Resource Categories'
-        };
-        document.getElementById('view-title').innerText = titles[viewName] || 'Admin Dashboard';
-        activeView = viewName;
-
-        // Auto load data for the view
-        loadDataForView(viewName);
-        toggleMobileSidebar(false);
-      }
-
-      // Core Request API Helper (Native fetch)
-      async function apiRequest(endpoint, method = 'GET', body = null, isMultipart = false) {
-        const headers = {};
-        if (token) {
-          headers['Authorization'] = `Bearer ${token}`;
-          headers['x-auth-token'] = token;
-        }
-
-        const options = { method, headers };
-
-        if (body) {
-          if (isMultipart) {
-            options.body = body; // let browser handle Content-Type boundaries
-          } else {
-            headers['Content-Type'] = 'application/json';
-            options.body = JSON.stringify(body);
-          }
-        }
-
-        const response = await fetch(`${apiBaseUrl}${endpoint}`, options);
-        
-        if (response.status === 401) {
-          handleLogout();
-          throw new Error('Authorization denied. Logged out.');
-        }
-
-        const data = await response.json();
-        
-        if (!response.ok) {
-          throw new Error(data.errors?.[0]?.msg || data.msg || 'Request failed');
-        }
-
-        return data;
-      }
-
-      // Check Authentication state
-      async function checkAuthentication() {
-        document.getElementById('app-loader').classList.remove('hidden');
-        if (!token) {
-          showAuthView(true);
-          return;
-        }
-
-        try {
-          user = await apiRequest('/auth/me');
-          if (user.role !== 'admin') {
-            throw new Error('Access Denied: Administrator role required.');
-          }
-          
-          // Setup user details
-          document.getElementById('user-display-name').innerText = user.name;
-          document.getElementById('user-display-email').innerText = user.email;
-          document.getElementById('header-user-name').innerText = user.name;
-          const initial = user.name ? user.name[0].toUpperCase() : 'A';
-          document.getElementById('user-avatar-initial').innerText = initial;
-          document.getElementById('header-user-avatar').innerText = initial;
-
-          showAuthView(false);
-          navigateTo('dashboard');
-        } catch (err) {
-          console.error(err);
-          localStorage.removeItem('token');
-          token = '';
-          showAuthView(true);
-          showAuthAlert(err.message);
-        }
-      }
-
-      function showAuthView(visible) {
-        document.getElementById('app-loader').classList.add('hidden');
-        if (visible) {
-          document.getElementById('auth-view').classList.remove('hidden');
-          document.getElementById('app-view').classList.add('hidden');
-        } else {
-          document.getElementById('auth-view').classList.add('hidden');
-          document.getElementById('app-view').classList.remove('hidden');
-        }
-        lucide.createIcons();
-      }
-
-      // Handle Authentication forms
-      async function handleAuthSubmit(e) {
-        e.preventDefault();
-        hideAuthAlert();
-
-        const email = document.getElementById('auth-email').value;
-        const password = document.getElementById('auth-password').value;
-        
-        const submitBtn = document.getElementById('auth-submit-btn');
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = `<span>Processing...</span>`;
-
-        try {
-          const res = await apiRequest('/auth/login', 'POST', { email, password });
-          token = res.token;
-          localStorage.setItem('token', token);
-          await checkAuthentication();
-        } catch (err) {
-          showAuthAlert(err.message);
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = "<span>Sign In as Admin</span>";
-        }
-      }
-
-      function showAuthAlert(msg) {
-        document.getElementById('auth-alert-msg').innerText = msg;
-        document.getElementById('auth-alert').classList.remove('hidden');
-      }
-
-      function hideAuthAlert() {
-        document.getElementById('auth-alert').classList.add('hidden');
-      }
-
-      function handleLogout() {
-        token = '';
-        user = null;
-        localStorage.removeItem('token');
-        showAuthView(true);
-      }
-
-      // Action Notification Alerts
-      function showActionAlert(type, message) {
-        const container = document.getElementById('action-alert');
-        const iconDiv = document.getElementById('action-alert-icon');
-        const msgDiv = document.getElementById('action-alert-msg');
-        
-        msgDiv.innerText = message;
-        
-        const styles = {
-          success: {
-            bg: 'bg-emerald-50 dark:bg-emerald-900/10 border-emerald-250 dark:border-emerald-800/30 text-emerald-800 dark:text-emerald-300',
-            icon: '<i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 shrink-0"></i>'
-          },
-          error: {
-            bg: 'bg-rose-50 dark:bg-rose-900/10 border-rose-250 dark:border-rose-800/30 text-rose-800 dark:text-rose-300',
-            icon: '<i data-lucide="alert-circle" class="w-5 h-5 text-rose-500 shrink-0"></i>'
-          }
-        };
-
-        const theme = styles[type] || styles.success;
-        container.className = `flex items-start gap-3 p-4 rounded-lg border mb-6 text-sm ${theme.bg}`;
-        iconDiv.innerHTML = theme.icon;
-        container.classList.remove('hidden');
-        lucide.createIcons();
-
-        // Auto close after 5s
-        setTimeout(() => {
-          hideActionAlert();
-        }, 5000);
-      }
-
-      function hideActionAlert() {
-        document.getElementById('action-alert').classList.add('hidden');
-      }
-
-      // ==============================================
-      // DATA LOADER GATEWAY FOR SPA VIEWS
-      // ==============================================
-      function loadDataForView(viewName) {
-        setErrorView(null);
-        switch (viewName) {
-          case 'dashboard':
-            loadDashboardStats();
-            break;
-          case 'students':
-            loadStudentsList();
-            break;
-          case 'notes':
-            loadNotesList();
-            break;
-          case 'assignments':
-            loadAssignmentsList();
-            break;
-          case 'announcements':
-            loadAnnouncementsList();
-            break;
-          case 'timetables':
-            loadTimetablesList();
-            break;
-          case 'syllabus':
-            loadSyllabiList();
-            break;
-          case 'papers':
-            loadPapersList();
-            break;
-          case 'categories':
-            loadCategoriesList();
-            break;
-        }
-      }
-
-      function setErrorView(msg) {
-        if (msg) {
-          showActionAlert('error', msg);
-        } else {
-          hideActionAlert();
-        }
-      }
-
-      // Confirmation dialog handling
-      function openConfirmModal(message, callback) {
-        document.getElementById('confirm-modal-msg').innerText = message;
-        document.getElementById('confirm-modal').classList.remove('hidden');
-        confirmCallback = callback;
-      }
-
-      function closeConfirmModal() {
-        document.getElementById('confirm-modal').classList.add('hidden');
-        confirmCallback = null;
-      }
-
-      document.getElementById('confirm-modal-yes-btn').addEventListener('click', async () => {
-        if (confirmCallback) {
-          const btn = document.getElementById('confirm-modal-yes-btn');
-          btn.disabled = true;
-          btn.innerHTML = 'Deleting...';
-          try {
-            await confirmCallback();
-          } catch (err) {
-            console.error(err);
-          } finally {
-            btn.disabled = false;
-            btn.innerHTML = 'Delete';
-            closeConfirmModal();
-          }
-        }
-      });
-
-      // Side panel toggles
-      function toggleSidePanel(panelName, show) {
-        const panel = document.getElementById(`${panelName}-side-panel`);
-        if (show) {
-          panel.classList.remove('hidden');
-        } else {
-          panel.classList.add('hidden');
-        }
-      }
-
-      // ==============================================
-      // 1. DASHBOARD LOAD LOGIC
-      // ==============================================
-      async function loadDashboardStats() {
-        try {
-          const [
-            usersRes,
-            notesRes,
-            asgRes,
-            annRes,
-            ttRes,
-            papersRes,
-            catRes
-          ] = await Promise.allSettled([
-            apiRequest('/users'),
-            apiRequest('/notes'),
-            apiRequest('/assignments'),
-            apiRequest('/announcements'),
-            apiRequest('/timetable'),
-            apiRequest('/papers'),
-            apiRequest('/categories')
-          ]);
-
-          const val = (r, fallback = []) => r.status === 'fulfilled' ? r.value : fallback;
-
-          students      = val(usersRes);
-          notes         = val(notesRes);
-          assignments   = val(asgRes);
-          announcements = val(annRes);
-          timetables    = val(ttRes);
-          papers        = val(papersRes);
-          categories    = val(catRes);
-
-          const studentCount = students.filter(s => s.role !== 'admin').length;
-          document.getElementById('stat-students').innerText = studentCount;
-          document.getElementById('stat-notes').innerText = notes.length;
-          document.getElementById('stat-assignments').innerText = assignments.length;
-          document.getElementById('stat-announcements').innerText = announcements.length;
-          
-          document.getElementById('stat-timetables-sub').innerText = `${timetables.length} schedules active`;
-          document.getElementById('stat-papers-sub').innerText = `${papers.length} papers uploaded`;
-          document.getElementById('stat-categories-sub').innerText = `${categories.length} topics configured`;
-
-          // Render Recents
-          renderRecentNotes();
-          renderRecentAssignments();
-        } catch (err) {
-          setErrorView('Dashboard fetch failed. Verify backend: ' + err.message);
-        }
-      }
-
-      function renderRecentNotes() {
-        const container = document.getElementById('recent-notes-list');
-        const slice = notes.slice(0, 5);
-        if (slice.length === 0) {
-          container.innerHTML = `<p class="text-xs text-zinc-400 py-2 text-center">No study notes found.</p>`;
-          return;
-        }
-        container.innerHTML = slice.map(note => `
-          <div class="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-100 dark:border-zinc-800/50 rounded-lg">
-            <div class="min-w-0 flex-1">
-              <p class="text-xs font-semibold truncate text-zinc-800 dark:text-zinc-200">${note.title}</p>
-              <p class="text-[10px] text-zinc-400 truncate mt-0.5">${note.description || 'No description'}</p>
-            </div>
-            <span class="text-[9px] text-zinc-400 bg-zinc-150 dark:bg-zinc-800 rounded px-1.5 py-0.5 font-mono">${new Date(note.createdAt).toLocaleDateString()}</span>
-          </div>
-        `).join('');
-      }
-
-      function renderRecentAssignments() {
-        const container = document.getElementById('recent-assignments-list');
-        const slice = assignments.slice(0, 5);
-        if (slice.length === 0) {
-          container.innerHTML = `<p class="text-xs text-zinc-400 py-2 text-center">No assignments found.</p>`;
-          return;
-        }
-        container.innerHTML = slice.map(asg => {
-          const isOverdue = asg.dueDate && new Date(asg.dueDate) < new Date();
-          return `
-            <div class="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-100 dark:border-zinc-800/50 rounded-lg">
-              <div class="min-w-0 flex-1">
-                <p class="text-xs font-semibold truncate text-zinc-800 dark:text-zinc-200">${asg.title}</p>
-                <p class="text-[10px] text-zinc-400 truncate mt-0.5">Due: ${asg.dueDate ? new Date(asg.dueDate).toLocaleDateString() : 'N/A'}</p>
-              </div>
-              <span class="text-[9px] font-semibold rounded px-1.5 py-0.5 ${isOverdue ? 'bg-rose-100 dark:bg-rose-950/20 text-rose-600' : 'bg-emerald-100 dark:bg-emerald-950/20 text-emerald-600'}">${isOverdue ? 'Overdue' : 'Active'}</span>
-            </div>
-          `;
-        }).join('');
-      }
-
-      // ==============================================
-      // 2. STUDENTS VIEW LOGIC
-      // ==============================================
-      async function loadStudentsList() {
-        try {
-          students = await apiRequest('/users');
-          renderStudentsTable(students);
-        } catch (err) {
-          setErrorView('Could not fetch student profiles.');
-        }
-      }
-
-      function renderStudentsTable(dataList) {
-        const tbody = document.getElementById('students-table-body');
-        const countLbl = document.getElementById('students-count-lbl');
-        
-        const nonAdmins = dataList.filter(s => s.role !== 'admin');
-        countLbl.innerText = `Showing ${nonAdmins.length} of ${dataList.length} registered profiles`;
-
-        if (dataList.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-zinc-400">No profiles found in database.</td></tr>`;
-          return;
-        }
-
-        tbody.innerHTML = dataList.map(s => `
-          <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-900/30 text-zinc-900 dark:text-zinc-200 transition-colors">
-            <td class="py-4 px-6 font-semibold flex items-center gap-2">
-              <div class="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold text-xs">
-                ${s.name ? s.name[0].toUpperCase() : 'U'}
-              </div>
-              <span>${s.name}</span>
-            </td>
-            <td class="py-4 px-6 font-mono text-xs">${s.email}</td>
-            <td class="py-4 px-6">
-              <span class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded ${s.role === 'admin' ? 'bg-purple-100 dark:bg-purple-950/20 text-purple-600 dark:text-purple-400' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500'}">
-                ${s.role}
-              </span>
-            </td>
-            <td class="py-4 px-6 text-zinc-400 text-xs">${new Date(s.createdAt).toLocaleDateString()}</td>
-            <td class="py-4 px-6 text-right">
-              ${s.role !== 'admin' ? `
-                <button onclick="confirmDeleteStudent('${s._id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors inline-flex">
-                  <i data-lucide="trash-2" class="w-4 h-4"></i>
-                </button>
-              ` : `<span class="text-xs text-zinc-400 italic">Protected</span>`}
-            </td>
-          </tr>
-        `).join('');
-        lucide.createIcons();
-      }
-
-      function filterStudentsTable() {
-        const query = document.getElementById('students-search').value.toLowerCase();
-        const filtered = students.filter(s => 
-          s.name.toLowerCase().includes(query) || 
-          s.email.toLowerCase().includes(query)
-        );
-        renderStudentsTable(filtered);
-      }
-
-      function confirmDeleteStudent(id) {
-        openConfirmModal('Are you sure you want to delete this student profile permanently?', async () => {
-          try {
-            await apiRequest(`/users/${id}`, 'DELETE');
-            showActionAlert('success', 'Student profile successfully removed.');
-            loadStudentsList();
-          } catch (err) {
-            showActionAlert('error', err.message);
-          }
-        });
-      }
-
-      // ==============================================
-      // 3. NOTES VIEW LOGIC
-      // ==============================================
-      async function loadNotesList() {
-        try {
-          notes = await apiRequest('/notes');
-          renderNotesTable(notes);
-        } catch (err) {
-          setErrorView('Could not fetch study notes list.');
-        }
-      }
-
-      function renderNotesTable(dataList) {
-        const tbody = document.getElementById('notes-table-body');
-        if (dataList.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-zinc-400">No study notes uploaded yet.</td></tr>`;
-          return;
-        }
-
-        tbody.innerHTML = dataList.map(n => `
-          <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-900/30 text-zinc-900 dark:text-zinc-200 transition-colors">
-            <td class="py-4 px-6 font-semibold flex items-center gap-2">
-              <i data-lucide="file-text" class="w-4 h-4 text-purple-500 shrink-0"></i>
-              <span class="truncate max-w-[150px]">${n.title}</span>
-            </td>
-            <td class="py-4 px-6 text-zinc-400 truncate max-w-[200px]">${n.description || 'No description'}</td>
-            <td class="py-4 px-6 text-zinc-500">${n.createdBy?.name || 'Admin'}</td>
-            <td class="py-4 px-6 text-zinc-400 text-xs">${new Date(n.createdAt).toLocaleDateString()}</td>
-            <td class="py-4 px-6 text-right flex items-center justify-end gap-1.5">
-              ${n.fileUrl ? `
-                <a href="${n.fileUrl.startsWith('http') ? n.fileUrl : apiBaseUrl.replace('/api', '') + n.fileUrl}" target="_blank" class="p-1.5 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/20 rounded transition-colors inline-flex">
-                  <i data-lucide="download" class="w-4 h-4"></i>
-                </a>
-              ` : ''}
-              <button onclick="confirmDeleteNote('${n._id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors inline-flex">
-                <i data-lucide="trash-2" class="w-4 h-4"></i>
-              </button>
-            </td>
-          </tr>
-        `).join('');
-        lucide.createIcons();
-      }
-
-      function filterNotesTable() {
-        const query = document.getElementById('notes-search').value.toLowerCase();
-        const filtered = notes.filter(n => 
-          n.title.toLowerCase().includes(query) || 
-          (n.description && n.description.toLowerCase().includes(query))
-        );
-        renderNotesTable(filtered);
-      }
-
-      async function handleNoteSubmit(e) {
-        e.preventDefault();
-        const title = document.getElementById('note-title').value;
-        const description = document.getElementById('note-desc').value;
-        const fileInput = document.getElementById('note-file');
-        
-        if (!fileInput.files.length) {
-          showActionAlert('error', 'Please choose a file attachment.');
-          return;
-        }
-
-        const btn = document.getElementById('note-submit-btn');
-        btn.disabled = true;
-        btn.innerHTML = 'Uploading...';
-
-        try {
-          const form = new FormData();
-          form.append('title', title);
-          form.append('description', description);
-          form.append('file', fileInput.files[0]);
-
-          const res = await apiRequest('/notes', 'POST', form, true);
-          showActionAlert('success', 'Study note successfully uploaded.');
-          
-          // Reset form
-          document.getElementById('note-form').reset();
-          toggleSidePanel('note', false);
-          loadNotesList();
-        } catch (err) {
-          showActionAlert('error', err.message);
-        } finally {
-          btn.disabled = false;
-          btn.innerHTML = 'Save Note';
-        }
-      }
-
-      function confirmDeleteNote(id) {
-        openConfirmModal('Are you sure you want to delete this study note?', async () => {
-          try {
-            await apiRequest(`/notes/${id}`, 'DELETE');
-            showActionAlert('success', 'Study note deleted.');
-            loadNotesList();
-          } catch (err) {
-            showActionAlert('error', err.message);
-          }
-        });
-      }
-
-      // ==============================================
-      // 4. ASSIGNMENTS VIEW LOGIC
-      // ==============================================
-      async function loadAssignmentsList() {
-        try {
-          assignments = await apiRequest('/assignments');
-          renderAsgTable(assignments);
-        } catch (err) {
-          setErrorView('Could not fetch assignments list.');
-        }
-      }
-
-      function renderAsgTable(dataList) {
-        const tbody = document.getElementById('asg-table-body');
-        if (dataList.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-zinc-400">No assignments created yet.</td></tr>`;
-          return;
-        }
-
-        tbody.innerHTML = dataList.map(a => {
-          const isOverdue = a.dueDate && new Date(a.dueDate) < new Date();
-          return `
-            <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-900/30 text-zinc-900 dark:text-zinc-200 transition-colors">
-              <td class="py-4 px-6 font-semibold flex items-center gap-2">
-                <i data-lucide="file-spreadsheet" class="w-4 h-4 text-purple-500 shrink-0"></i>
-                <span class="truncate max-w-[150px]">${a.title}</span>
-              </td>
-              <td class="py-4 px-6 text-zinc-400 truncate max-w-[200px]">${a.description || 'No description'}</td>
-              <td class="py-4 px-6 text-zinc-500 text-xs">${a.dueDate ? new Date(a.dueDate).toLocaleDateString() : 'N/A'}</td>
-              <td class="py-4 px-6">
-                <span class="text-[10px] font-semibold px-2 py-0.5 rounded ${isOverdue ? 'bg-rose-100 dark:bg-rose-950/20 text-rose-650' : 'bg-emerald-100 dark:bg-emerald-950/20 text-emerald-650'}">${isOverdue ? 'Overdue' : 'Active'}</span>
-              </td>
-              <td class="py-4 px-6 text-right flex items-center justify-end gap-1.5">
-                ${a.fileUrl ? `
-                  <a href="${a.fileUrl.startsWith('http') ? a.fileUrl : apiBaseUrl.replace('/api', '') + a.fileUrl}" target="_blank" class="p-1.5 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/20 rounded transition-colors inline-flex">
-                    <i data-lucide="download" class="w-4 h-4"></i>
-                  </a>
-                ` : ''}
-                <button onclick="confirmDeleteAsg('${a._id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors inline-flex">
-                  <i data-lucide="trash-2" class="w-4 h-4"></i>
-                </button>
-              </td>
-            </tr>
-          `;
-        }).join('');
-        lucide.createIcons();
-      }
-
-      function filterAsgTable() {
-        const query = document.getElementById('asg-search').value.toLowerCase();
-        const filtered = assignments.filter(a => 
-          a.title.toLowerCase().includes(query) || 
-          (a.description && a.description.toLowerCase().includes(query))
-        );
-        renderAsgTable(filtered);
-      }
-
-      async function handleAsgSubmit(e) {
-        e.preventDefault();
-        const title = document.getElementById('asg-title').value;
-        const description = document.getElementById('asg-desc').value;
-        const dueDate = document.getElementById('asg-duedate').value;
-        const fileInput = document.getElementById('asg-file');
-
-        const btn = document.getElementById('asg-submit-btn');
-        btn.disabled = true;
-        btn.innerHTML = 'Saving...';
-
-        try {
-          const form = new FormData();
-          form.append('title', title);
-          form.append('description', description);
-          form.append('dueDate', dueDate);
-          if (fileInput.files.length) {
-            form.append('file', fileInput.files[0]);
-          }
-
-          await apiRequest('/assignments', 'POST', form, true);
-          showActionAlert('success', 'Assignment successfully posted.');
-          
-          document.getElementById('asg-form').reset();
-          toggleSidePanel('asg', false);
-          loadAssignmentsList();
-        } catch (err) {
-          showActionAlert('error', err.message);
-        } finally {
-          btn.disabled = false;
-          btn.innerHTML = 'Create';
-        }
-      }
-
-      function confirmDeleteAsg(id) {
-        openConfirmModal('Are you sure you want to delete this assignment project?', async () => {
-          try {
-            await apiRequest(`/assignments/${id}`, 'DELETE');
-            showActionAlert('success', 'Assignment deleted.');
-            loadAssignmentsList();
-          } catch (err) {
-            showActionAlert('error', err.message);
-          }
-        });
-      }
-
-      // ==============================================
-      // 5. ANNOUNCEMENTS VIEW LOGIC
-      // ==============================================
-      async function loadAnnouncementsList() {
-        try {
-          announcements = await apiRequest('/announcements');
-          renderAnnouncements(announcements);
-        } catch (err) {
-          setErrorView('Could not fetch announcements.');
-        }
-      }
-
-      function renderAnnouncements(dataList) {
-        document.getElementById('ann-header-count').innerText = `Active Notices (${dataList.length})`;
-        const container = document.getElementById('ann-cards-container');
-        
-        if (dataList.length === 0) {
-          container.innerHTML = `
-            <div class="text-center py-12 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl">
-              <i data-lucide="megaphone" class="mx-auto text-zinc-300 dark:text-zinc-700 mb-2 w-12 h-12"></i>
-              <p class="text-sm font-semibold text-zinc-850 dark:text-zinc-200">No announcements posted</p>
-            </div>
-          `;
-          lucide.createIcons();
-          return;
-        }
-
-        container.innerHTML = dataList.map(a => `
-          <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow relative group">
-            <div class="p-3 bg-purple-50 dark:bg-purple-900/20 text-purple-650 dark:text-purple-400 rounded-lg shrink-0">
-              <i data-lucide="megaphone" class="w-5 h-5"></i>
-            </div>
-            <div class="flex-1 min-w-0 pr-8">
-              <div class="flex items-center gap-2 mb-1 flex-wrap">
-                <h4 class="text-base font-bold text-zinc-950 dark:text-zinc-50 font-display">${a.title}</h4>
-                <span class="text-[10px] text-zinc-400 font-mono">${new Date(a.createdAt).toLocaleString()}</span>
-              </div>
-              <p class="text-sm text-zinc-550 dark:text-zinc-400 leading-relaxed whitespace-pre-wrap">${a.body}</p>
-              <p class="text-[10px] text-zinc-400 mt-3 italic">Posted by: ${a.createdBy?.name || 'Administrator'}</p>
-            </div>
-            <button onclick="confirmDeleteAnn('${a._id}')" class="absolute top-4 right-4 p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors opacity-0 group-hover:opacity-100">
-              <i data-lucide="trash-2" class="w-4 h-4"></i>
-            </button>
-          </div>
-        `).join('');
-        lucide.createIcons();
-      }
-
-      async function handleAnnSubmit(e) {
-        e.preventDefault();
-        const title = document.getElementById('ann-title').value;
-        const body = document.getElementById('ann-body').value;
-
-        const btn = document.getElementById('ann-submit-btn');
-        btn.disabled = true;
-        btn.innerHTML = 'Posting...';
-
-        try {
-          await apiRequest('/announcements', 'POST', { title, body });
-          showActionAlert('success', 'Notice posted successfully.');
-          
-          document.getElementById('ann-form').reset();
-          toggleSidePanel('ann', false);
-          loadAnnouncementsList();
-        } catch (err) {
-          showActionAlert('error', err.message);
-        } finally {
-          btn.disabled = false;
-          btn.innerHTML = 'Post Notice';
-        }
-      }
-
-      function confirmDeleteAnn(id) {
-        openConfirmModal('Are you sure you want to remove this announcement notice?', async () => {
-          try {
-            await apiRequest(`/announcements/${id}`, 'DELETE');
-            showActionAlert('success', 'Announcement deleted.');
-            loadAnnouncementsList();
-          } catch (err) {
-            showActionAlert('error', err.message);
-          }
-        });
-      }
-
-      // ==============================================
-      // 6. TIMETABLES VIEW LOGIC
-      // ==============================================
-      // Run once per session to fix old DB records (entries -> slots)
-      let _ttMigrated = false;
-      async function silentMigrateTimetables() {
-        if (_ttMigrated) return;
-        _ttMigrated = true;
-        try { await apiRequest('/timetable/migrate', 'POST'); } catch (_) {}
-      }
-
-      async function loadTimetablesList() {
-        const container = document.getElementById('tt-grid-container');
-        container.innerHTML = '<p class="text-sm text-zinc-400 text-center py-10 col-span-2">Loading timetables...</p>';
-        try {
-          await silentMigrateTimetables(); // fix old records silently first
-          timetables = await apiRequest('/timetable');
-          renderTimetables(timetables);
-        } catch (err) {
-          const msg = err.message || 'Could not fetch timetables list.';
-          setErrorView(msg);
-          container.innerHTML = `
-            <div class="col-span-2 text-center py-12">
-              <i data-lucide="wifi-off" class="mx-auto text-rose-400 mb-2 w-10 h-10"></i>
-              <p class="text-sm font-semibold text-rose-500">Failed to load timetables</p>
-              <p class="text-xs text-zinc-400 mt-1">${msg}</p>
-              <button onclick="loadTimetablesList()" class="mt-4 text-xs text-purple-500 hover:underline font-semibold">↻ Retry</button>
-            </div>`;
-          lucide.createIcons();
-        }
-      }
-
-      function renderTimetables(dataList) {
-        const container = document.getElementById('tt-grid-container');
-        if (dataList.length === 0) {
-          container.innerHTML = `
-            <div class="text-center py-12 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl col-span-2">
-              <i data-lucide="calendar" class="mx-auto text-zinc-300 dark:text-zinc-700 mb-2 w-12 h-12"></i>
-              <p class="text-sm font-semibold text-zinc-850 dark:text-zinc-200">No schedules configured</p>
-            </div>
-          `;
-          lucide.createIcons();
-          return;
-        }
-
-        container.innerHTML = dataList.map(tt => `
-          <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm flex flex-col justify-between group">
-            <div>
-              <div class="flex justify-between items-start p-5 border-b border-zinc-100 dark:border-zinc-800">
-                <div>
-                  <h4 class="text-base font-bold text-zinc-950 dark:text-zinc-50 font-display">${tt.title}</h4>
-                  <p class="text-[9px] text-zinc-400 font-mono mt-0.5">Created: ${new Date(tt.createdAt).toLocaleDateString()}</p>
-                </div>
-                <button onclick="confirmDeleteTt('${tt._id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors opacity-0 group-hover:opacity-100">
-                  <i data-lucide="trash-2" class="w-4 h-4"></i>
-                </button>
-              </div>
-              
-              <div class="p-5 space-y-3 max-h-[300px] overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-850">
-                ${(tt.slots||[]).map((entry, idx) => `
-                  <div class="pt-3 first:pt-0 flex flex-col gap-1">
-                    <div class="flex justify-between items-center">
-                      <span class="text-[10px] font-bold text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/10 px-2 py-0.5 rounded">${entry.day}</span>
-                      <div class="flex items-center gap-1 text-[10px] text-zinc-400 font-mono">
-                        <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-                        <span>${entry.start} - ${entry.end}</span>
-                      </div>
-                    </div>
-                    <div class="flex items-center gap-1.5 text-sm font-semibold text-zinc-850 dark:text-zinc-200">
-                      <i data-lucide="book-open" class="w-3.5 h-3.5 text-zinc-400 shrink-0"></i>
-                      <span class="truncate">${entry.subject}</span>
-                    </div>
-                    ${entry.location ? `
-                      <div class="flex items-center gap-1 text-[11px] text-zinc-400">
-                        <i data-lucide="map-pin" class="w-3 h-3 shrink-0"></i>
-                        <span class="truncate">${entry.location}</span>
-                      </div>
-                    ` : ''}
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-            <div class="p-4 bg-zinc-50 dark:bg-zinc-900/20 border-t border-zinc-100 dark:border-zinc-800 text-[10px] text-zinc-450 dark:text-zinc-500 text-center">
-              ${(tt.slots||[]).length} period slots scheduled
-            </div>
-          </div>
-        `).join('');
-        lucide.createIcons();
-      }
-
-      // Dynamic period row builder
-      function addFormPeriodRow() {
-        const container = document.getElementById('tt-period-rows');
-        const index = container.children.length;
-        
-        const row = document.createElement('div');
-        row.className = "p-3 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-150 dark:border-zinc-800/50 rounded-lg space-y-2.5 relative row-item";
-        row.innerHTML = `
-          <button type="button" onclick="this.parentElement.remove()" class="absolute top-2 right-2 p-1 text-zinc-400 hover:text-rose-500 rounded hover:bg-zinc-200 dark:hover:bg-zinc-800"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
-          <div class="grid grid-cols-2 gap-2">
-            <div class="flex flex-col gap-0.5">
-              <label class="text-[9px] font-bold text-zinc-400">Day</label>
-              <select class="p-day bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-1.5 py-0.5 text-xs text-zinc-800 dark:text-zinc-200">
-                <option value="Monday">Monday</option>
-                <option value="Tuesday">Tuesday</option>
-                <option value="Wednesday">Wednesday</option>
-                <option value="Thursday">Thursday</option>
-                <option value="Friday">Friday</option>
-                <option value="Saturday">Saturday</option>
-                <option value="Sunday">Sunday</option>
-              </select>
-            </div>
-            <div class="flex flex-col gap-0.5">
-              <label class="text-[9px] font-bold text-zinc-400">Subject</label>
-              <input type="text" required class="p-subject bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-1.5 py-0.5 text-xs text-zinc-800 dark:text-zinc-200" placeholder="Maths" />
-            </div>
-          </div>
-          <div class="grid grid-cols-3 gap-2">
-            <div class="flex flex-col gap-0.5">
-              <label class="text-[9px] font-bold text-zinc-400">Start</label>
-              <input type="text" required class="p-start bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-1.5 py-0.5 text-xs text-zinc-800 dark:text-zinc-200 font-mono" placeholder="09:00" />
-            </div>
-            <div class="flex flex-col gap-0.5">
-              <label class="text-[9px] font-bold text-zinc-400">End</label>
-              <input type="text" required class="p-end bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-1.5 py-0.5 text-xs text-zinc-800 dark:text-zinc-200 font-mono" placeholder="10:00" />
-            </div>
-            <div class="flex flex-col gap-0.5">
-              <label class="text-[9px] font-bold text-zinc-400">Room</label>
-              <input type="text" class="p-location bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-1.5 py-0.5 text-xs text-zinc-800 dark:text-zinc-200" placeholder="Lobby" />
-            </div>
-          </div>
-        `;
-        container.appendChild(row);
-        lucide.createIcons();
-      }
-
-      async function handleTtSubmit(e) {
-        e.preventDefault();
-        const title = document.getElementById('tt-title').value;
-        const rowElements = document.querySelectorAll('#tt-period-rows .row-item');
-        
-        if (rowElements.length === 0) {
-          showActionAlert('error', 'Add at least one slot entry.');
-          return;
-        }
-
-        const slots = [];
-        rowElements.forEach(row => {
-          slots.push({
-            day: row.querySelector('.p-day').value,
-            subject: row.querySelector('.p-subject').value,
-            start: row.querySelector('.p-start').value,
-            end: row.querySelector('.p-end').value,
-            location: row.querySelector('.p-location').value
-          });
-        });
-
-        const btn = document.getElementById('tt-submit-btn');
-        btn.disabled = true;
-        btn.innerHTML = 'Saving...';
-
-        try {
-          await apiRequest('/timetable', 'POST', { title, slots });
-          showActionAlert('success', 'Timetable class schedule saved.');
-          
-          document.getElementById('tt-form').reset();
-          document.getElementById('tt-period-rows').innerHTML = '';
-          toggleSidePanel('tt', false);
-          loadTimetablesList();
-        } catch (err) {
-          showActionAlert('error', err.message);
-        } finally {
-          btn.disabled = false;
-          btn.innerHTML = 'Save Timetable';
-        }
-      }
-
-      function confirmDeleteTt(id) {
-        openConfirmModal('Delete this class timetable schedule?', async () => {
-          try {
-            await apiRequest(`/timetable/${id}`, 'DELETE');
-            showActionAlert('success', 'Schedule timetable deleted.');
-            loadTimetablesList();
-          } catch (err) {
-            showActionAlert('error', err.message);
-          }
-        });
-      }
-
-      // Initialize side panels forms
-      function initTtSideForm() {
-        document.getElementById('tt-period-rows').innerHTML = '';
-        addFormPeriodRow();
-      }
-
-      // ==============================================
-      // 7. SYLLABUS VIEW LOGIC
-      // ==============================================
-      async function loadSyllabiList() {
-        try {
-          syllabi = await apiRequest('/syllabus');
-          renderSyllabi(syllabi);
-        } catch (err) {
-          setErrorView('Could not load syllabus.');
-        }
-      }
-
-      function renderSyllabi(dataList) {
-        const container = document.getElementById('syl-grid-container');
-        if (dataList.length === 0) {
-          container.innerHTML = `
-            <div class="text-center py-12 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl col-span-2">
-              <i data-lucide="file-text" class="mx-auto text-zinc-300 dark:text-zinc-700 mb-2 w-12 h-12"></i>
-              <p class="text-sm font-semibold text-zinc-850 dark:text-zinc-200">No syllabus lists</p>
-            </div>
-          `;
-          lucide.createIcons();
-          return;
-        }
-
-        container.innerHTML = dataList.map(s => `
-          <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm flex flex-col justify-between group relative hover:shadow-md transition-shadow">
-            <div>
-              <div class="flex items-center gap-3 mb-2 pr-8">
-                <div class="p-2 bg-purple-50 dark:bg-purple-900/20 text-purple-650 dark:text-purple-400 rounded-lg">
-                  <i data-lucide="file-text" class="w-5 h-5"></i>
-                </div>
-                <div>
-                  <h4 class="text-base font-bold text-zinc-950 dark:text-zinc-50 font-display">${s.title}</h4>
-                  <p class="text-[9px] text-zinc-400 font-mono">Created: ${new Date(s.createdAt).toLocaleDateString()}</p>
-                </div>
-              </div>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-2 mb-4 leading-relaxed line-clamp-3">${s.description || 'No description provided.'}</p>
-              ${s.subjects && s.subjects.length > 0 ? `
-                <div class="flex flex-wrap gap-1 mb-2">
-                  ${s.subjects.map(sub => `<span class="text-[9px] font-semibold px-2 py-0.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 rounded">${sub}</span>`).join('')}
-                </div>
-              ` : ''}
-            </div>
-            <div class="pt-4 border-t border-zinc-100 dark:border-zinc-850 mt-4 flex items-center justify-between text-xs text-zinc-400">
-              <span>By: ${s.createdBy?.name || 'Admin'}</span>
-              <span>${s.subjects?.length || 0} subjects</span>
-            </div>
-            <button onclick="confirmDeleteSyl('${s._id}')" class="absolute top-4 right-4 p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors opacity-0 group-hover:opacity-100">
-              <i data-lucide="trash-2" class="w-4 h-4"></i>
-            </button>
-          </div>
-        `).join('');
-        lucide.createIcons();
-      }
-
-      async function handleSylSubmit(e) {
-        e.preventDefault();
-        const title = document.getElementById('syl-title').value;
-        const description = document.getElementById('syl-desc').value;
-        const subjectsVal = document.getElementById('syl-subjects').value;
-
-        const subjects = subjectsVal.split(',').map(s => s.trim()).filter(s => s.length > 0);
-
-        const btn = document.getElementById('syl-submit-btn');
-        btn.disabled = true;
-        btn.innerHTML = 'Saving...';
-
-        try {
-          await apiRequest('/syllabus', 'POST', { title, description, subjects });
-          showActionAlert('success', 'Syllabus guidelines created.');
-          
-          document.getElementById('syl-form').reset();
-          toggleSidePanel('syl', false);
-          loadSyllabiList();
-        } catch (err) {
-          showActionAlert('error', err.message);
-        } finally {
-          btn.disabled = false;
-          btn.innerHTML = 'Save Syllabus';
-        }
-      }
-
-      function confirmDeleteSyl(id) {
-        openConfirmModal('Delete this class syllabus configurations?', async () => {
-          try {
-            await apiRequest(`/syllabus/${id}`, 'DELETE');
-            showActionAlert('success', 'Syllabus course outline removed.');
-            loadSyllabiList();
-          } catch (err) {
-            showActionAlert('error', err.message);
-          }
-        });
-      }
-
-      // ==============================================
-      // 8. PAPERS VIEW LOGIC
-      // ==============================================
-      async function loadPapersList() {
-        try {
-          papers = await apiRequest('/papers');
-          renderPapersTable(papers);
-        } catch (err) {
-          setErrorView('Could not fetch papers list.');
-        }
-      }
-
-      function renderPapersTable(dataList) {
-        const tbody = document.getElementById('papers-table-body');
-        if (dataList.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-zinc-400">No papers uploaded.</td></tr>`;
-          return;
-        }
-
-        tbody.innerHTML = dataList.map(p => `
-          <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-900/30 text-zinc-900 dark:text-zinc-200 transition-colors">
-            <td class="py-4 px-6 font-semibold flex items-center gap-2">
-              <i data-lucide="file-check" class="w-4 h-4 text-purple-500 shrink-0"></i>
-              <span class="truncate max-w-[150px]">${p.title}</span>
-            </td>
-            <td class="py-4 px-6 text-zinc-400 truncate max-w-[200px]">${p.subject}</td>
-            <td class="py-4 px-6 text-zinc-500">${p.createdBy?.name || 'Admin'}</td>
-            <td class="py-4 px-6 text-zinc-400 text-xs">${new Date(p.createdAt).toLocaleDateString()}</td>
-            <td class="py-4 px-6 text-right flex items-center justify-end gap-1.5">
-              ${p.fileUrl ? `
-                <a href="${p.fileUrl.startsWith('http') ? p.fileUrl : apiBaseUrl.replace('/api', '') + p.fileUrl}" target="_blank" class="p-1.5 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/20 rounded transition-colors inline-flex">
-                  <i data-lucide="download" class="w-4 h-4"></i>
-                </a>
-              ` : ''}
-              <button onclick="confirmDeletePaper('${p._id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors inline-flex">
-                <i data-lucide="trash-2" class="w-4 h-4"></i>
-              </button>
-            </td>
-          </tr>
-        `).join('');
-        lucide.createIcons();
-      }
-
-      function filterPapersTable() {
-        const query = document.getElementById('papers-search').value.toLowerCase();
-        const filtered = papers.filter(p => 
-          p.title.toLowerCase().includes(query) || 
-          p.subject.toLowerCase().includes(query)
-        );
-        renderPapersTable(filtered);
-      }
-
-      async function handlePaperSubmit(e) {
-        e.preventDefault();
-        const title = document.getElementById('paper-title').value;
-        const subject = document.getElementById('paper-subject').value;
-        const fileInput = document.getElementById('paper-file');
-        
-        if (!fileInput.files.length) {
-          showActionAlert('error', 'Select file to upload.');
-          return;
-        }
-
-        const btn = document.getElementById('paper-submit-btn');
-        btn.disabled = true;
-        btn.innerHTML = 'Uploading...';
-
-        try {
-          const form = new FormData();
-          form.append('title', title);
-          form.append('subject', subject);
-          form.append('file', fileInput.files[0]);
-
-          await apiRequest('/papers', 'POST', form, true);
-          showActionAlert('success', 'Exam paper uploaded successfully.');
-          
-          document.getElementById('paper-form').reset();
-          toggleSidePanel('paper', false);
-          loadPapersList();
-        } catch (err) {
-          showActionAlert('error', err.message);
-        } finally {
-          btn.disabled = false;
-          btn.innerHTML = 'Upload';
-        }
-      }
-
-      function confirmDeletePaper(id) {
-        openConfirmModal('Delete this previous year exam paper?', async () => {
-          try {
-            await apiRequest(`/papers/${id}`, 'DELETE');
-            showActionAlert('success', 'Exam paper deleted.');
-            loadPapersList();
-          } catch (err) {
-            showActionAlert('error', err.message);
-          }
-        });
-      }
-
-      // ==============================================
-      // 9. CATEGORIES VIEW LOGIC
-      // ==============================================
-      async function loadCategoriesList() {
-        try {
-          categories = await apiRequest('/categories');
-          renderCategories(categories);
-        } catch (err) {
-          setErrorView('Could not load categories.');
-        }
-      }
-
-      function renderCategories(dataList) {
-        const container = document.getElementById('cat-grid-container');
-        if (dataList.length === 0) {
-          container.innerHTML = `
-            <div class="text-center py-12 bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl col-span-2">
-              <i data-lucide="layers" class="mx-auto text-zinc-300 dark:text-zinc-700 mb-2 w-12 h-12"></i>
-              <p class="text-sm font-semibold text-zinc-850 dark:text-zinc-200">No categories found</p>
-            </div>
-          `;
-          lucide.createIcons();
-          return;
-        }
-
-        container.innerHTML = dataList.map(cat => `
-          <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 hover:shadow-md transition-shadow relative group flex items-start gap-4">
-            <div class="p-3 bg-purple-50 dark:bg-purple-900/20 text-purple-650 dark:text-purple-400 rounded-lg shrink-0">
-              <i data-lucide="layers" class="w-5 h-5"></i>
-            </div>
-            <div class="flex-1 min-w-0 pr-8">
-              <h4 class="text-base font-bold text-zinc-950 dark:text-zinc-50 font-display truncate">${cat.name}</h4>
-              <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed line-clamp-2">${cat.description || 'No description provided.'}</p>
-            </div>
-            <button onclick="confirmDeleteCat('${cat._id}')" class="absolute top-4 right-4 p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors opacity-0 group-hover:opacity-100">
-              <i data-lucide="trash-2" class="w-4 h-4"></i>
-            </button>
-          </div>
-        `).join('');
-        lucide.createIcons();
-      }
-
-      async function handleCatSubmit(e) {
-        e.preventDefault();
-        const name = document.getElementById('cat-name').value;
-        const description = document.getElementById('cat-desc').value;
-
-        const btn = document.getElementById('cat-submit-btn');
-        btn.disabled = true;
-        btn.innerHTML = 'Saving...';
-
-        try {
-          await apiRequest('/categories', 'POST', { name, description });
-          showActionAlert('success', 'Category created successfully.');
-          
-          document.getElementById('cat-form').reset();
-          toggleSidePanel('cat', false);
-          loadCategoriesList();
-        } catch (err) {
-          showActionAlert('error', err.message);
-        } finally {
-          btn.disabled = false;
-          btn.innerHTML = 'Save Category';
-        }
-      }
-
-      function confirmDeleteCat(id) {
-        openConfirmModal('Delete this category? Resources tagged with it will remain.', async () => {
-          try {
-            await apiRequest(`/categories/${id}`, 'DELETE');
-            showActionAlert('success', 'Category successfully deleted.');
-            loadCategoriesList();
-          } catch (err) {
-            showActionAlert('error', err.message);
-          }
-        });
-      }
-
-      // Sidebar panel logic helper triggers
-      function toggleSidePanel(panelName, show) {
-        const panel = document.getElementById(`${panelName}-side-panel`);
-        if (show) {
-          panel.classList.remove('hidden');
-          if (panelName === 'tt') initTtSideForm();
-        } else {
-          panel.classList.add('hidden');
-        }
-      }
-    </script>
-
-  <!-- PWA Install Banner -->
+    <script>eval(atob('Ly8gR2xvYmFsIEFwcCBTdGF0ZXMKICAgICAgbGV0IGFjdGl2ZVZpZXcgPSAnZGFzaGJvYXJkJzsKICAgICAgbGV0IGFwaUJhc2VV'+'cmwgPSAnaHR0cHM6Ly9odWItNnlybC5vbnJlbmRlci5jb20vYXBpJzsKICAgICAgbGV0IHRva2VuID0gbG9jYWxTdG9yYWdlLmdl'+'dEl0ZW0oJ3Rva2VuJykgfHwgJyc7CiAgICAgIGxldCB1c2VyID0gbnVsbDsKCiAgICAgIC8vIEluLU1lbW9yeSBEYXRhIEFycmF5'+'cwogICAgICBsZXQgc3R1ZGVudHMgPSBbXTsKICAgICAgbGV0IG5vdGVzID0gW107CiAgICAgIGxldCBhc3NpZ25tZW50cyA9IFtd'+'OwogICAgICBsZXQgYW5ub3VuY2VtZW50cyA9IFtdOwogICAgICBsZXQgdGltZXRhYmxlcyA9IFtdOwogICAgICBsZXQgc3lsbGFi'+'aSA9IFtdOwogICAgICBsZXQgcGFwZXJzID0gW107CiAgICAgIGxldCBjYXRlZ29yaWVzID0gW107CgogICAgICAvLyBDb25maXJt'+'IG1vZGFsIGNhbGxiYWNrCiAgICAgIGxldCBjb25maXJtQ2FsbGJhY2sgPSBudWxsOwoKICAgICAgLy8gQXBwIEluaXRpYWxpemF0'+'aW9uCiAgICAgIHdpbmRvdy5hZGRFdmVudExpc3RlbmVyKCdET01Db250ZW50TG9hZGVkJywgKCkgPT4gewogICAgICAgIC8vIElu'+'aXRpYWxpemUgQVBJIGlucHV0cwogICAgICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdhcGktdXJsLWlucHV0JykudmFsdWUg'+'PSBhcGlCYXNlVXJsOwogICAgICAgIAogICAgICAgIC8vIFN5bmMgdGhlbWUgd2l0aCBzeXN0ZW0gLyBzYXZlZCBzZXR0aW5nCiAg'+'ICAgICAgY29uc3Qgc2F2ZWREYXJrTW9kZSA9IGxvY2FsU3RvcmFnZS5nZXRJdGVtKCdkYXJrTW9kZScpOwogICAgICAgIGNvbnN0'+'IGlzRGFyayA9IHNhdmVkRGFya01vZGUgPyBKU09OLnBhcnNlKHNhdmVkRGFya01vZGUpIDogdHJ1ZTsKICAgICAgICBpZiAoaXNE'+'YXJrKSB7CiAgICAgICAgICBkb2N1bWVudC5kb2N1bWVudEVsZW1lbnQuY2xhc3NMaXN0LmFkZCgnZGFyaycpOwogICAgICAgICAg'+'c2hvd1RoZW1lSWNvbnModHJ1ZSk7CiAgICAgICAgfSBlbHNlIHsKICAgICAgICAgIGRvY3VtZW50LmRvY3VtZW50RWxlbWVudC5j'+'bGFzc0xpc3QucmVtb3ZlKCdkYXJrJyk7CiAgICAgICAgICBzaG93VGhlbWVJY29ucyhmYWxzZSk7CiAgICAgICAgfQoKICAgICAg'+'ICAvLyBDaGVjayBBdXRoIFN0YXR1cwogICAgICAgIGNoZWNrQXV0aGVudGljYXRpb24oKTsKICAgICAgfSk7CgogICAgICAvLyBB'+'UEkgYmFzZSBVUkwgY29uZmlndXJhdGlvbiB1cGRhdGVyCiAgICAgIGZ1bmN0aW9uIHVwZGF0ZUFwaUJhc2VVcmwodmFsKSB7CiAg'+'ICAgICAgaWYgKCF2YWwudHJpbSgpKSByZXR1cm47CiAgICAgICAgYXBpQmFzZVVybCA9IHZhbC50cmltKCk7CiAgICAgICAgbG9j'+'YWxTdG9yYWdlLnNldEl0ZW0oJ2FwaUJhc2VVcmwnLCBhcGlCYXNlVXJsKTsKICAgICAgICBzaG93QWN0aW9uQWxlcnQoJ3N1Y2Nl'+'c3MnLCBgQVBJIFVSTCBjb25maWd1cmVkIHRvOiAke2FwaUJhc2VVcmx9YCk7CiAgICAgICAgaWYgKHRva2VuKSB7CiAgICAgICAg'+'ICBjaGVja0F1dGhlbnRpY2F0aW9uKCk7IC8vIHJlbG9hZCB3aXRoIG5ldyBBUEkgVVJMCiAgICAgICAgfQogICAgICB9CgogICAg'+'ICAvLyBUaGVtZSB0b2dnbGUgaGFuZGxlcnMKICAgICAgZnVuY3Rpb24gdG9nZ2xlRGFya01vZGUoKSB7CiAgICAgICAgY29uc3Qg'+'cm9vdCA9IGRvY3VtZW50LmRvY3VtZW50RWxlbWVudDsKICAgICAgICBjb25zdCBpc0RhcmtOb3cgPSByb290LmNsYXNzTGlzdC5j'+'b250YWlucygnZGFyaycpOwogICAgICAgIGlmIChpc0RhcmtOb3cpIHsKICAgICAgICAgIHJvb3QuY2xhc3NMaXN0LnJlbW92ZSgn'+'ZGFyaycpOwogICAgICAgICAgbG9jYWxTdG9yYWdlLnNldEl0ZW0oJ2RhcmtNb2RlJywgJ2ZhbHNlJyk7CiAgICAgICAgICBzaG93'+'VGhlbWVJY29ucyhmYWxzZSk7CiAgICAgICAgfSBlbHNlIHsKICAgICAgICAgIHJvb3QuY2xhc3NMaXN0LmFkZCgnZGFyaycpOwog'+'ICAgICAgICAgbG9jYWxTdG9yYWdlLnNldEl0ZW0oJ2RhcmtNb2RlJywgJ3RydWUnKTsKICAgICAgICAgIHNob3dUaGVtZUljb25z'+'KHRydWUpOwogICAgICAgIH0KICAgICAgfQoKICAgICAgZnVuY3Rpb24gc2hvd1RoZW1lSWNvbnMoaXNEYXJrKSB7CiAgICAgICAg'+'aWYgKGlzRGFyaykgewogICAgICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3NpZGViYXItdGhlbWUtaWNvbi1zdW4nKS5j'+'bGFzc0xpc3QucmVtb3ZlKCdoaWRkZW4nKTsKICAgICAgICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdzaWRlYmFyLXRoZW1l'+'LWljb24tbW9vbicpLmNsYXNzTGlzdC5hZGQoJ2hpZGRlbicpOwogICAgICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ21v'+'YmlsZS10aGVtZS1pY29uLXN1bicpLmNsYXNzTGlzdC5yZW1vdmUoJ2hpZGRlbicpOwogICAgICAgICAgZG9jdW1lbnQuZ2V0RWxl'+'bWVudEJ5SWQoJ21vYmlsZS10aGVtZS1pY29uLW1vb24nKS5jbGFzc0xpc3QuYWRkKCdoaWRkZW4nKTsKICAgICAgICB9IGVsc2Ug'+'ewogICAgICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3NpZGViYXItdGhlbWUtaWNvbi1zdW4nKS5jbGFzc0xpc3QuYWRk'+'KCdoaWRkZW4nKTsKICAgICAgICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdzaWRlYmFyLXRoZW1lLWljb24tbW9vbicpLmNs'+'YXNzTGlzdC5yZW1vdmUoJ2hpZGRlbicpOwogICAgICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ21vYmlsZS10aGVtZS1p'+'Y29uLXN1bicpLmNsYXNzTGlzdC5hZGQoJ2hpZGRlbicpOwogICAgICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ21vYmls'+'ZS10aGVtZS1pY29uLW1vb24nKS5jbGFzc0xpc3QucmVtb3ZlKCdoaWRkZW4nKTsKICAgICAgICB9CiAgICAgIH0KCiAgICAgIC8v'+'IE1vYmlsZSBTaWRlYmFyIG9wZW4vY2xvc2UKICAgICAgZnVuY3Rpb24gdG9nZ2xlTW9iaWxlU2lkZWJhcihvcGVuKSB7CiAgICAg'+'ICAgY29uc3Qgc2lkZWJhciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdzaWRlYmFyJyk7CiAgICAgICAgY29uc3Qgb3Zlcmxh'+'eSA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdzaWRlYmFyLW92ZXJsYXknKTsKICAgICAgICBpZiAob3BlbikgewogICAgICAg'+'ICAgc2lkZWJhci5jbGFzc0xpc3QucmVtb3ZlKCctdHJhbnNsYXRlLXgtZnVsbCcpOwogICAgICAgICAgb3ZlcmxheS5jbGFzc0xp'+'c3QucmVtb3ZlKCdoaWRkZW4nKTsKICAgICAgICB9IGVsc2UgewogICAgICAgICAgc2lkZWJhci5jbGFzc0xpc3QuYWRkKCctdHJh'+'bnNsYXRlLXgtZnVsbCcpOwogICAgICAgICAgb3ZlcmxheS5jbGFzc0xpc3QuYWRkKCdoaWRkZW4nKTsKICAgICAgICB9CiAgICAg'+'IH0KCiAgICAgIC8vIE5hdmlnYXRpb24gaGFuZGxlciAoaGFzaGxlc3Mgcm91dGVyKQogICAgICBmdW5jdGlvbiBuYXZpZ2F0ZVRv'+'KHZpZXdOYW1lKSB7CiAgICAgICAgLy8gSGlkZSBhbGwgdmlld3MKICAgICAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCcu'+'dmlldy1zZWN0aW9uJykuZm9yRWFjaCh2aWV3ID0+IHsKICAgICAgICAgIHZpZXcuY2xhc3NMaXN0LmFkZCgnaGlkZGVuJyk7CiAg'+'ICAgICAgfSk7CiAgICAgICAgCiAgICAgICAgLy8gU2hvdyBzZWxlY3RlZCB2aWV3CiAgICAgICAgY29uc3QgY3VycmVudFZpZXcg'+'PSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChgdmlldy0ke3ZpZXdOYW1lfWApOwogICAgICAgIGlmIChjdXJyZW50Vmlldykgewog'+'ICAgICAgICAgY3VycmVudFZpZXcuY2xhc3NMaXN0LnJlbW92ZSgnaGlkZGVuJyk7CiAgICAgICAgfQoKICAgICAgICAvLyBVcGRh'+'dGUgYWN0aXZlIGNsYXNzIGluIHNpZGViYXIgbmF2IGJ1dHRvbnMKICAgICAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCdh'+'c2lkZSBuYXYgYnV0dG9uJykuZm9yRWFjaChidG4gPT4gewogICAgICAgICAgYnRuLmNsYXNzTmFtZSA9ICJ3LWZ1bGwgZmxleCBp'+'dGVtcy1jZW50ZXIgZ2FwLTMgcHgtNCBweS0yLjUgcm91bmRlZC1sZyB0ZXh0LXNtIGZvbnQtc2VtaWJvbGQgdHJhbnNpdGlvbi1h'+'bGwgdGV4dC16aW5jLTUwMCBkYXJrOnRleHQtemluYy00MDAgaG92ZXI6YmctemluYy0xNTAgZGFyazpob3ZlcjpiZy16aW5jLTgw'+'MC81MCBob3Zlcjp0ZXh0LXppbmMtOTUwIGRhcms6aG92ZXI6dGV4dC16aW5jLTUwIjsKICAgICAgICB9KTsKICAgICAgICAKICAg'+'ICAgICBjb25zdCBhY3RpdmVOYXZCdG4gPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChgbmF2LSR7dmlld05hbWV9YCk7CiAgICAg'+'ICAgaWYgKGFjdGl2ZU5hdkJ0bikgewogICAgICAgICAgYWN0aXZlTmF2QnRuLmNsYXNzTmFtZSA9ICJ3LWZ1bGwgZmxleCBpdGVt'+'cy1jZW50ZXIgZ2FwLTMgcHgtNCBweS0yLjUgcm91bmRlZC1sZyB0ZXh0LXNtIGZvbnQtc2VtaWJvbGQgdHJhbnNpdGlvbi1hbGwg'+'dGV4dC1wdXJwbGUtNjUwIGJnLXB1cnBsZS0xMDAgZGFyazpiZy1wdXJwbGUtOTAwLzMwIGRhcms6dGV4dC1wdXJwbGUtNDAwIjsK'+'ICAgICAgICB9CgogICAgICAgIC8vIFNldCB0b3AgaGVhZGVyIHRpdGxlCiAgICAgICAgY29uc3QgdGl0bGVzID0gewogICAgICAg'+'ICAgZGFzaGJvYXJkOiAnU3lzdGVtIE92ZXJ2aWV3JywKICAgICAgICAgIHN0dWRlbnRzOiAnU3R1ZGVudCBQcm9maWxlcycsCiAg'+'ICAgICAgICBub3RlczogJ1N0dWR5IE5vdGVzIExpYnJhcnknLAogICAgICAgICAgYXNzaWdubWVudHM6ICdDbGFzcyBQcm9qZWN0'+'cyAmIEFzc2lnbm1lbnRzJywKICAgICAgICAgIGFubm91bmNlbWVudHM6ICdQdXNoIEFubm91bmNlbWVudHMnLAogICAgICAgICAg'+'dGltZXRhYmxlczogJ0NsYXNzIFRpbWV0YWJsZXMgJiBIb3VycycsCiAgICAgICAgICBzeWxsYWJ1czogJ0NvdXJzZSBTeWxsYWJ1'+'cyBMaXN0cycsCiAgICAgICAgICBwYXBlcnM6ICdQcmV2aW91cyBFeGFtIFBhcGVycycsCiAgICAgICAgICBjYXRlZ29yaWVzOiAn'+'Tm90ZXMgJiBSZXNvdXJjZSBDYXRlZ29yaWVzJwogICAgICAgIH07CiAgICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Zp'+'ZXctdGl0bGUnKS5pbm5lclRleHQgPSB0aXRsZXNbdmlld05hbWVdIHx8ICdBZG1pbiBEYXNoYm9hcmQnOwogICAgICAgIGFjdGl2'+'ZVZpZXcgPSB2aWV3TmFtZTsKCiAgICAgICAgLy8gQXV0byBsb2FkIGRhdGEgZm9yIHRoZSB2aWV3CiAgICAgICAgbG9hZERhdGFG'+'b3JWaWV3KHZpZXdOYW1lKTsKICAgICAgICB0b2dnbGVNb2JpbGVTaWRlYmFyKGZhbHNlKTsKICAgICAgfQoKICAgICAgLy8gQ29y'+'ZSBSZXF1ZXN0IEFQSSBIZWxwZXIgKE5hdGl2ZSBmZXRjaCkKICAgICAgYXN5bmMgZnVuY3Rpb24gYXBpUmVxdWVzdChlbmRwb2lu'+'dCwgbWV0aG9kID0gJ0dFVCcsIGJvZHkgPSBudWxsLCBpc011bHRpcGFydCA9IGZhbHNlKSB7CiAgICAgICAgY29uc3QgaGVhZGVy'+'cyA9IHt9OwogICAgICAgIGlmICh0b2tlbikgewogICAgICAgICAgaGVhZGVyc1snQXV0aG9yaXphdGlvbiddID0gYEJlYXJlciAk'+'e3Rva2VufWA7CiAgICAgICAgICBoZWFkZXJzWyd4LWF1dGgtdG9rZW4nXSA9IHRva2VuOwogICAgICAgIH0KCiAgICAgICAgY29u'+'c3Qgb3B0aW9ucyA9IHsgbWV0aG9kLCBoZWFkZXJzIH07CgogICAgICAgIGlmIChib2R5KSB7CiAgICAgICAgICBpZiAoaXNNdWx0'+'aXBhcnQpIHsKICAgICAgICAgICAgb3B0aW9ucy5ib2R5ID0gYm9keTsgLy8gbGV0IGJyb3dzZXIgaGFuZGxlIENvbnRlbnQtVHlw'+'ZSBib3VuZGFyaWVzCiAgICAgICAgICB9IGVsc2UgewogICAgICAgICAgICBoZWFkZXJzWydDb250ZW50LVR5cGUnXSA9ICdhcHBs'+'aWNhdGlvbi9qc29uJzsKICAgICAgICAgICAgb3B0aW9ucy5ib2R5ID0gSlNPTi5zdHJpbmdpZnkoYm9keSk7CiAgICAgICAgICB9'+'CiAgICAgICAgfQoKICAgICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGZldGNoKGAke2FwaUJhc2VVcmx9JHtlbmRwb2ludH1g'+'LCBvcHRpb25zKTsKICAgICAgICAKICAgICAgICBpZiAocmVzcG9uc2Uuc3RhdHVzID09PSA0MDEpIHsKICAgICAgICAgIGhhbmRs'+'ZUxvZ291dCgpOwogICAgICAgICAgdGhyb3cgbmV3IEVycm9yKCdBdXRob3JpemF0aW9uIGRlbmllZC4gTG9nZ2VkIG91dC4nKTsK'+'ICAgICAgICB9CgogICAgICAgIGNvbnN0IGRhdGEgPSBhd2FpdCByZXNwb25zZS5qc29uKCk7CiAgICAgICAgCiAgICAgICAgaWYg'+'KCFyZXNwb25zZS5vaykgewogICAgICAgICAgdGhyb3cgbmV3IEVycm9yKGRhdGEuZXJyb3JzPy5bMF0/Lm1zZyB8fCBkYXRhLm1z'+'ZyB8fCAnUmVxdWVzdCBmYWlsZWQnKTsKICAgICAgICB9CgogICAgICAgIHJldHVybiBkYXRhOwogICAgICB9CgogICAgICAvLyBD'+'aGVjayBBdXRoZW50aWNhdGlvbiBzdGF0ZQogICAgICBhc3luYyBmdW5jdGlvbiBjaGVja0F1dGhlbnRpY2F0aW9uKCkgewogICAg'+'ICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdhcHAtbG9hZGVyJykuY2xhc3NMaXN0LnJlbW92ZSgnaGlkZGVuJyk7CiAgICAg'+'ICAgaWYgKCF0b2tlbikgewogICAgICAgICAgc2hvd0F1dGhWaWV3KHRydWUpOwogICAgICAgICAgcmV0dXJuOwogICAgICAgIH0K'+'CiAgICAgICAgdHJ5IHsKICAgICAgICAgIHVzZXIgPSBhd2FpdCBhcGlSZXF1ZXN0KCcvYXV0aC9tZScpOwogICAgICAgICAgaWYg'+'KHVzZXIucm9sZSAhPT0gJ2FkbWluJykgewogICAgICAgICAgICB0aHJvdyBuZXcgRXJyb3IoJ0FjY2VzcyBEZW5pZWQ6IEFkbWlu'+'aXN0cmF0b3Igcm9sZSByZXF1aXJlZC4nKTsKICAgICAgICAgIH0KICAgICAgICAgIAogICAgICAgICAgLy8gU2V0dXAgdXNlciBk'+'ZXRhaWxzCiAgICAgICAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgndXNlci1kaXNwbGF5LW5hbWUnKS5pbm5lclRleHQgPSB1'+'c2VyLm5hbWU7CiAgICAgICAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgndXNlci1kaXNwbGF5LWVtYWlsJykuaW5uZXJUZXh0'+'ID0gdXNlci5lbWFpbDsKICAgICAgICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdoZWFkZXItdXNlci1uYW1lJykuaW5uZXJU'+'ZXh0ID0gdXNlci5uYW1lOwogICAgICAgICAgY29uc3QgaW5pdGlhbCA9IHVzZXIubmFtZSA/IHVzZXIubmFtZVswXS50b1VwcGVy'+'Q2FzZSgpIDogJ0EnOwogICAgICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3VzZXItYXZhdGFyLWluaXRpYWwnKS5pbm5l'+'clRleHQgPSBpbml0aWFsOwogICAgICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2hlYWRlci11c2VyLWF2YXRhcicpLmlu'+'bmVyVGV4dCA9IGluaXRpYWw7CgogICAgICAgICAgc2hvd0F1dGhWaWV3KGZhbHNlKTsKICAgICAgICAgIG5hdmlnYXRlVG8oJ2Rh'+'c2hib2FyZCcpOwogICAgICAgIH0gY2F0Y2ggKGVycikgewogICAgICAgICAgY29uc29sZS5lcnJvcihlcnIpOwogICAgICAgICAg'+'bG9jYWxTdG9yYWdlLnJlbW92ZUl0ZW0oJ3Rva2VuJyk7CiAgICAgICAgICB0b2tlbiA9ICcnOwogICAgICAgICAgc2hvd0F1dGhW'+'aWV3KHRydWUpOwogICAgICAgICAgc2hvd0F1dGhBbGVydChlcnIubWVzc2FnZSk7CiAgICAgICAgfQogICAgICB9CgogICAgICBm'+'dW5jdGlvbiBzaG93QXV0aFZpZXcodmlzaWJsZSkgewogICAgICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdhcHAtbG9hZGVy'+'JykuY2xhc3NMaXN0LmFkZCgnaGlkZGVuJyk7CiAgICAgICAgaWYgKHZpc2libGUpIHsKICAgICAgICAgIGRvY3VtZW50LmdldEVs'+'ZW1lbnRCeUlkKCdhdXRoLXZpZXcnKS5jbGFzc0xpc3QucmVtb3ZlKCdoaWRkZW4nKTsKICAgICAgICAgIGRvY3VtZW50LmdldEVs'+'ZW1lbnRCeUlkKCdhcHAtdmlldycpLmNsYXNzTGlzdC5hZGQoJ2hpZGRlbicpOwogICAgICAgIH0gZWxzZSB7CiAgICAgICAgICBk'+'b2N1bWVudC5nZXRFbGVtZW50QnlJZCgnYXV0aC12aWV3JykuY2xhc3NMaXN0LmFkZCgnaGlkZGVuJyk7CiAgICAgICAgICBkb2N1'+'bWVudC5nZXRFbGVtZW50QnlJZCgnYXBwLXZpZXcnKS5jbGFzc0xpc3QucmVtb3ZlKCdoaWRkZW4nKTsKICAgICAgICB9CiAgICAg'+'ICAgbHVjaWRlLmNyZWF0ZUljb25zKCk7CiAgICAgIH0KCiAgICAgIC8vIEhhbmRsZSBBdXRoZW50aWNhdGlvbiBmb3JtcwogICAg'+'ICBhc3luYyBmdW5jdGlvbiBoYW5kbGVBdXRoU3VibWl0KGUpIHsKICAgICAgICBlLnByZXZlbnREZWZhdWx0KCk7CiAgICAgICAg'+'aGlkZUF1dGhBbGVydCgpOwoKICAgICAgICBjb25zdCBlbWFpbCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdhdXRoLWVtYWls'+'JykudmFsdWU7CiAgICAgICAgY29uc3QgcGFzc3dvcmQgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnYXV0aC1wYXNzd29yZCcp'+'LnZhbHVlOwogICAgICAgIAogICAgICAgIGNvbnN0IHN1Ym1pdEJ0biA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdhdXRoLXN1'+'Ym1pdC1idG4nKTsKICAgICAgICBzdWJtaXRCdG4uZGlzYWJsZWQgPSB0cnVlOwogICAgICAgIHN1Ym1pdEJ0bi5pbm5lckhUTUwg'+'PSBgPHNwYW4+UHJvY2Vzc2luZy4uLjwvc3Bhbj5gOwoKICAgICAgICB0cnkgewogICAgICAgICAgY29uc3QgcmVzID0gYXdhaXQg'+'YXBpUmVxdWVzdCgnL2F1dGgvbG9naW4nLCAnUE9TVCcsIHsgZW1haWwsIHBhc3N3b3JkIH0pOwogICAgICAgICAgdG9rZW4gPSBy'+'ZXMudG9rZW47CiAgICAgICAgICBsb2NhbFN0b3JhZ2Uuc2V0SXRlbSgndG9rZW4nLCB0b2tlbik7CiAgICAgICAgICBhd2FpdCBj'+'aGVja0F1dGhlbnRpY2F0aW9uKCk7CiAgICAgICAgfSBjYXRjaCAoZXJyKSB7CiAgICAgICAgICBzaG93QXV0aEFsZXJ0KGVyci5t'+'ZXNzYWdlKTsKICAgICAgICAgIHN1Ym1pdEJ0bi5kaXNhYmxlZCA9IGZhbHNlOwogICAgICAgICAgc3VibWl0QnRuLmlubmVySFRN'+'TCA9ICI8c3Bhbj5TaWduIEluIGFzIEFkbWluPC9zcGFuPiI7CiAgICAgICAgfQogICAgICB9CgogICAgICBmdW5jdGlvbiBzaG93'+'QXV0aEFsZXJ0KG1zZykgewogICAgICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdhdXRoLWFsZXJ0LW1zZycpLmlubmVyVGV4'+'dCA9IG1zZzsKICAgICAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnYXV0aC1hbGVydCcpLmNsYXNzTGlzdC5yZW1vdmUoJ2hp'+'ZGRlbicpOwogICAgICB9CgogICAgICBmdW5jdGlvbiBoaWRlQXV0aEFsZXJ0KCkgewogICAgICAgIGRvY3VtZW50LmdldEVsZW1l'+'bnRCeUlkKCdhdXRoLWFsZXJ0JykuY2xhc3NMaXN0LmFkZCgnaGlkZGVuJyk7CiAgICAgIH0KCiAgICAgIGZ1bmN0aW9uIGhhbmRs'+'ZUxvZ291dCgpIHsKICAgICAgICB0b2tlbiA9ICcnOwogICAgICAgIHVzZXIgPSBudWxsOwogICAgICAgIGxvY2FsU3RvcmFnZS5y'+'ZW1vdmVJdGVtKCd0b2tlbicpOwogICAgICAgIHNob3dBdXRoVmlldyh0cnVlKTsKICAgICAgfQoKICAgICAgLy8gQWN0aW9uIE5v'+'dGlmaWNhdGlvbiBBbGVydHMKICAgICAgZnVuY3Rpb24gc2hvd0FjdGlvbkFsZXJ0KHR5cGUsIG1lc3NhZ2UpIHsKICAgICAgICBj'+'b25zdCBjb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnYWN0aW9uLWFsZXJ0Jyk7CiAgICAgICAgY29uc3QgaWNv'+'bkRpdiA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdhY3Rpb24tYWxlcnQtaWNvbicpOwogICAgICAgIGNvbnN0IG1zZ0RpdiA9'+'IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdhY3Rpb24tYWxlcnQtbXNnJyk7CiAgICAgICAgCiAgICAgICAgbXNnRGl2LmlubmVy'+'VGV4dCA9IG1lc3NhZ2U7CiAgICAgICAgCiAgICAgICAgY29uc3Qgc3R5bGVzID0gewogICAgICAgICAgc3VjY2VzczogewogICAg'+'ICAgICAgICBiZzogJ2JnLWVtZXJhbGQtNTAgZGFyazpiZy1lbWVyYWxkLTkwMC8xMCBib3JkZXItZW1lcmFsZC0yNTAgZGFyazpi'+'b3JkZXItZW1lcmFsZC04MDAvMzAgdGV4dC1lbWVyYWxkLTgwMCBkYXJrOnRleHQtZW1lcmFsZC0zMDAnLAogICAgICAgICAgICBp'+'Y29uOiAnPGkgZGF0YS1sdWNpZGU9ImNoZWNrLWNpcmNsZSIgY2xhc3M9InctNSBoLTUgdGV4dC1lbWVyYWxkLTUwMCBzaHJpbmst'+'MCI+PC9pPicKICAgICAgICAgIH0sCiAgICAgICAgICBlcnJvcjogewogICAgICAgICAgICBiZzogJ2JnLXJvc2UtNTAgZGFyazpi'+'Zy1yb3NlLTkwMC8xMCBib3JkZXItcm9zZS0yNTAgZGFyazpib3JkZXItcm9zZS04MDAvMzAgdGV4dC1yb3NlLTgwMCBkYXJrOnRl'+'eHQtcm9zZS0zMDAnLAogICAgICAgICAgICBpY29uOiAnPGkgZGF0YS1sdWNpZGU9ImFsZXJ0LWNpcmNsZSIgY2xhc3M9InctNSBo'+'LTUgdGV4dC1yb3NlLTUwMCBzaHJpbmstMCI+PC9pPicKICAgICAgICAgIH0KICAgICAgICB9OwoKICAgICAgICBjb25zdCB0aGVt'+'ZSA9IHN0eWxlc1t0eXBlXSB8fCBzdHlsZXMuc3VjY2VzczsKICAgICAgICBjb250YWluZXIuY2xhc3NOYW1lID0gYGZsZXggaXRl'+'bXMtc3RhcnQgZ2FwLTMgcC00IHJvdW5kZWQtbGcgYm9yZGVyIG1iLTYgdGV4dC1zbSAke3RoZW1lLmJnfWA7CiAgICAgICAgaWNv'+'bkRpdi5pbm5lckhUTUwgPSB0aGVtZS5pY29uOwogICAgICAgIGNvbnRhaW5lci5jbGFzc0xpc3QucmVtb3ZlKCdoaWRkZW4nKTsK'+'ICAgICAgICBsdWNpZGUuY3JlYXRlSWNvbnMoKTsKCiAgICAgICAgLy8gQXV0byBjbG9zZSBhZnRlciA1cwogICAgICAgIHNldFRp'+'bWVvdXQoKCkgPT4gewogICAgICAgICAgaGlkZUFjdGlvbkFsZXJ0KCk7CiAgICAgICAgfSwgNTAwMCk7CiAgICAgIH0KCiAgICAg'+'IGZ1bmN0aW9uIGhpZGVBY3Rpb25BbGVydCgpIHsKICAgICAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnYWN0aW9uLWFsZXJ0'+'JykuY2xhc3NMaXN0LmFkZCgnaGlkZGVuJyk7CiAgICAgIH0KCiAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09'+'PT09PT09PT09PT09PT09PT0KICAgICAgLy8gREFUQSBMT0FERVIgR0FURVdBWSBGT1IgU1BBIFZJRVdTCiAgICAgIC8vID09PT09'+'PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgZnVuY3Rpb24gbG9hZERhdGFGb3JWaWV3KHZp'+'ZXdOYW1lKSB7CiAgICAgICAgc2V0RXJyb3JWaWV3KG51bGwpOwogICAgICAgIHN3aXRjaCAodmlld05hbWUpIHsKICAgICAgICAg'+'IGNhc2UgJ2Rhc2hib2FyZCc6CiAgICAgICAgICAgIGxvYWREYXNoYm9hcmRTdGF0cygpOwogICAgICAgICAgICBicmVhazsKICAg'+'ICAgICAgIGNhc2UgJ3N0dWRlbnRzJzoKICAgICAgICAgICAgbG9hZFN0dWRlbnRzTGlzdCgpOwogICAgICAgICAgICBicmVhazsK'+'ICAgICAgICAgIGNhc2UgJ25vdGVzJzoKICAgICAgICAgICAgbG9hZE5vdGVzTGlzdCgpOwogICAgICAgICAgICBicmVhazsKICAg'+'ICAgICAgIGNhc2UgJ2Fzc2lnbm1lbnRzJzoKICAgICAgICAgICAgbG9hZEFzc2lnbm1lbnRzTGlzdCgpOwogICAgICAgICAgICBi'+'cmVhazsKICAgICAgICAgIGNhc2UgJ2Fubm91bmNlbWVudHMnOgogICAgICAgICAgICBsb2FkQW5ub3VuY2VtZW50c0xpc3QoKTsK'+'ICAgICAgICAgICAgYnJlYWs7CiAgICAgICAgICBjYXNlICd0aW1ldGFibGVzJzoKICAgICAgICAgICAgbG9hZFRpbWV0YWJsZXNM'+'aXN0KCk7CiAgICAgICAgICAgIGJyZWFrOwogICAgICAgICAgY2FzZSAnc3lsbGFidXMnOgogICAgICAgICAgICBsb2FkU3lsbGFi'+'aUxpc3QoKTsKICAgICAgICAgICAgYnJlYWs7CiAgICAgICAgICBjYXNlICdwYXBlcnMnOgogICAgICAgICAgICBsb2FkUGFwZXJz'+'TGlzdCgpOwogICAgICAgICAgICBicmVhazsKICAgICAgICAgIGNhc2UgJ2NhdGVnb3JpZXMnOgogICAgICAgICAgICBsb2FkQ2F0'+'ZWdvcmllc0xpc3QoKTsKICAgICAgICAgICAgYnJlYWs7CiAgICAgICAgfQogICAgICB9CgogICAgICBmdW5jdGlvbiBzZXRFcnJv'+'clZpZXcobXNnKSB7CiAgICAgICAgaWYgKG1zZykgewogICAgICAgICAgc2hvd0FjdGlvbkFsZXJ0KCdlcnJvcicsIG1zZyk7CiAg'+'ICAgICAgfSBlbHNlIHsKICAgICAgICAgIGhpZGVBY3Rpb25BbGVydCgpOwogICAgICAgIH0KICAgICAgfQoKICAgICAgLy8gQ29u'+'ZmlybWF0aW9uIGRpYWxvZyBoYW5kbGluZwogICAgICBmdW5jdGlvbiBvcGVuQ29uZmlybU1vZGFsKG1lc3NhZ2UsIGNhbGxiYWNr'+'KSB7CiAgICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2NvbmZpcm0tbW9kYWwtbXNnJykuaW5uZXJUZXh0ID0gbWVzc2Fn'+'ZTsKICAgICAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnY29uZmlybS1tb2RhbCcpLmNsYXNzTGlzdC5yZW1vdmUoJ2hpZGRl'+'bicpOwogICAgICAgIGNvbmZpcm1DYWxsYmFjayA9IGNhbGxiYWNrOwogICAgICB9CgogICAgICBmdW5jdGlvbiBjbG9zZUNvbmZp'+'cm1Nb2RhbCgpIHsKICAgICAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnY29uZmlybS1tb2RhbCcpLmNsYXNzTGlzdC5hZGQo'+'J2hpZGRlbicpOwogICAgICAgIGNvbmZpcm1DYWxsYmFjayA9IG51bGw7CiAgICAgIH0KCiAgICAgIGRvY3VtZW50LmdldEVsZW1l'+'bnRCeUlkKCdjb25maXJtLW1vZGFsLXllcy1idG4nKS5hZGRFdmVudExpc3RlbmVyKCdjbGljaycsIGFzeW5jICgpID0+IHsKICAg'+'ICAgICBpZiAoY29uZmlybUNhbGxiYWNrKSB7CiAgICAgICAgICBjb25zdCBidG4gPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgn'+'Y29uZmlybS1tb2RhbC15ZXMtYnRuJyk7CiAgICAgICAgICBidG4uZGlzYWJsZWQgPSB0cnVlOwogICAgICAgICAgYnRuLmlubmVy'+'SFRNTCA9ICdEZWxldGluZy4uLic7CiAgICAgICAgICB0cnkgewogICAgICAgICAgICBhd2FpdCBjb25maXJtQ2FsbGJhY2soKTsK'+'ICAgICAgICAgIH0gY2F0Y2ggKGVycikgewogICAgICAgICAgICBjb25zb2xlLmVycm9yKGVycik7CiAgICAgICAgICB9IGZpbmFs'+'bHkgewogICAgICAgICAgICBidG4uZGlzYWJsZWQgPSBmYWxzZTsKICAgICAgICAgICAgYnRuLmlubmVySFRNTCA9ICdEZWxldGUn'+'OwogICAgICAgICAgICBjbG9zZUNvbmZpcm1Nb2RhbCgpOwogICAgICAgICAgfQogICAgICAgIH0KICAgICAgfSk7CgogICAgICAv'+'LyBTaWRlIHBhbmVsIHRvZ2dsZXMKICAgICAgZnVuY3Rpb24gdG9nZ2xlU2lkZVBhbmVsKHBhbmVsTmFtZSwgc2hvdykgewogICAg'+'ICAgIGNvbnN0IHBhbmVsID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoYCR7cGFuZWxOYW1lfS1zaWRlLXBhbmVsYCk7CiAgICAg'+'ICAgaWYgKHNob3cpIHsKICAgICAgICAgIHBhbmVsLmNsYXNzTGlzdC5yZW1vdmUoJ2hpZGRlbicpOwogICAgICAgIH0gZWxzZSB7'+'CiAgICAgICAgICBwYW5lbC5jbGFzc0xpc3QuYWRkKCdoaWRkZW4nKTsKICAgICAgICB9CiAgICAgIH0KCiAgICAgIC8vID09PT09'+'PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgLy8gMS4gREFTSEJPQVJEIExPQUQgTE9HSUMK'+'ICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICBhc3luYyBmdW5jdGlv'+'biBsb2FkRGFzaGJvYXJkU3RhdHMoKSB7CiAgICAgICAgdHJ5IHsKICAgICAgICAgIGNvbnN0IFsKICAgICAgICAgICAgdXNlcnNS'+'ZXMsCiAgICAgICAgICAgIG5vdGVzUmVzLAogICAgICAgICAgICBhc2dSZXMsCiAgICAgICAgICAgIGFublJlcywKICAgICAgICAg'+'ICAgdHRSZXMsCiAgICAgICAgICAgIHBhcGVyc1JlcywKICAgICAgICAgICAgY2F0UmVzCiAgICAgICAgICBdID0gYXdhaXQgUHJv'+'bWlzZS5hbGxTZXR0bGVkKFsKICAgICAgICAgICAgYXBpUmVxdWVzdCgnL3VzZXJzJyksCiAgICAgICAgICAgIGFwaVJlcXVlc3Qo'+'Jy9ub3RlcycpLAogICAgICAgICAgICBhcGlSZXF1ZXN0KCcvYXNzaWdubWVudHMnKSwKICAgICAgICAgICAgYXBpUmVxdWVzdCgn'+'L2Fubm91bmNlbWVudHMnKSwKICAgICAgICAgICAgYXBpUmVxdWVzdCgnL3RpbWV0YWJsZScpLAogICAgICAgICAgICBhcGlSZXF1'+'ZXN0KCcvcGFwZXJzJyksCiAgICAgICAgICAgIGFwaVJlcXVlc3QoJy9jYXRlZ29yaWVzJykKICAgICAgICAgIF0pOwoKICAgICAg'+'ICAgIGNvbnN0IHZhbCA9IChyLCBmYWxsYmFjayA9IFtdKSA9PiByLnN0YXR1cyA9PT0gJ2Z1bGZpbGxlZCcgPyByLnZhbHVlIDog'+'ZmFsbGJhY2s7CgogICAgICAgICAgc3R1ZGVudHMgICAgICA9IHZhbCh1c2Vyc1Jlcyk7CiAgICAgICAgICBub3RlcyAgICAgICAg'+'ID0gdmFsKG5vdGVzUmVzKTsKICAgICAgICAgIGFzc2lnbm1lbnRzICAgPSB2YWwoYXNnUmVzKTsKICAgICAgICAgIGFubm91bmNl'+'bWVudHMgPSB2YWwoYW5uUmVzKTsKICAgICAgICAgIHRpbWV0YWJsZXMgICAgPSB2YWwodHRSZXMpOwogICAgICAgICAgcGFwZXJz'+'ICAgICAgICA9IHZhbChwYXBlcnNSZXMpOwogICAgICAgICAgY2F0ZWdvcmllcyAgICA9IHZhbChjYXRSZXMpOwoKICAgICAgICAg'+'IGNvbnN0IHN0dWRlbnRDb3VudCA9IHN0dWRlbnRzLmZpbHRlcihzID0+IHMucm9sZSAhPT0gJ2FkbWluJykubGVuZ3RoOwogICAg'+'ICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3N0YXQtc3R1ZGVudHMnKS5pbm5lclRleHQgPSBzdHVkZW50Q291bnQ7CiAg'+'ICAgICAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnc3RhdC1ub3RlcycpLmlubmVyVGV4dCA9IG5vdGVzLmxlbmd0aDsKICAg'+'ICAgICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdzdGF0LWFzc2lnbm1lbnRzJykuaW5uZXJUZXh0ID0gYXNzaWdubWVudHMu'+'bGVuZ3RoOwogICAgICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3N0YXQtYW5ub3VuY2VtZW50cycpLmlubmVyVGV4dCA9'+'IGFubm91bmNlbWVudHMubGVuZ3RoOwogICAgICAgICAgCiAgICAgICAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnc3RhdC10'+'aW1ldGFibGVzLXN1YicpLmlubmVyVGV4dCA9IGAke3RpbWV0YWJsZXMubGVuZ3RofSBzY2hlZHVsZXMgYWN0aXZlYDsKICAgICAg'+'ICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdzdGF0LXBhcGVycy1zdWInKS5pbm5lclRleHQgPSBgJHtwYXBlcnMubGVuZ3Ro'+'fSBwYXBlcnMgdXBsb2FkZWRgOwogICAgICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3N0YXQtY2F0ZWdvcmllcy1zdWIn'+'KS5pbm5lclRleHQgPSBgJHtjYXRlZ29yaWVzLmxlbmd0aH0gdG9waWNzIGNvbmZpZ3VyZWRgOwoKICAgICAgICAgIC8vIFJlbmRl'+'ciBSZWNlbnRzCiAgICAgICAgICByZW5kZXJSZWNlbnROb3RlcygpOwogICAgICAgICAgcmVuZGVyUmVjZW50QXNzaWdubWVudHMo'+'KTsKICAgICAgICB9IGNhdGNoIChlcnIpIHsKICAgICAgICAgIHNldEVycm9yVmlldygnRGFzaGJvYXJkIGZldGNoIGZhaWxlZC4g'+'VmVyaWZ5IGJhY2tlbmQ6ICcgKyBlcnIubWVzc2FnZSk7CiAgICAgICAgfQogICAgICB9CgogICAgICBmdW5jdGlvbiByZW5kZXJS'+'ZWNlbnROb3RlcygpIHsKICAgICAgICBjb25zdCBjb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncmVjZW50LW5v'+'dGVzLWxpc3QnKTsKICAgICAgICBjb25zdCBzbGljZSA9IG5vdGVzLnNsaWNlKDAsIDUpOwogICAgICAgIGlmIChzbGljZS5sZW5n'+'dGggPT09IDApIHsKICAgICAgICAgIGNvbnRhaW5lci5pbm5lckhUTUwgPSBgPHAgY2xhc3M9InRleHQteHMgdGV4dC16aW5jLTQw'+'MCBweS0yIHRleHQtY2VudGVyIj5ObyBzdHVkeSBub3RlcyBmb3VuZC48L3A+YDsKICAgICAgICAgIHJldHVybjsKICAgICAgICB9'+'CiAgICAgICAgY29udGFpbmVyLmlubmVySFRNTCA9IHNsaWNlLm1hcChub3RlID0+IGAKICAgICAgICAgIDxkaXYgY2xhc3M9ImZs'+'ZXggaXRlbXMtY2VudGVyIGp1c3RpZnktYmV0d2VlbiBwLTMgYmctemluYy01MCBkYXJrOmJnLXppbmMtOTAwLzMwIGJvcmRlciBi'+'b3JkZXItemluYy0xMDAgZGFyazpib3JkZXItemluYy04MDAvNTAgcm91bmRlZC1sZyI+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9'+'Im1pbi13LTAgZmxleC0xIj4KICAgICAgICAgICAgICA8cCBjbGFzcz0idGV4dC14cyBmb250LXNlbWlib2xkIHRydW5jYXRlIHRl'+'eHQtemluYy04MDAgZGFyazp0ZXh0LXppbmMtMjAwIj4ke25vdGUudGl0bGV9PC9wPgogICAgICAgICAgICAgIDxwIGNsYXNzPSJ0'+'ZXh0LVsxMHB4XSB0ZXh0LXppbmMtNDAwIHRydW5jYXRlIG10LTAuNSI+JHtub3RlLmRlc2NyaXB0aW9uIHx8ICdObyBkZXNjcmlw'+'dGlvbid9PC9wPgogICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgPHNwYW4gY2xhc3M9InRleHQtWzlweF0gdGV4dC16aW5j'+'LTQwMCBiZy16aW5jLTE1MCBkYXJrOmJnLXppbmMtODAwIHJvdW5kZWQgcHgtMS41IHB5LTAuNSBmb250LW1vbm8iPiR7bmV3IERh'+'dGUobm90ZS5jcmVhdGVkQXQpLnRvTG9jYWxlRGF0ZVN0cmluZygpfTwvc3Bhbj4KICAgICAgICAgIDwvZGl2PgogICAgICAgIGAp'+'LmpvaW4oJycpOwogICAgICB9CgogICAgICBmdW5jdGlvbiByZW5kZXJSZWNlbnRBc3NpZ25tZW50cygpIHsKICAgICAgICBjb25z'+'dCBjb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncmVjZW50LWFzc2lnbm1lbnRzLWxpc3QnKTsKICAgICAgICBj'+'b25zdCBzbGljZSA9IGFzc2lnbm1lbnRzLnNsaWNlKDAsIDUpOwogICAgICAgIGlmIChzbGljZS5sZW5ndGggPT09IDApIHsKICAg'+'ICAgICAgIGNvbnRhaW5lci5pbm5lckhUTUwgPSBgPHAgY2xhc3M9InRleHQteHMgdGV4dC16aW5jLTQwMCBweS0yIHRleHQtY2Vu'+'dGVyIj5ObyBhc3NpZ25tZW50cyBmb3VuZC48L3A+YDsKICAgICAgICAgIHJldHVybjsKICAgICAgICB9CiAgICAgICAgY29udGFp'+'bmVyLmlubmVySFRNTCA9IHNsaWNlLm1hcChhc2cgPT4gewogICAgICAgICAgY29uc3QgaXNPdmVyZHVlID0gYXNnLmR1ZURhdGUg'+'JiYgbmV3IERhdGUoYXNnLmR1ZURhdGUpIDwgbmV3IERhdGUoKTsKICAgICAgICAgIHJldHVybiBgCiAgICAgICAgICAgIDxkaXYg'+'Y2xhc3M9ImZsZXggaXRlbXMtY2VudGVyIGp1c3RpZnktYmV0d2VlbiBwLTMgYmctemluYy01MCBkYXJrOmJnLXppbmMtOTAwLzMw'+'IGJvcmRlciBib3JkZXItemluYy0xMDAgZGFyazpib3JkZXItemluYy04MDAvNTAgcm91bmRlZC1sZyI+CiAgICAgICAgICAgICAg'+'PGRpdiBjbGFzcz0ibWluLXctMCBmbGV4LTEiPgogICAgICAgICAgICAgICAgPHAgY2xhc3M9InRleHQteHMgZm9udC1zZW1pYm9s'+'ZCB0cnVuY2F0ZSB0ZXh0LXppbmMtODAwIGRhcms6dGV4dC16aW5jLTIwMCI+JHthc2cudGl0bGV9PC9wPgogICAgICAgICAgICAg'+'ICAgPHAgY2xhc3M9InRleHQtWzEwcHhdIHRleHQtemluYy00MDAgdHJ1bmNhdGUgbXQtMC41Ij5EdWU6ICR7YXNnLmR1ZURhdGUg'+'PyBuZXcgRGF0ZShhc2cuZHVlRGF0ZSkudG9Mb2NhbGVEYXRlU3RyaW5nKCkgOiAnTi9BJ308L3A+CiAgICAgICAgICAgICAgPC9k'+'aXY+CiAgICAgICAgICAgICAgPHNwYW4gY2xhc3M9InRleHQtWzlweF0gZm9udC1zZW1pYm9sZCByb3VuZGVkIHB4LTEuNSBweS0w'+'LjUgJHtpc092ZXJkdWUgPyAnYmctcm9zZS0xMDAgZGFyazpiZy1yb3NlLTk1MC8yMCB0ZXh0LXJvc2UtNjAwJyA6ICdiZy1lbWVy'+'YWxkLTEwMCBkYXJrOmJnLWVtZXJhbGQtOTUwLzIwIHRleHQtZW1lcmFsZC02MDAnfSI+JHtpc092ZXJkdWUgPyAnT3ZlcmR1ZScg'+'OiAnQWN0aXZlJ308L3NwYW4+CiAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgYDsKICAgICAgICB9KS5qb2luKCcnKTsKICAg'+'ICAgfQoKICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAvLyAyLiBT'+'VFVERU5UUyBWSUVXIExPR0lDCiAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0K'+'ICAgICAgYXN5bmMgZnVuY3Rpb24gbG9hZFN0dWRlbnRzTGlzdCgpIHsKICAgICAgICB0cnkgewogICAgICAgICAgc3R1ZGVudHMg'+'PSBhd2FpdCBhcGlSZXF1ZXN0KCcvdXNlcnMnKTsKICAgICAgICAgIHJlbmRlclN0dWRlbnRzVGFibGUoc3R1ZGVudHMpOwogICAg'+'ICAgIH0gY2F0Y2ggKGVycikgewogICAgICAgICAgc2V0RXJyb3JWaWV3KCdDb3VsZCBub3QgZmV0Y2ggc3R1ZGVudCBwcm9maWxl'+'cy4nKTsKICAgICAgICB9CiAgICAgIH0KCiAgICAgIGZ1bmN0aW9uIHJlbmRlclN0dWRlbnRzVGFibGUoZGF0YUxpc3QpIHsKICAg'+'ICAgICBjb25zdCB0Ym9keSA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdzdHVkZW50cy10YWJsZS1ib2R5Jyk7CiAgICAgICAg'+'Y29uc3QgY291bnRMYmwgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnc3R1ZGVudHMtY291bnQtbGJsJyk7CiAgICAgICAgCiAg'+'ICAgICAgY29uc3Qgbm9uQWRtaW5zID0gZGF0YUxpc3QuZmlsdGVyKHMgPT4gcy5yb2xlICE9PSAnYWRtaW4nKTsKICAgICAgICBj'+'b3VudExibC5pbm5lclRleHQgPSBgU2hvd2luZyAke25vbkFkbWlucy5sZW5ndGh9IG9mICR7ZGF0YUxpc3QubGVuZ3RofSByZWdp'+'c3RlcmVkIHByb2ZpbGVzYDsKCiAgICAgICAgaWYgKGRhdGFMaXN0Lmxlbmd0aCA9PT0gMCkgewogICAgICAgICAgdGJvZHkuaW5u'+'ZXJIVE1MID0gYDx0cj48dGQgY29sc3Bhbj0iNSIgY2xhc3M9InB5LTggdGV4dC1jZW50ZXIgdGV4dC16aW5jLTQwMCI+Tm8gcHJv'+'ZmlsZXMgZm91bmQgaW4gZGF0YWJhc2UuPC90ZD48L3RyPmA7CiAgICAgICAgICByZXR1cm47CiAgICAgICAgfQoKICAgICAgICB0'+'Ym9keS5pbm5lckhUTUwgPSBkYXRhTGlzdC5tYXAocyA9PiBgCiAgICAgICAgICA8dHIgY2xhc3M9ImhvdmVyOmJnLXppbmMtNTAg'+'ZGFyazpob3ZlcjpiZy16aW5jLTkwMC8zMCB0ZXh0LXppbmMtOTAwIGRhcms6dGV4dC16aW5jLTIwMCB0cmFuc2l0aW9uLWNvbG9y'+'cyI+CiAgICAgICAgICAgIDx0ZCBjbGFzcz0icHktNCBweC02IGZvbnQtc2VtaWJvbGQgZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTIi'+'PgogICAgICAgICAgICAgIDxkaXYgY2xhc3M9InctOCBoLTggcm91bmRlZC1mdWxsIGJnLXB1cnBsZS0xMDAgZGFyazpiZy1wdXJw'+'bGUtOTAwLzIwIHRleHQtcHVycGxlLTYwMCBkYXJrOnRleHQtcHVycGxlLTQwMCBmbGV4IGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNl'+'bnRlciBmb250LWJvbGQgdGV4dC14cyI+CiAgICAgICAgICAgICAgICAke3MubmFtZSA/IHMubmFtZVswXS50b1VwcGVyQ2FzZSgp'+'IDogJ1UnfQogICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICAgIDxzcGFuPiR7cy5uYW1lfTwvc3Bhbj4KICAgICAgICAg'+'ICAgPC90ZD4KICAgICAgICAgICAgPHRkIGNsYXNzPSJweS00IHB4LTYgZm9udC1tb25vIHRleHQteHMiPiR7cy5lbWFpbH08L3Rk'+'PgogICAgICAgICAgICA8dGQgY2xhc3M9InB5LTQgcHgtNiI+CiAgICAgICAgICAgICAgPHNwYW4gY2xhc3M9ImlubGluZS1mbGV4'+'IGl0ZW1zLWNlbnRlciBnYXAtMSB0ZXh0LVsxMHB4XSBmb250LXNlbWlib2xkIHB4LTIgcHktMC41IHJvdW5kZWQgJHtzLnJvbGUg'+'PT09ICdhZG1pbicgPyAnYmctcHVycGxlLTEwMCBkYXJrOmJnLXB1cnBsZS05NTAvMjAgdGV4dC1wdXJwbGUtNjAwIGRhcms6dGV4'+'dC1wdXJwbGUtNDAwJyA6ICdiZy16aW5jLTEwMCBkYXJrOmJnLXppbmMtODAwIHRleHQtemluYy01MDAnfSI+CiAgICAgICAgICAg'+'ICAgICAke3Mucm9sZX0KICAgICAgICAgICAgICA8L3NwYW4+CiAgICAgICAgICAgIDwvdGQ+CiAgICAgICAgICAgIDx0ZCBjbGFz'+'cz0icHktNCBweC02IHRleHQtemluYy00MDAgdGV4dC14cyI+JHtuZXcgRGF0ZShzLmNyZWF0ZWRBdCkudG9Mb2NhbGVEYXRlU3Ry'+'aW5nKCl9PC90ZD4KICAgICAgICAgICAgPHRkIGNsYXNzPSJweS00IHB4LTYgdGV4dC1yaWdodCI+CiAgICAgICAgICAgICAgJHtz'+'LnJvbGUgIT09ICdhZG1pbicgPyBgCiAgICAgICAgICAgICAgICA8YnV0dG9uIG9uY2xpY2s9ImNvbmZpcm1EZWxldGVTdHVkZW50'+'KCcke3MuX2lkfScpIiBjbGFzcz0icC0xLjUgdGV4dC1yb3NlLTUwMCBob3ZlcjpiZy1yb3NlLTUwIGRhcms6aG92ZXI6Ymctcm9z'+'ZS05NTAvMjAgcm91bmRlZCB0cmFuc2l0aW9uLWNvbG9ycyBpbmxpbmUtZmxleCI+CiAgICAgICAgICAgICAgICAgIDxpIGRhdGEt'+'bHVjaWRlPSJ0cmFzaC0yIiBjbGFzcz0idy00IGgtNCI+PC9pPgogICAgICAgICAgICAgICAgPC9idXR0b24+CiAgICAgICAgICAg'+'ICAgYCA6IGA8c3BhbiBjbGFzcz0idGV4dC14cyB0ZXh0LXppbmMtNDAwIGl0YWxpYyI+UHJvdGVjdGVkPC9zcGFuPmB9CiAgICAg'+'ICAgICAgIDwvdGQ+CiAgICAgICAgICA8L3RyPgogICAgICAgIGApLmpvaW4oJycpOwogICAgICAgIGx1Y2lkZS5jcmVhdGVJY29u'+'cygpOwogICAgICB9CgogICAgICBmdW5jdGlvbiBmaWx0ZXJTdHVkZW50c1RhYmxlKCkgewogICAgICAgIGNvbnN0IHF1ZXJ5ID0g'+'ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3N0dWRlbnRzLXNlYXJjaCcpLnZhbHVlLnRvTG93ZXJDYXNlKCk7CiAgICAgICAgY29u'+'c3QgZmlsdGVyZWQgPSBzdHVkZW50cy5maWx0ZXIocyA9PiAKICAgICAgICAgIHMubmFtZS50b0xvd2VyQ2FzZSgpLmluY2x1ZGVz'+'KHF1ZXJ5KSB8fCAKICAgICAgICAgIHMuZW1haWwudG9Mb3dlckNhc2UoKS5pbmNsdWRlcyhxdWVyeSkKICAgICAgICApOwogICAg'+'ICAgIHJlbmRlclN0dWRlbnRzVGFibGUoZmlsdGVyZWQpOwogICAgICB9CgogICAgICBmdW5jdGlvbiBjb25maXJtRGVsZXRlU3R1'+'ZGVudChpZCkgewogICAgICAgIG9wZW5Db25maXJtTW9kYWwoJ0FyZSB5b3Ugc3VyZSB5b3Ugd2FudCB0byBkZWxldGUgdGhpcyBz'+'dHVkZW50IHByb2ZpbGUgcGVybWFuZW50bHk/JywgYXN5bmMgKCkgPT4gewogICAgICAgICAgdHJ5IHsKICAgICAgICAgICAgYXdh'+'aXQgYXBpUmVxdWVzdChgL3VzZXJzLyR7aWR9YCwgJ0RFTEVURScpOwogICAgICAgICAgICBzaG93QWN0aW9uQWxlcnQoJ3N1Y2Nl'+'c3MnLCAnU3R1ZGVudCBwcm9maWxlIHN1Y2Nlc3NmdWxseSByZW1vdmVkLicpOwogICAgICAgICAgICBsb2FkU3R1ZGVudHNMaXN0'+'KCk7CiAgICAgICAgICB9IGNhdGNoIChlcnIpIHsKICAgICAgICAgICAgc2hvd0FjdGlvbkFsZXJ0KCdlcnJvcicsIGVyci5tZXNz'+'YWdlKTsKICAgICAgICAgIH0KICAgICAgICB9KTsKICAgICAgfQoKICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09'+'PT09PT09PT09PT09PT09PT09PQogICAgICAvLyAzLiBOT1RFUyBWSUVXIExPR0lDCiAgICAgIC8vID09PT09PT09PT09PT09PT09'+'PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgYXN5bmMgZnVuY3Rpb24gbG9hZE5vdGVzTGlzdCgpIHsKICAgICAg'+'ICB0cnkgewogICAgICAgICAgbm90ZXMgPSBhd2FpdCBhcGlSZXF1ZXN0KCcvbm90ZXMnKTsKICAgICAgICAgIHJlbmRlck5vdGVz'+'VGFibGUobm90ZXMpOwogICAgICAgIH0gY2F0Y2ggKGVycikgewogICAgICAgICAgc2V0RXJyb3JWaWV3KCdDb3VsZCBub3QgZmV0'+'Y2ggc3R1ZHkgbm90ZXMgbGlzdC4nKTsKICAgICAgICB9CiAgICAgIH0KCiAgICAgIGZ1bmN0aW9uIHJlbmRlck5vdGVzVGFibGUo'+'ZGF0YUxpc3QpIHsKICAgICAgICBjb25zdCB0Ym9keSA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdub3Rlcy10YWJsZS1ib2R5'+'Jyk7CiAgICAgICAgaWYgKGRhdGFMaXN0Lmxlbmd0aCA9PT0gMCkgewogICAgICAgICAgdGJvZHkuaW5uZXJIVE1MID0gYDx0cj48'+'dGQgY29sc3Bhbj0iNSIgY2xhc3M9InB5LTggdGV4dC1jZW50ZXIgdGV4dC16aW5jLTQwMCI+Tm8gc3R1ZHkgbm90ZXMgdXBsb2Fk'+'ZWQgeWV0LjwvdGQ+PC90cj5gOwogICAgICAgICAgcmV0dXJuOwogICAgICAgIH0KCiAgICAgICAgdGJvZHkuaW5uZXJIVE1MID0g'+'ZGF0YUxpc3QubWFwKG4gPT4gYAogICAgICAgICAgPHRyIGNsYXNzPSJob3ZlcjpiZy16aW5jLTUwIGRhcms6aG92ZXI6Ymctemlu'+'Yy05MDAvMzAgdGV4dC16aW5jLTkwMCBkYXJrOnRleHQtemluYy0yMDAgdHJhbnNpdGlvbi1jb2xvcnMiPgogICAgICAgICAgICA8'+'dGQgY2xhc3M9InB5LTQgcHgtNiBmb250LXNlbWlib2xkIGZsZXggaXRlbXMtY2VudGVyIGdhcC0yIj4KICAgICAgICAgICAgICA8'+'aSBkYXRhLWx1Y2lkZT0iZmlsZS10ZXh0IiBjbGFzcz0idy00IGgtNCB0ZXh0LXB1cnBsZS01MDAgc2hyaW5rLTAiPjwvaT4KICAg'+'ICAgICAgICAgICA8c3BhbiBjbGFzcz0idHJ1bmNhdGUgbWF4LXctWzE1MHB4XSI+JHtuLnRpdGxlfTwvc3Bhbj4KICAgICAgICAg'+'ICAgPC90ZD4KICAgICAgICAgICAgPHRkIGNsYXNzPSJweS00IHB4LTYgdGV4dC16aW5jLTQwMCB0cnVuY2F0ZSBtYXgtdy1bMjAw'+'cHhdIj4ke24uZGVzY3JpcHRpb24gfHwgJ05vIGRlc2NyaXB0aW9uJ308L3RkPgogICAgICAgICAgICA8dGQgY2xhc3M9InB5LTQg'+'cHgtNiB0ZXh0LXppbmMtNTAwIj4ke24uY3JlYXRlZEJ5Py5uYW1lIHx8ICdBZG1pbid9PC90ZD4KICAgICAgICAgICAgPHRkIGNs'+'YXNzPSJweS00IHB4LTYgdGV4dC16aW5jLTQwMCB0ZXh0LXhzIj4ke25ldyBEYXRlKG4uY3JlYXRlZEF0KS50b0xvY2FsZURhdGVT'+'dHJpbmcoKX08L3RkPgogICAgICAgICAgICA8dGQgY2xhc3M9InB5LTQgcHgtNiB0ZXh0LXJpZ2h0IGZsZXggaXRlbXMtY2VudGVy'+'IGp1c3RpZnktZW5kIGdhcC0xLjUiPgogICAgICAgICAgICAgICR7bi5maWxlVXJsID8gYAogICAgICAgICAgICAgICAgPGEgaHJl'+'Zj0iJHtuLmZpbGVVcmwuc3RhcnRzV2l0aCgnaHR0cCcpID8gbi5maWxlVXJsIDogYXBpQmFzZVVybC5yZXBsYWNlKCcvYXBpJywg'+'JycpICsgbi5maWxlVXJsfSIgdGFyZ2V0PSJfYmxhbmsiIGNsYXNzPSJwLTEuNSB0ZXh0LXB1cnBsZS02MDAgZGFyazp0ZXh0LXB1'+'cnBsZS00MDAgaG92ZXI6YmctcHVycGxlLTUwIGRhcms6aG92ZXI6YmctcHVycGxlLTk1MC8yMCByb3VuZGVkIHRyYW5zaXRpb24t'+'Y29sb3JzIGlubGluZS1mbGV4Ij4KICAgICAgICAgICAgICAgICAgPGkgZGF0YS1sdWNpZGU9ImRvd25sb2FkIiBjbGFzcz0idy00'+'IGgtNCI+PC9pPgogICAgICAgICAgICAgICAgPC9hPgogICAgICAgICAgICAgIGAgOiAnJ30KICAgICAgICAgICAgICA8YnV0dG9u'+'IG9uY2xpY2s9ImNvbmZpcm1EZWxldGVOb3RlKCcke24uX2lkfScpIiBjbGFzcz0icC0xLjUgdGV4dC1yb3NlLTUwMCBob3Zlcjpi'+'Zy1yb3NlLTUwIGRhcms6aG92ZXI6Ymctcm9zZS05NTAvMjAgcm91bmRlZCB0cmFuc2l0aW9uLWNvbG9ycyBpbmxpbmUtZmxleCI+'+'CiAgICAgICAgICAgICAgICA8aSBkYXRhLWx1Y2lkZT0idHJhc2gtMiIgY2xhc3M9InctNCBoLTQiPjwvaT4KICAgICAgICAgICAg'+'ICA8L2J1dHRvbj4KICAgICAgICAgICAgPC90ZD4KICAgICAgICAgIDwvdHI+CiAgICAgICAgYCkuam9pbignJyk7CiAgICAgICAg'+'bHVjaWRlLmNyZWF0ZUljb25zKCk7CiAgICAgIH0KCiAgICAgIGZ1bmN0aW9uIGZpbHRlck5vdGVzVGFibGUoKSB7CiAgICAgICAg'+'Y29uc3QgcXVlcnkgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnbm90ZXMtc2VhcmNoJykudmFsdWUudG9Mb3dlckNhc2UoKTsK'+'ICAgICAgICBjb25zdCBmaWx0ZXJlZCA9IG5vdGVzLmZpbHRlcihuID0+IAogICAgICAgICAgbi50aXRsZS50b0xvd2VyQ2FzZSgp'+'LmluY2x1ZGVzKHF1ZXJ5KSB8fCAKICAgICAgICAgIChuLmRlc2NyaXB0aW9uICYmIG4uZGVzY3JpcHRpb24udG9Mb3dlckNhc2Uo'+'KS5pbmNsdWRlcyhxdWVyeSkpCiAgICAgICAgKTsKICAgICAgICByZW5kZXJOb3Rlc1RhYmxlKGZpbHRlcmVkKTsKICAgICAgfQoK'+'ICAgICAgYXN5bmMgZnVuY3Rpb24gaGFuZGxlTm90ZVN1Ym1pdChlKSB7CiAgICAgICAgZS5wcmV2ZW50RGVmYXVsdCgpOwogICAg'+'ICAgIGNvbnN0IHRpdGxlID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ25vdGUtdGl0bGUnKS52YWx1ZTsKICAgICAgICBjb25z'+'dCBkZXNjcmlwdGlvbiA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdub3RlLWRlc2MnKS52YWx1ZTsKICAgICAgICBjb25zdCBm'+'aWxlSW5wdXQgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnbm90ZS1maWxlJyk7CiAgICAgICAgCiAgICAgICAgaWYgKCFmaWxl'+'SW5wdXQuZmlsZXMubGVuZ3RoKSB7CiAgICAgICAgICBzaG93QWN0aW9uQWxlcnQoJ2Vycm9yJywgJ1BsZWFzZSBjaG9vc2UgYSBm'+'aWxlIGF0dGFjaG1lbnQuJyk7CiAgICAgICAgICByZXR1cm47CiAgICAgICAgfQoKICAgICAgICBjb25zdCBidG4gPSBkb2N1bWVu'+'dC5nZXRFbGVtZW50QnlJZCgnbm90ZS1zdWJtaXQtYnRuJyk7CiAgICAgICAgYnRuLmRpc2FibGVkID0gdHJ1ZTsKICAgICAgICBi'+'dG4uaW5uZXJIVE1MID0gJ1VwbG9hZGluZy4uLic7CgogICAgICAgIHRyeSB7CiAgICAgICAgICBjb25zdCBmb3JtID0gbmV3IEZv'+'cm1EYXRhKCk7CiAgICAgICAgICBmb3JtLmFwcGVuZCgndGl0bGUnLCB0aXRsZSk7CiAgICAgICAgICBmb3JtLmFwcGVuZCgnZGVz'+'Y3JpcHRpb24nLCBkZXNjcmlwdGlvbik7CiAgICAgICAgICBmb3JtLmFwcGVuZCgnZmlsZScsIGZpbGVJbnB1dC5maWxlc1swXSk7'+'CgogICAgICAgICAgY29uc3QgcmVzID0gYXdhaXQgYXBpUmVxdWVzdCgnL25vdGVzJywgJ1BPU1QnLCBmb3JtLCB0cnVlKTsKICAg'+'ICAgICAgIHNob3dBY3Rpb25BbGVydCgnc3VjY2VzcycsICdTdHVkeSBub3RlIHN1Y2Nlc3NmdWxseSB1cGxvYWRlZC4nKTsKICAg'+'ICAgICAgIAogICAgICAgICAgLy8gUmVzZXQgZm9ybQogICAgICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ25vdGUtZm9y'+'bScpLnJlc2V0KCk7CiAgICAgICAgICB0b2dnbGVTaWRlUGFuZWwoJ25vdGUnLCBmYWxzZSk7CiAgICAgICAgICBsb2FkTm90ZXNM'+'aXN0KCk7CiAgICAgICAgfSBjYXRjaCAoZXJyKSB7CiAgICAgICAgICBzaG93QWN0aW9uQWxlcnQoJ2Vycm9yJywgZXJyLm1lc3Nh'+'Z2UpOwogICAgICAgIH0gZmluYWxseSB7CiAgICAgICAgICBidG4uZGlzYWJsZWQgPSBmYWxzZTsKICAgICAgICAgIGJ0bi5pbm5l'+'ckhUTUwgPSAnU2F2ZSBOb3RlJzsKICAgICAgICB9CiAgICAgIH0KCiAgICAgIGZ1bmN0aW9uIGNvbmZpcm1EZWxldGVOb3RlKGlk'+'KSB7CiAgICAgICAgb3BlbkNvbmZpcm1Nb2RhbCgnQXJlIHlvdSBzdXJlIHlvdSB3YW50IHRvIGRlbGV0ZSB0aGlzIHN0dWR5IG5v'+'dGU/JywgYXN5bmMgKCkgPT4gewogICAgICAgICAgdHJ5IHsKICAgICAgICAgICAgYXdhaXQgYXBpUmVxdWVzdChgL25vdGVzLyR7'+'aWR9YCwgJ0RFTEVURScpOwogICAgICAgICAgICBzaG93QWN0aW9uQWxlcnQoJ3N1Y2Nlc3MnLCAnU3R1ZHkgbm90ZSBkZWxldGVk'+'LicpOwogICAgICAgICAgICBsb2FkTm90ZXNMaXN0KCk7CiAgICAgICAgICB9IGNhdGNoIChlcnIpIHsKICAgICAgICAgICAgc2hv'+'d0FjdGlvbkFsZXJ0KCdlcnJvcicsIGVyci5tZXNzYWdlKTsKICAgICAgICAgIH0KICAgICAgICB9KTsKICAgICAgfQoKICAgICAg'+'Ly8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAvLyA0LiBBU1NJR05NRU5UUyBW'+'SUVXIExPR0lDCiAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgYXN5'+'bmMgZnVuY3Rpb24gbG9hZEFzc2lnbm1lbnRzTGlzdCgpIHsKICAgICAgICB0cnkgewogICAgICAgICAgYXNzaWdubWVudHMgPSBh'+'d2FpdCBhcGlSZXF1ZXN0KCcvYXNzaWdubWVudHMnKTsKICAgICAgICAgIHJlbmRlckFzZ1RhYmxlKGFzc2lnbm1lbnRzKTsKICAg'+'ICAgICB9IGNhdGNoIChlcnIpIHsKICAgICAgICAgIHNldEVycm9yVmlldygnQ291bGQgbm90IGZldGNoIGFzc2lnbm1lbnRzIGxp'+'c3QuJyk7CiAgICAgICAgfQogICAgICB9CgogICAgICBmdW5jdGlvbiByZW5kZXJBc2dUYWJsZShkYXRhTGlzdCkgewogICAgICAg'+'IGNvbnN0IHRib2R5ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2FzZy10YWJsZS1ib2R5Jyk7CiAgICAgICAgaWYgKGRhdGFM'+'aXN0Lmxlbmd0aCA9PT0gMCkgewogICAgICAgICAgdGJvZHkuaW5uZXJIVE1MID0gYDx0cj48dGQgY29sc3Bhbj0iNSIgY2xhc3M9'+'InB5LTggdGV4dC1jZW50ZXIgdGV4dC16aW5jLTQwMCI+Tm8gYXNzaWdubWVudHMgY3JlYXRlZCB5ZXQuPC90ZD48L3RyPmA7CiAg'+'ICAgICAgICByZXR1cm47CiAgICAgICAgfQoKICAgICAgICB0Ym9keS5pbm5lckhUTUwgPSBkYXRhTGlzdC5tYXAoYSA9PiB7CiAg'+'ICAgICAgICBjb25zdCBpc092ZXJkdWUgPSBhLmR1ZURhdGUgJiYgbmV3IERhdGUoYS5kdWVEYXRlKSA8IG5ldyBEYXRlKCk7CiAg'+'ICAgICAgICByZXR1cm4gYAogICAgICAgICAgICA8dHIgY2xhc3M9ImhvdmVyOmJnLXppbmMtNTAgZGFyazpob3ZlcjpiZy16aW5j'+'LTkwMC8zMCB0ZXh0LXppbmMtOTAwIGRhcms6dGV4dC16aW5jLTIwMCB0cmFuc2l0aW9uLWNvbG9ycyI+CiAgICAgICAgICAgICAg'+'PHRkIGNsYXNzPSJweS00IHB4LTYgZm9udC1zZW1pYm9sZCBmbGV4IGl0ZW1zLWNlbnRlciBnYXAtMiI+CiAgICAgICAgICAgICAg'+'ICA8aSBkYXRhLWx1Y2lkZT0iZmlsZS1zcHJlYWRzaGVldCIgY2xhc3M9InctNCBoLTQgdGV4dC1wdXJwbGUtNTAwIHNocmluay0w'+'Ij48L2k+CiAgICAgICAgICAgICAgICA8c3BhbiBjbGFzcz0idHJ1bmNhdGUgbWF4LXctWzE1MHB4XSI+JHthLnRpdGxlfTwvc3Bh'+'bj4KICAgICAgICAgICAgICA8L3RkPgogICAgICAgICAgICAgIDx0ZCBjbGFzcz0icHktNCBweC02IHRleHQtemluYy00MDAgdHJ1'+'bmNhdGUgbWF4LXctWzIwMHB4XSI+JHthLmRlc2NyaXB0aW9uIHx8ICdObyBkZXNjcmlwdGlvbid9PC90ZD4KICAgICAgICAgICAg'+'ICA8dGQgY2xhc3M9InB5LTQgcHgtNiB0ZXh0LXppbmMtNTAwIHRleHQteHMiPiR7YS5kdWVEYXRlID8gbmV3IERhdGUoYS5kdWVE'+'YXRlKS50b0xvY2FsZURhdGVTdHJpbmcoKSA6ICdOL0EnfTwvdGQ+CiAgICAgICAgICAgICAgPHRkIGNsYXNzPSJweS00IHB4LTYi'+'PgogICAgICAgICAgICAgICAgPHNwYW4gY2xhc3M9InRleHQtWzEwcHhdIGZvbnQtc2VtaWJvbGQgcHgtMiBweS0wLjUgcm91bmRl'+'ZCAke2lzT3ZlcmR1ZSA/ICdiZy1yb3NlLTEwMCBkYXJrOmJnLXJvc2UtOTUwLzIwIHRleHQtcm9zZS02NTAnIDogJ2JnLWVtZXJh'+'bGQtMTAwIGRhcms6YmctZW1lcmFsZC05NTAvMjAgdGV4dC1lbWVyYWxkLTY1MCd9Ij4ke2lzT3ZlcmR1ZSA/ICdPdmVyZHVlJyA6'+'ICdBY3RpdmUnfTwvc3Bhbj4KICAgICAgICAgICAgICA8L3RkPgogICAgICAgICAgICAgIDx0ZCBjbGFzcz0icHktNCBweC02IHRl'+'eHQtcmlnaHQgZmxleCBpdGVtcy1jZW50ZXIganVzdGlmeS1lbmQgZ2FwLTEuNSI+CiAgICAgICAgICAgICAgICAke2EuZmlsZVVy'+'bCA/IGAKICAgICAgICAgICAgICAgICAgPGEgaHJlZj0iJHthLmZpbGVVcmwuc3RhcnRzV2l0aCgnaHR0cCcpID8gYS5maWxlVXJs'+'IDogYXBpQmFzZVVybC5yZXBsYWNlKCcvYXBpJywgJycpICsgYS5maWxlVXJsfSIgdGFyZ2V0PSJfYmxhbmsiIGNsYXNzPSJwLTEu'+'NSB0ZXh0LXB1cnBsZS02MDAgZGFyazp0ZXh0LXB1cnBsZS00MDAgaG92ZXI6YmctcHVycGxlLTUwIGRhcms6aG92ZXI6YmctcHVy'+'cGxlLTk1MC8yMCByb3VuZGVkIHRyYW5zaXRpb24tY29sb3JzIGlubGluZS1mbGV4Ij4KICAgICAgICAgICAgICAgICAgICA8aSBk'+'YXRhLWx1Y2lkZT0iZG93bmxvYWQiIGNsYXNzPSJ3LTQgaC00Ij48L2k+CiAgICAgICAgICAgICAgICAgIDwvYT4KICAgICAgICAg'+'ICAgICAgIGAgOiAnJ30KICAgICAgICAgICAgICAgIDxidXR0b24gb25jbGljaz0iY29uZmlybURlbGV0ZUFzZygnJHthLl9pZH0n'+'KSIgY2xhc3M9InAtMS41IHRleHQtcm9zZS01MDAgaG92ZXI6Ymctcm9zZS01MCBkYXJrOmhvdmVyOmJnLXJvc2UtOTUwLzIwIHJv'+'dW5kZWQgdHJhbnNpdGlvbi1jb2xvcnMgaW5saW5lLWZsZXgiPgogICAgICAgICAgICAgICAgICA8aSBkYXRhLWx1Y2lkZT0idHJh'+'c2gtMiIgY2xhc3M9InctNCBoLTQiPjwvaT4KICAgICAgICAgICAgICAgIDwvYnV0dG9uPgogICAgICAgICAgICAgIDwvdGQ+CiAg'+'ICAgICAgICAgIDwvdHI+CiAgICAgICAgICBgOwogICAgICAgIH0pLmpvaW4oJycpOwogICAgICAgIGx1Y2lkZS5jcmVhdGVJY29u'+'cygpOwogICAgICB9CgogICAgICBmdW5jdGlvbiBmaWx0ZXJBc2dUYWJsZSgpIHsKICAgICAgICBjb25zdCBxdWVyeSA9IGRvY3Vt'+'ZW50LmdldEVsZW1lbnRCeUlkKCdhc2ctc2VhcmNoJykudmFsdWUudG9Mb3dlckNhc2UoKTsKICAgICAgICBjb25zdCBmaWx0ZXJl'+'ZCA9IGFzc2lnbm1lbnRzLmZpbHRlcihhID0+IAogICAgICAgICAgYS50aXRsZS50b0xvd2VyQ2FzZSgpLmluY2x1ZGVzKHF1ZXJ5'+'KSB8fCAKICAgICAgICAgIChhLmRlc2NyaXB0aW9uICYmIGEuZGVzY3JpcHRpb24udG9Mb3dlckNhc2UoKS5pbmNsdWRlcyhxdWVy'+'eSkpCiAgICAgICAgKTsKICAgICAgICByZW5kZXJBc2dUYWJsZShmaWx0ZXJlZCk7CiAgICAgIH0KCiAgICAgIGFzeW5jIGZ1bmN0'+'aW9uIGhhbmRsZUFzZ1N1Ym1pdChlKSB7CiAgICAgICAgZS5wcmV2ZW50RGVmYXVsdCgpOwogICAgICAgIGNvbnN0IHRpdGxlID0g'+'ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2FzZy10aXRsZScpLnZhbHVlOwogICAgICAgIGNvbnN0IGRlc2NyaXB0aW9uID0gZG9j'+'dW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2FzZy1kZXNjJykudmFsdWU7CiAgICAgICAgY29uc3QgZHVlRGF0ZSA9IGRvY3VtZW50Lmdl'+'dEVsZW1lbnRCeUlkKCdhc2ctZHVlZGF0ZScpLnZhbHVlOwogICAgICAgIGNvbnN0IGZpbGVJbnB1dCA9IGRvY3VtZW50LmdldEVs'+'ZW1lbnRCeUlkKCdhc2ctZmlsZScpOwoKICAgICAgICBjb25zdCBidG4gPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnYXNnLXN1'+'Ym1pdC1idG4nKTsKICAgICAgICBidG4uZGlzYWJsZWQgPSB0cnVlOwogICAgICAgIGJ0bi5pbm5lckhUTUwgPSAnU2F2aW5nLi4u'+'JzsKCiAgICAgICAgdHJ5IHsKICAgICAgICAgIGNvbnN0IGZvcm0gPSBuZXcgRm9ybURhdGEoKTsKICAgICAgICAgIGZvcm0uYXBw'+'ZW5kKCd0aXRsZScsIHRpdGxlKTsKICAgICAgICAgIGZvcm0uYXBwZW5kKCdkZXNjcmlwdGlvbicsIGRlc2NyaXB0aW9uKTsKICAg'+'ICAgICAgIGZvcm0uYXBwZW5kKCdkdWVEYXRlJywgZHVlRGF0ZSk7CiAgICAgICAgICBpZiAoZmlsZUlucHV0LmZpbGVzLmxlbmd0'+'aCkgewogICAgICAgICAgICBmb3JtLmFwcGVuZCgnZmlsZScsIGZpbGVJbnB1dC5maWxlc1swXSk7CiAgICAgICAgICB9CgogICAg'+'ICAgICAgYXdhaXQgYXBpUmVxdWVzdCgnL2Fzc2lnbm1lbnRzJywgJ1BPU1QnLCBmb3JtLCB0cnVlKTsKICAgICAgICAgIHNob3dB'+'Y3Rpb25BbGVydCgnc3VjY2VzcycsICdBc3NpZ25tZW50IHN1Y2Nlc3NmdWxseSBwb3N0ZWQuJyk7CiAgICAgICAgICAKICAgICAg'+'ICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdhc2ctZm9ybScpLnJlc2V0KCk7CiAgICAgICAgICB0b2dnbGVTaWRlUGFuZWwo'+'J2FzZycsIGZhbHNlKTsKICAgICAgICAgIGxvYWRBc3NpZ25tZW50c0xpc3QoKTsKICAgICAgICB9IGNhdGNoIChlcnIpIHsKICAg'+'ICAgICAgIHNob3dBY3Rpb25BbGVydCgnZXJyb3InLCBlcnIubWVzc2FnZSk7CiAgICAgICAgfSBmaW5hbGx5IHsKICAgICAgICAg'+'IGJ0bi5kaXNhYmxlZCA9IGZhbHNlOwogICAgICAgICAgYnRuLmlubmVySFRNTCA9ICdDcmVhdGUnOwogICAgICAgIH0KICAgICAg'+'fQoKICAgICAgZnVuY3Rpb24gY29uZmlybURlbGV0ZUFzZyhpZCkgewogICAgICAgIG9wZW5Db25maXJtTW9kYWwoJ0FyZSB5b3Ug'+'c3VyZSB5b3Ugd2FudCB0byBkZWxldGUgdGhpcyBhc3NpZ25tZW50IHByb2plY3Q/JywgYXN5bmMgKCkgPT4gewogICAgICAgICAg'+'dHJ5IHsKICAgICAgICAgICAgYXdhaXQgYXBpUmVxdWVzdChgL2Fzc2lnbm1lbnRzLyR7aWR9YCwgJ0RFTEVURScpOwogICAgICAg'+'ICAgICBzaG93QWN0aW9uQWxlcnQoJ3N1Y2Nlc3MnLCAnQXNzaWdubWVudCBkZWxldGVkLicpOwogICAgICAgICAgICBsb2FkQXNz'+'aWdubWVudHNMaXN0KCk7CiAgICAgICAgICB9IGNhdGNoIChlcnIpIHsKICAgICAgICAgICAgc2hvd0FjdGlvbkFsZXJ0KCdlcnJv'+'cicsIGVyci5tZXNzYWdlKTsKICAgICAgICAgIH0KICAgICAgICB9KTsKICAgICAgfQoKICAgICAgLy8gPT09PT09PT09PT09PT09'+'PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAvLyA1LiBBTk5PVU5DRU1FTlRTIFZJRVcgTE9HSUMKICAgICAg'+'Ly8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICBhc3luYyBmdW5jdGlvbiBsb2Fk'+'QW5ub3VuY2VtZW50c0xpc3QoKSB7CiAgICAgICAgdHJ5IHsKICAgICAgICAgIGFubm91bmNlbWVudHMgPSBhd2FpdCBhcGlSZXF1'+'ZXN0KCcvYW5ub3VuY2VtZW50cycpOwogICAgICAgICAgcmVuZGVyQW5ub3VuY2VtZW50cyhhbm5vdW5jZW1lbnRzKTsKICAgICAg'+'ICB9IGNhdGNoIChlcnIpIHsKICAgICAgICAgIHNldEVycm9yVmlldygnQ291bGQgbm90IGZldGNoIGFubm91bmNlbWVudHMuJyk7'+'CiAgICAgICAgfQogICAgICB9CgogICAgICBmdW5jdGlvbiByZW5kZXJBbm5vdW5jZW1lbnRzKGRhdGFMaXN0KSB7CiAgICAgICAg'+'ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2Fubi1oZWFkZXItY291bnQnKS5pbm5lclRleHQgPSBgQWN0aXZlIE5vdGljZXMgKCR7'+'ZGF0YUxpc3QubGVuZ3RofSlgOwogICAgICAgIGNvbnN0IGNvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdhbm4t'+'Y2FyZHMtY29udGFpbmVyJyk7CiAgICAgICAgCiAgICAgICAgaWYgKGRhdGFMaXN0Lmxlbmd0aCA9PT0gMCkgewogICAgICAgICAg'+'Y29udGFpbmVyLmlubmVySFRNTCA9IGAKICAgICAgICAgICAgPGRpdiBjbGFzcz0idGV4dC1jZW50ZXIgcHktMTIgYmctd2hpdGUg'+'ZGFyazpiZy1bIzBjMGMwZl0gYm9yZGVyIGJvcmRlci16aW5jLTIwMCBkYXJrOmJvcmRlci16aW5jLTgwMCByb3VuZGVkLXhsIj4K'+'ICAgICAgICAgICAgICA8aSBkYXRhLWx1Y2lkZT0ibWVnYXBob25lIiBjbGFzcz0ibXgtYXV0byB0ZXh0LXppbmMtMzAwIGRhcms6'+'dGV4dC16aW5jLTcwMCBtYi0yIHctMTIgaC0xMiI+PC9pPgogICAgICAgICAgICAgIDxwIGNsYXNzPSJ0ZXh0LXNtIGZvbnQtc2Vt'+'aWJvbGQgdGV4dC16aW5jLTg1MCBkYXJrOnRleHQtemluYy0yMDAiPk5vIGFubm91bmNlbWVudHMgcG9zdGVkPC9wPgogICAgICAg'+'ICAgICA8L2Rpdj4KICAgICAgICAgIGA7CiAgICAgICAgICBsdWNpZGUuY3JlYXRlSWNvbnMoKTsKICAgICAgICAgIHJldHVybjsK'+'ICAgICAgICB9CgogICAgICAgIGNvbnRhaW5lci5pbm5lckhUTUwgPSBkYXRhTGlzdC5tYXAoYSA9PiBgCiAgICAgICAgICA8ZGl2'+'IGNsYXNzPSJiZy13aGl0ZSBkYXJrOmJnLVsjMGMwYzBmXSBib3JkZXIgYm9yZGVyLXppbmMtMjAwIGRhcms6Ym9yZGVyLXppbmMt'+'ODAwIHJvdW5kZWQteGwgcC02IHNoYWRvdy1zbSBmbGV4IGl0ZW1zLXN0YXJ0IGdhcC00IGhvdmVyOnNoYWRvdy1tZCB0cmFuc2l0'+'aW9uLXNoYWRvdyByZWxhdGl2ZSBncm91cCI+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9InAtMyBiZy1wdXJwbGUtNTAgZGFyazpi'+'Zy1wdXJwbGUtOTAwLzIwIHRleHQtcHVycGxlLTY1MCBkYXJrOnRleHQtcHVycGxlLTQwMCByb3VuZGVkLWxnIHNocmluay0wIj4K'+'ICAgICAgICAgICAgICA8aSBkYXRhLWx1Y2lkZT0ibWVnYXBob25lIiBjbGFzcz0idy01IGgtNSI+PC9pPgogICAgICAgICAgICA8'+'L2Rpdj4KICAgICAgICAgICAgPGRpdiBjbGFzcz0iZmxleC0xIG1pbi13LTAgcHItOCI+CiAgICAgICAgICAgICAgPGRpdiBjbGFz'+'cz0iZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTIgbWItMSBmbGV4LXdyYXAiPgogICAgICAgICAgICAgICAgPGg0IGNsYXNzPSJ0ZXh0'+'LWJhc2UgZm9udC1ib2xkIHRleHQtemluYy05NTAgZGFyazp0ZXh0LXppbmMtNTAgZm9udC1kaXNwbGF5Ij4ke2EudGl0bGV9PC9o'+'ND4KICAgICAgICAgICAgICAgIDxzcGFuIGNsYXNzPSJ0ZXh0LVsxMHB4XSB0ZXh0LXppbmMtNDAwIGZvbnQtbW9ubyI+JHtuZXcg'+'RGF0ZShhLmNyZWF0ZWRBdCkudG9Mb2NhbGVTdHJpbmcoKX08L3NwYW4+CiAgICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAg'+'ICAgPHAgY2xhc3M9InRleHQtc20gdGV4dC16aW5jLTU1MCBkYXJrOnRleHQtemluYy00MDAgbGVhZGluZy1yZWxheGVkIHdoaXRl'+'c3BhY2UtcHJlLXdyYXAiPiR7YS5ib2R5fTwvcD4KICAgICAgICAgICAgICA8cCBjbGFzcz0idGV4dC1bMTBweF0gdGV4dC16aW5j'+'LTQwMCBtdC0zIGl0YWxpYyI+UG9zdGVkIGJ5OiAke2EuY3JlYXRlZEJ5Py5uYW1lIHx8ICdBZG1pbmlzdHJhdG9yJ308L3A+CiAg'+'ICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICA8YnV0dG9uIG9uY2xpY2s9ImNvbmZpcm1EZWxldGVBbm4oJyR7YS5faWR9Jyki'+'IGNsYXNzPSJhYnNvbHV0ZSB0b3AtNCByaWdodC00IHAtMS41IHRleHQtcm9zZS01MDAgaG92ZXI6Ymctcm9zZS01MCBkYXJrOmhv'+'dmVyOmJnLXJvc2UtOTUwLzIwIHJvdW5kZWQgdHJhbnNpdGlvbi1jb2xvcnMgb3BhY2l0eS0wIGdyb3VwLWhvdmVyOm9wYWNpdHkt'+'MTAwIj4KICAgICAgICAgICAgICA8aSBkYXRhLWx1Y2lkZT0idHJhc2gtMiIgY2xhc3M9InctNCBoLTQiPjwvaT4KICAgICAgICAg'+'ICAgPC9idXR0b24+CiAgICAgICAgICA8L2Rpdj4KICAgICAgICBgKS5qb2luKCcnKTsKICAgICAgICBsdWNpZGUuY3JlYXRlSWNv'+'bnMoKTsKICAgICAgfQoKICAgICAgYXN5bmMgZnVuY3Rpb24gaGFuZGxlQW5uU3VibWl0KGUpIHsKICAgICAgICBlLnByZXZlbnRE'+'ZWZhdWx0KCk7CiAgICAgICAgY29uc3QgdGl0bGUgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnYW5uLXRpdGxlJykudmFsdWU7'+'CiAgICAgICAgY29uc3QgYm9keSA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdhbm4tYm9keScpLnZhbHVlOwoKICAgICAgICBj'+'b25zdCBidG4gPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnYW5uLXN1Ym1pdC1idG4nKTsKICAgICAgICBidG4uZGlzYWJsZWQg'+'PSB0cnVlOwogICAgICAgIGJ0bi5pbm5lckhUTUwgPSAnUG9zdGluZy4uLic7CgogICAgICAgIHRyeSB7CiAgICAgICAgICBhd2Fp'+'dCBhcGlSZXF1ZXN0KCcvYW5ub3VuY2VtZW50cycsICdQT1NUJywgeyB0aXRsZSwgYm9keSB9KTsKICAgICAgICAgIHNob3dBY3Rp'+'b25BbGVydCgnc3VjY2VzcycsICdOb3RpY2UgcG9zdGVkIHN1Y2Nlc3NmdWxseS4nKTsKICAgICAgICAgIAogICAgICAgICAgZG9j'+'dW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2Fubi1mb3JtJykucmVzZXQoKTsKICAgICAgICAgIHRvZ2dsZVNpZGVQYW5lbCgnYW5uJywg'+'ZmFsc2UpOwogICAgICAgICAgbG9hZEFubm91bmNlbWVudHNMaXN0KCk7CiAgICAgICAgfSBjYXRjaCAoZXJyKSB7CiAgICAgICAg'+'ICBzaG93QWN0aW9uQWxlcnQoJ2Vycm9yJywgZXJyLm1lc3NhZ2UpOwogICAgICAgIH0gZmluYWxseSB7CiAgICAgICAgICBidG4u'+'ZGlzYWJsZWQgPSBmYWxzZTsKICAgICAgICAgIGJ0bi5pbm5lckhUTUwgPSAnUG9zdCBOb3RpY2UnOwogICAgICAgIH0KICAgICAg'+'fQoKICAgICAgZnVuY3Rpb24gY29uZmlybURlbGV0ZUFubihpZCkgewogICAgICAgIG9wZW5Db25maXJtTW9kYWwoJ0FyZSB5b3Ug'+'c3VyZSB5b3Ugd2FudCB0byByZW1vdmUgdGhpcyBhbm5vdW5jZW1lbnQgbm90aWNlPycsIGFzeW5jICgpID0+IHsKICAgICAgICAg'+'IHRyeSB7CiAgICAgICAgICAgIGF3YWl0IGFwaVJlcXVlc3QoYC9hbm5vdW5jZW1lbnRzLyR7aWR9YCwgJ0RFTEVURScpOwogICAg'+'ICAgICAgICBzaG93QWN0aW9uQWxlcnQoJ3N1Y2Nlc3MnLCAnQW5ub3VuY2VtZW50IGRlbGV0ZWQuJyk7CiAgICAgICAgICAgIGxv'+'YWRBbm5vdW5jZW1lbnRzTGlzdCgpOwogICAgICAgICAgfSBjYXRjaCAoZXJyKSB7CiAgICAgICAgICAgIHNob3dBY3Rpb25BbGVy'+'dCgnZXJyb3InLCBlcnIubWVzc2FnZSk7CiAgICAgICAgICB9CiAgICAgICAgfSk7CiAgICAgIH0KCiAgICAgIC8vID09PT09PT09'+'PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgLy8gNi4gVElNRVRBQkxFUyBWSUVXIExPR0lDCiAg'+'ICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgLy8gUnVuIG9uY2UgcGVy'+'IHNlc3Npb24gdG8gZml4IG9sZCBEQiByZWNvcmRzIChlbnRyaWVzIC0+IHNsb3RzKQogICAgICBsZXQgX3R0TWlncmF0ZWQgPSBm'+'YWxzZTsKICAgICAgYXN5bmMgZnVuY3Rpb24gc2lsZW50TWlncmF0ZVRpbWV0YWJsZXMoKSB7CiAgICAgICAgaWYgKF90dE1pZ3Jh'+'dGVkKSByZXR1cm47CiAgICAgICAgX3R0TWlncmF0ZWQgPSB0cnVlOwogICAgICAgIHRyeSB7IGF3YWl0IGFwaVJlcXVlc3QoJy90'+'aW1ldGFibGUvbWlncmF0ZScsICdQT1NUJyk7IH0gY2F0Y2ggKF8pIHt9CiAgICAgIH0KCiAgICAgIGFzeW5jIGZ1bmN0aW9uIGxv'+'YWRUaW1ldGFibGVzTGlzdCgpIHsKICAgICAgICBjb25zdCBjb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgndHQt'+'Z3JpZC1jb250YWluZXInKTsKICAgICAgICBjb250YWluZXIuaW5uZXJIVE1MID0gJzxwIGNsYXNzPSJ0ZXh0LXNtIHRleHQtemlu'+'Yy00MDAgdGV4dC1jZW50ZXIgcHktMTAgY29sLXNwYW4tMiI+TG9hZGluZyB0aW1ldGFibGVzLi4uPC9wPic7CiAgICAgICAgdHJ5'+'IHsKICAgICAgICAgIGF3YWl0IHNpbGVudE1pZ3JhdGVUaW1ldGFibGVzKCk7IC8vIGZpeCBvbGQgcmVjb3JkcyBzaWxlbnRseSBm'+'aXJzdAogICAgICAgICAgdGltZXRhYmxlcyA9IGF3YWl0IGFwaVJlcXVlc3QoJy90aW1ldGFibGUnKTsKICAgICAgICAgIHJlbmRl'+'clRpbWV0YWJsZXModGltZXRhYmxlcyk7CiAgICAgICAgfSBjYXRjaCAoZXJyKSB7CiAgICAgICAgICBjb25zdCBtc2cgPSBlcnIu'+'bWVzc2FnZSB8fCAnQ291bGQgbm90IGZldGNoIHRpbWV0YWJsZXMgbGlzdC4nOwogICAgICAgICAgc2V0RXJyb3JWaWV3KG1zZyk7'+'CiAgICAgICAgICBjb250YWluZXIuaW5uZXJIVE1MID0gYAogICAgICAgICAgICA8ZGl2IGNsYXNzPSJjb2wtc3Bhbi0yIHRleHQt'+'Y2VudGVyIHB5LTEyIj4KICAgICAgICAgICAgICA8aSBkYXRhLWx1Y2lkZT0id2lmaS1vZmYiIGNsYXNzPSJteC1hdXRvIHRleHQt'+'cm9zZS00MDAgbWItMiB3LTEwIGgtMTAiPjwvaT4KICAgICAgICAgICAgICA8cCBjbGFzcz0idGV4dC1zbSBmb250LXNlbWlib2xk'+'IHRleHQtcm9zZS01MDAiPkZhaWxlZCB0byBsb2FkIHRpbWV0YWJsZXM8L3A+CiAgICAgICAgICAgICAgPHAgY2xhc3M9InRleHQt'+'eHMgdGV4dC16aW5jLTQwMCBtdC0xIj4ke21zZ308L3A+CiAgICAgICAgICAgICAgPGJ1dHRvbiBvbmNsaWNrPSJsb2FkVGltZXRh'+'Ymxlc0xpc3QoKSIgY2xhc3M9Im10LTQgdGV4dC14cyB0ZXh0LXB1cnBsZS01MDAgaG92ZXI6dW5kZXJsaW5lIGZvbnQtc2VtaWJv'+'bGQiPuKGuyBSZXRyeTwvYnV0dG9uPgogICAgICAgICAgICA8L2Rpdj5gOwogICAgICAgICAgbHVjaWRlLmNyZWF0ZUljb25zKCk7'+'CiAgICAgICAgfQogICAgICB9CgogICAgICBmdW5jdGlvbiByZW5kZXJUaW1ldGFibGVzKGRhdGFMaXN0KSB7CiAgICAgICAgY29u'+'c3QgY29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3R0LWdyaWQtY29udGFpbmVyJyk7CiAgICAgICAgaWYgKGRh'+'dGFMaXN0Lmxlbmd0aCA9PT0gMCkgewogICAgICAgICAgY29udGFpbmVyLmlubmVySFRNTCA9IGAKICAgICAgICAgICAgPGRpdiBj'+'bGFzcz0idGV4dC1jZW50ZXIgcHktMTIgYmctd2hpdGUgZGFyazpiZy1bIzBjMGMwZl0gYm9yZGVyIGJvcmRlci16aW5jLTIwMCBk'+'YXJrOmJvcmRlci16aW5jLTgwMCByb3VuZGVkLXhsIGNvbC1zcGFuLTIiPgogICAgICAgICAgICAgIDxpIGRhdGEtbHVjaWRlPSJj'+'YWxlbmRhciIgY2xhc3M9Im14LWF1dG8gdGV4dC16aW5jLTMwMCBkYXJrOnRleHQtemluYy03MDAgbWItMiB3LTEyIGgtMTIiPjwv'+'aT4KICAgICAgICAgICAgICA8cCBjbGFzcz0idGV4dC1zbSBmb250LXNlbWlib2xkIHRleHQtemluYy04NTAgZGFyazp0ZXh0LXpp'+'bmMtMjAwIj5ObyBzY2hlZHVsZXMgY29uZmlndXJlZDwvcD4KICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICBgOwogICAgICAg'+'ICAgbHVjaWRlLmNyZWF0ZUljb25zKCk7CiAgICAgICAgICByZXR1cm47CiAgICAgICAgfQoKICAgICAgICBjb250YWluZXIuaW5u'+'ZXJIVE1MID0gZGF0YUxpc3QubWFwKHR0ID0+IGAKICAgICAgICAgIDxkaXYgY2xhc3M9ImJnLXdoaXRlIGRhcms6YmctWyMwYzBj'+'MGZdIGJvcmRlciBib3JkZXItemluYy0yMDAgZGFyazpib3JkZXItemluYy04MDAgcm91bmRlZC14bCBvdmVyZmxvdy1oaWRkZW4g'+'c2hhZG93LXNtIGZsZXggZmxleC1jb2wganVzdGlmeS1iZXR3ZWVuIGdyb3VwIj4KICAgICAgICAgICAgPGRpdj4KICAgICAgICAg'+'ICAgICA8ZGl2IGNsYXNzPSJmbGV4IGp1c3RpZnktYmV0d2VlbiBpdGVtcy1zdGFydCBwLTUgYm9yZGVyLWIgYm9yZGVyLXppbmMt'+'MTAwIGRhcms6Ym9yZGVyLXppbmMtODAwIj4KICAgICAgICAgICAgICAgIDxkaXY+CiAgICAgICAgICAgICAgICAgIDxoNCBjbGFz'+'cz0idGV4dC1iYXNlIGZvbnQtYm9sZCB0ZXh0LXppbmMtOTUwIGRhcms6dGV4dC16aW5jLTUwIGZvbnQtZGlzcGxheSI+JHt0dC50'+'aXRsZX08L2g0PgogICAgICAgICAgICAgICAgICA8cCBjbGFzcz0idGV4dC1bOXB4XSB0ZXh0LXppbmMtNDAwIGZvbnQtbW9ubyBt'+'dC0wLjUiPkNyZWF0ZWQ6ICR7bmV3IERhdGUodHQuY3JlYXRlZEF0KS50b0xvY2FsZURhdGVTdHJpbmcoKX08L3A+CiAgICAgICAg'+'ICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgICAgIDxidXR0b24gb25jbGljaz0iY29uZmlybURlbGV0ZVR0KCcke3R0Ll9pZH0n'+'KSIgY2xhc3M9InAtMS41IHRleHQtcm9zZS01MDAgaG92ZXI6Ymctcm9zZS01MCBkYXJrOmhvdmVyOmJnLXJvc2UtOTUwLzIwIHJv'+'dW5kZWQgdHJhbnNpdGlvbi1jb2xvcnMgb3BhY2l0eS0wIGdyb3VwLWhvdmVyOm9wYWNpdHktMTAwIj4KICAgICAgICAgICAgICAg'+'ICAgPGkgZGF0YS1sdWNpZGU9InRyYXNoLTIiIGNsYXNzPSJ3LTQgaC00Ij48L2k+CiAgICAgICAgICAgICAgICA8L2J1dHRvbj4K'+'ICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgICAKICAgICAgICAgICAgICA8ZGl2IGNsYXNzPSJwLTUgc3BhY2UteS0z'+'IG1heC1oLVszMDBweF0gb3ZlcmZsb3cteS1hdXRvIGRpdmlkZS15IGRpdmlkZS16aW5jLTEwMCBkYXJrOmRpdmlkZS16aW5jLTg1'+'MCI+CiAgICAgICAgICAgICAgICAkeyh0dC5zbG90c3x8W10pLm1hcCgoZW50cnksIGlkeCkgPT4gYAogICAgICAgICAgICAgICAg'+'ICA8ZGl2IGNsYXNzPSJwdC0zIGZpcnN0OnB0LTAgZmxleCBmbGV4LWNvbCBnYXAtMSI+CiAgICAgICAgICAgICAgICAgICAgPGRp'+'diBjbGFzcz0iZmxleCBqdXN0aWZ5LWJldHdlZW4gaXRlbXMtY2VudGVyIj4KICAgICAgICAgICAgICAgICAgICAgIDxzcGFuIGNs'+'YXNzPSJ0ZXh0LVsxMHB4XSBmb250LWJvbGQgdGV4dC1wdXJwbGUtNjAwIGRhcms6dGV4dC1wdXJwbGUtNDAwIGJnLXB1cnBsZS01'+'MCBkYXJrOmJnLXB1cnBsZS05MDAvMTAgcHgtMiBweS0wLjUgcm91bmRlZCI+JHtlbnRyeS5kYXl9PC9zcGFuPgogICAgICAgICAg'+'ICAgICAgICAgICAgPGRpdiBjbGFzcz0iZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTEgdGV4dC1bMTBweF0gdGV4dC16aW5jLTQwMCBm'+'b250LW1vbm8iPgogICAgICAgICAgICAgICAgICAgICAgICA8aSBkYXRhLWx1Y2lkZT0iY2xvY2siIGNsYXNzPSJ3LTMuNSBoLTMu'+'NSI+PC9pPgogICAgICAgICAgICAgICAgICAgICAgICA8c3Bhbj4ke2VudHJ5LnN0YXJ0fSAtICR7ZW50cnkuZW5kfTwvc3Bhbj4K'+'ICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICAgICAgICAg'+'IDxkaXYgY2xhc3M9ImZsZXggaXRlbXMtY2VudGVyIGdhcC0xLjUgdGV4dC1zbSBmb250LXNlbWlib2xkIHRleHQtemluYy04NTAg'+'ZGFyazp0ZXh0LXppbmMtMjAwIj4KICAgICAgICAgICAgICAgICAgICAgIDxpIGRhdGEtbHVjaWRlPSJib29rLW9wZW4iIGNsYXNz'+'PSJ3LTMuNSBoLTMuNSB0ZXh0LXppbmMtNDAwIHNocmluay0wIj48L2k+CiAgICAgICAgICAgICAgICAgICAgICA8c3BhbiBjbGFz'+'cz0idHJ1bmNhdGUiPiR7ZW50cnkuc3ViamVjdH08L3NwYW4+CiAgICAgICAgICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAg'+'ICAgICAgICAgJHtlbnRyeS5sb2NhdGlvbiA/IGAKICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3M9ImZsZXggaXRlbXMt'+'Y2VudGVyIGdhcC0xIHRleHQtWzExcHhdIHRleHQtemluYy00MDAiPgogICAgICAgICAgICAgICAgICAgICAgICA8aSBkYXRhLWx1'+'Y2lkZT0ibWFwLXBpbiIgY2xhc3M9InctMyBoLTMgc2hyaW5rLTAiPjwvaT4KICAgICAgICAgICAgICAgICAgICAgICAgPHNwYW4g'+'Y2xhc3M9InRydW5jYXRlIj4ke2VudHJ5LmxvY2F0aW9ufTwvc3Bhbj4KICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PgogICAg'+'ICAgICAgICAgICAgICAgIGAgOiAnJ30KICAgICAgICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgICAgICBgKS5qb2luKCcn'+'KX0KICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9InAtNCBiZy16'+'aW5jLTUwIGRhcms6YmctemluYy05MDAvMjAgYm9yZGVyLXQgYm9yZGVyLXppbmMtMTAwIGRhcms6Ym9yZGVyLXppbmMtODAwIHRl'+'eHQtWzEwcHhdIHRleHQtemluYy00NTAgZGFyazp0ZXh0LXppbmMtNTAwIHRleHQtY2VudGVyIj4KICAgICAgICAgICAgICAkeyh0'+'dC5zbG90c3x8W10pLmxlbmd0aH0gcGVyaW9kIHNsb3RzIHNjaGVkdWxlZAogICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgIDwv'+'ZGl2PgogICAgICAgIGApLmpvaW4oJycpOwogICAgICAgIGx1Y2lkZS5jcmVhdGVJY29ucygpOwogICAgICB9CgogICAgICAvLyBE'+'eW5hbWljIHBlcmlvZCByb3cgYnVpbGRlcgogICAgICBmdW5jdGlvbiBhZGRGb3JtUGVyaW9kUm93KCkgewogICAgICAgIGNvbnN0'+'IGNvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCd0dC1wZXJpb2Qtcm93cycpOwogICAgICAgIGNvbnN0IGluZGV4'+'ID0gY29udGFpbmVyLmNoaWxkcmVuLmxlbmd0aDsKICAgICAgICAKICAgICAgICBjb25zdCByb3cgPSBkb2N1bWVudC5jcmVhdGVF'+'bGVtZW50KCdkaXYnKTsKICAgICAgICByb3cuY2xhc3NOYW1lID0gInAtMyBiZy16aW5jLTUwIGRhcms6YmctemluYy05MDAvNDAg'+'Ym9yZGVyIGJvcmRlci16aW5jLTE1MCBkYXJrOmJvcmRlci16aW5jLTgwMC81MCByb3VuZGVkLWxnIHNwYWNlLXktMi41IHJlbGF0'+'aXZlIHJvdy1pdGVtIjsKICAgICAgICByb3cuaW5uZXJIVE1MID0gYAogICAgICAgICAgPGJ1dHRvbiB0eXBlPSJidXR0b24iIG9u'+'Y2xpY2s9InRoaXMucGFyZW50RWxlbWVudC5yZW1vdmUoKSIgY2xhc3M9ImFic29sdXRlIHRvcC0yIHJpZ2h0LTIgcC0xIHRleHQt'+'emluYy00MDAgaG92ZXI6dGV4dC1yb3NlLTUwMCByb3VuZGVkIGhvdmVyOmJnLXppbmMtMjAwIGRhcms6aG92ZXI6YmctemluYy04'+'MDAiPjxpIGRhdGEtbHVjaWRlPSJ4IiBjbGFzcz0idy0zLjUgaC0zLjUiPjwvaT48L2J1dHRvbj4KICAgICAgICAgIDxkaXYgY2xh'+'c3M9ImdyaWQgZ3JpZC1jb2xzLTIgZ2FwLTIiPgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJmbGV4IGZsZXgtY29sIGdhcC0wLjUi'+'PgogICAgICAgICAgICAgIDxsYWJlbCBjbGFzcz0idGV4dC1bOXB4XSBmb250LWJvbGQgdGV4dC16aW5jLTQwMCI+RGF5PC9sYWJl'+'bD4KICAgICAgICAgICAgICA8c2VsZWN0IGNsYXNzPSJwLWRheSBiZy13aGl0ZSBkYXJrOmJnLVsjMDkwOTBiXSBib3JkZXIgYm9y'+'ZGVyLXppbmMtMjAwIGRhcms6Ym9yZGVyLXppbmMtODAwIHJvdW5kZWQgcHgtMS41IHB5LTAuNSB0ZXh0LXhzIHRleHQtemluYy04'+'MDAgZGFyazp0ZXh0LXppbmMtMjAwIj4KICAgICAgICAgICAgICAgIDxvcHRpb24gdmFsdWU9Ik1vbmRheSI+TW9uZGF5PC9vcHRp'+'b24+CiAgICAgICAgICAgICAgICA8b3B0aW9uIHZhbHVlPSJUdWVzZGF5Ij5UdWVzZGF5PC9vcHRpb24+CiAgICAgICAgICAgICAg'+'ICA8b3B0aW9uIHZhbHVlPSJXZWRuZXNkYXkiPldlZG5lc2RheTwvb3B0aW9uPgogICAgICAgICAgICAgICAgPG9wdGlvbiB2YWx1'+'ZT0iVGh1cnNkYXkiPlRodXJzZGF5PC9vcHRpb24+CiAgICAgICAgICAgICAgICA8b3B0aW9uIHZhbHVlPSJGcmlkYXkiPkZyaWRh'+'eTwvb3B0aW9uPgogICAgICAgICAgICAgICAgPG9wdGlvbiB2YWx1ZT0iU2F0dXJkYXkiPlNhdHVyZGF5PC9vcHRpb24+CiAgICAg'+'ICAgICAgICAgICA8b3B0aW9uIHZhbHVlPSJTdW5kYXkiPlN1bmRheTwvb3B0aW9uPgogICAgICAgICAgICAgIDwvc2VsZWN0Pgog'+'ICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgPGRpdiBjbGFzcz0iZmxleCBmbGV4LWNvbCBnYXAtMC41Ij4KICAgICAgICAg'+'ICAgICA8bGFiZWwgY2xhc3M9InRleHQtWzlweF0gZm9udC1ib2xkIHRleHQtemluYy00MDAiPlN1YmplY3Q8L2xhYmVsPgogICAg'+'ICAgICAgICAgIDxpbnB1dCB0eXBlPSJ0ZXh0IiByZXF1aXJlZCBjbGFzcz0icC1zdWJqZWN0IGJnLXdoaXRlIGRhcms6YmctWyMw'+'OTA5MGJdIGJvcmRlciBib3JkZXItemluYy0yMDAgZGFyazpib3JkZXItemluYy04MDAgcm91bmRlZCBweC0xLjUgcHktMC41IHRl'+'eHQteHMgdGV4dC16aW5jLTgwMCBkYXJrOnRleHQtemluYy0yMDAiIHBsYWNlaG9sZGVyPSJNYXRocyIgLz4KICAgICAgICAgICAg'+'PC9kaXY+CiAgICAgICAgICA8L2Rpdj4KICAgICAgICAgIDxkaXYgY2xhc3M9ImdyaWQgZ3JpZC1jb2xzLTMgZ2FwLTIiPgogICAg'+'ICAgICAgICA8ZGl2IGNsYXNzPSJmbGV4IGZsZXgtY29sIGdhcC0wLjUiPgogICAgICAgICAgICAgIDxsYWJlbCBjbGFzcz0idGV4'+'dC1bOXB4XSBmb250LWJvbGQgdGV4dC16aW5jLTQwMCI+U3RhcnQ8L2xhYmVsPgogICAgICAgICAgICAgIDxpbnB1dCB0eXBlPSJ0'+'ZXh0IiByZXF1aXJlZCBjbGFzcz0icC1zdGFydCBiZy13aGl0ZSBkYXJrOmJnLVsjMDkwOTBiXSBib3JkZXIgYm9yZGVyLXppbmMt'+'MjAwIGRhcms6Ym9yZGVyLXppbmMtODAwIHJvdW5kZWQgcHgtMS41IHB5LTAuNSB0ZXh0LXhzIHRleHQtemluYy04MDAgZGFyazp0'+'ZXh0LXppbmMtMjAwIGZvbnQtbW9ubyIgcGxhY2Vob2xkZXI9IjA5OjAwIiAvPgogICAgICAgICAgICA8L2Rpdj4KICAgICAgICAg'+'ICAgPGRpdiBjbGFzcz0iZmxleCBmbGV4LWNvbCBnYXAtMC41Ij4KICAgICAgICAgICAgICA8bGFiZWwgY2xhc3M9InRleHQtWzlw'+'eF0gZm9udC1ib2xkIHRleHQtemluYy00MDAiPkVuZDwvbGFiZWw+CiAgICAgICAgICAgICAgPGlucHV0IHR5cGU9InRleHQiIHJl'+'cXVpcmVkIGNsYXNzPSJwLWVuZCBiZy13aGl0ZSBkYXJrOmJnLVsjMDkwOTBiXSBib3JkZXIgYm9yZGVyLXppbmMtMjAwIGRhcms6'+'Ym9yZGVyLXppbmMtODAwIHJvdW5kZWQgcHgtMS41IHB5LTAuNSB0ZXh0LXhzIHRleHQtemluYy04MDAgZGFyazp0ZXh0LXppbmMt'+'MjAwIGZvbnQtbW9ubyIgcGxhY2Vob2xkZXI9IjEwOjAwIiAvPgogICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgPGRpdiBj'+'bGFzcz0iZmxleCBmbGV4LWNvbCBnYXAtMC41Ij4KICAgICAgICAgICAgICA8bGFiZWwgY2xhc3M9InRleHQtWzlweF0gZm9udC1i'+'b2xkIHRleHQtemluYy00MDAiPlJvb208L2xhYmVsPgogICAgICAgICAgICAgIDxpbnB1dCB0eXBlPSJ0ZXh0IiBjbGFzcz0icC1s'+'b2NhdGlvbiBiZy13aGl0ZSBkYXJrOmJnLVsjMDkwOTBiXSBib3JkZXIgYm9yZGVyLXppbmMtMjAwIGRhcms6Ym9yZGVyLXppbmMt'+'ODAwIHJvdW5kZWQgcHgtMS41IHB5LTAuNSB0ZXh0LXhzIHRleHQtemluYy04MDAgZGFyazp0ZXh0LXppbmMtMjAwIiBwbGFjZWhv'+'bGRlcj0iTG9iYnkiIC8+CiAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgPC9kaXY+CiAgICAgICAgYDsKICAgICAgICBjb250'+'YWluZXIuYXBwZW5kQ2hpbGQocm93KTsKICAgICAgICBsdWNpZGUuY3JlYXRlSWNvbnMoKTsKICAgICAgfQoKICAgICAgYXN5bmMg'+'ZnVuY3Rpb24gaGFuZGxlVHRTdWJtaXQoZSkgewogICAgICAgIGUucHJldmVudERlZmF1bHQoKTsKICAgICAgICBjb25zdCB0aXRs'+'ZSA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCd0dC10aXRsZScpLnZhbHVlOwogICAgICAgIGNvbnN0IHJvd0VsZW1lbnRzID0g'+'ZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgnI3R0LXBlcmlvZC1yb3dzIC5yb3ctaXRlbScpOwogICAgICAgIAogICAgICAgIGlm'+'IChyb3dFbGVtZW50cy5sZW5ndGggPT09IDApIHsKICAgICAgICAgIHNob3dBY3Rpb25BbGVydCgnZXJyb3InLCAnQWRkIGF0IGxl'+'YXN0IG9uZSBzbG90IGVudHJ5LicpOwogICAgICAgICAgcmV0dXJuOwogICAgICAgIH0KCiAgICAgICAgY29uc3Qgc2xvdHMgPSBb'+'XTsKICAgICAgICByb3dFbGVtZW50cy5mb3JFYWNoKHJvdyA9PiB7CiAgICAgICAgICBzbG90cy5wdXNoKHsKICAgICAgICAgICAg'+'ZGF5OiByb3cucXVlcnlTZWxlY3RvcignLnAtZGF5JykudmFsdWUsCiAgICAgICAgICAgIHN1YmplY3Q6IHJvdy5xdWVyeVNlbGVj'+'dG9yKCcucC1zdWJqZWN0JykudmFsdWUsCiAgICAgICAgICAgIHN0YXJ0OiByb3cucXVlcnlTZWxlY3RvcignLnAtc3RhcnQnKS52'+'YWx1ZSwKICAgICAgICAgICAgZW5kOiByb3cucXVlcnlTZWxlY3RvcignLnAtZW5kJykudmFsdWUsCiAgICAgICAgICAgIGxvY2F0'+'aW9uOiByb3cucXVlcnlTZWxlY3RvcignLnAtbG9jYXRpb24nKS52YWx1ZQogICAgICAgICAgfSk7CiAgICAgICAgfSk7CgogICAg'+'ICAgIGNvbnN0IGJ0biA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCd0dC1zdWJtaXQtYnRuJyk7CiAgICAgICAgYnRuLmRpc2Fi'+'bGVkID0gdHJ1ZTsKICAgICAgICBidG4uaW5uZXJIVE1MID0gJ1NhdmluZy4uLic7CgogICAgICAgIHRyeSB7CiAgICAgICAgICBh'+'d2FpdCBhcGlSZXF1ZXN0KCcvdGltZXRhYmxlJywgJ1BPU1QnLCB7IHRpdGxlLCBzbG90cyB9KTsKICAgICAgICAgIHNob3dBY3Rp'+'b25BbGVydCgnc3VjY2VzcycsICdUaW1ldGFibGUgY2xhc3Mgc2NoZWR1bGUgc2F2ZWQuJyk7CiAgICAgICAgICAKICAgICAgICAg'+'IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCd0dC1mb3JtJykucmVzZXQoKTsKICAgICAgICAgIGRvY3VtZW50LmdldEVsZW1lbnRC'+'eUlkKCd0dC1wZXJpb2Qtcm93cycpLmlubmVySFRNTCA9ICcnOwogICAgICAgICAgdG9nZ2xlU2lkZVBhbmVsKCd0dCcsIGZhbHNl'+'KTsKICAgICAgICAgIGxvYWRUaW1ldGFibGVzTGlzdCgpOwogICAgICAgIH0gY2F0Y2ggKGVycikgewogICAgICAgICAgc2hvd0Fj'+'dGlvbkFsZXJ0KCdlcnJvcicsIGVyci5tZXNzYWdlKTsKICAgICAgICB9IGZpbmFsbHkgewogICAgICAgICAgYnRuLmRpc2FibGVk'+'ID0gZmFsc2U7CiAgICAgICAgICBidG4uaW5uZXJIVE1MID0gJ1NhdmUgVGltZXRhYmxlJzsKICAgICAgICB9CiAgICAgIH0KCiAg'+'ICAgIGZ1bmN0aW9uIGNvbmZpcm1EZWxldGVUdChpZCkgewogICAgICAgIG9wZW5Db25maXJtTW9kYWwoJ0RlbGV0ZSB0aGlzIGNs'+'YXNzIHRpbWV0YWJsZSBzY2hlZHVsZT8nLCBhc3luYyAoKSA9PiB7CiAgICAgICAgICB0cnkgewogICAgICAgICAgICBhd2FpdCBh'+'cGlSZXF1ZXN0KGAvdGltZXRhYmxlLyR7aWR9YCwgJ0RFTEVURScpOwogICAgICAgICAgICBzaG93QWN0aW9uQWxlcnQoJ3N1Y2Nl'+'c3MnLCAnU2NoZWR1bGUgdGltZXRhYmxlIGRlbGV0ZWQuJyk7CiAgICAgICAgICAgIGxvYWRUaW1ldGFibGVzTGlzdCgpOwogICAg'+'ICAgICAgfSBjYXRjaCAoZXJyKSB7CiAgICAgICAgICAgIHNob3dBY3Rpb25BbGVydCgnZXJyb3InLCBlcnIubWVzc2FnZSk7CiAg'+'ICAgICAgICB9CiAgICAgICAgfSk7CiAgICAgIH0KCiAgICAgIC8vIEluaXRpYWxpemUgc2lkZSBwYW5lbHMgZm9ybXMKICAgICAg'+'ZnVuY3Rpb24gaW5pdFR0U2lkZUZvcm0oKSB7CiAgICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3R0LXBlcmlvZC1yb3dz'+'JykuaW5uZXJIVE1MID0gJyc7CiAgICAgICAgYWRkRm9ybVBlcmlvZFJvdygpOwogICAgICB9CgogICAgICAvLyA9PT09PT09PT09'+'PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgIC8vIDcuIFNZTExBQlVTIFZJRVcgTE9HSUMKICAgICAg'+'Ly8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICBhc3luYyBmdW5jdGlvbiBsb2Fk'+'U3lsbGFiaUxpc3QoKSB7CiAgICAgICAgdHJ5IHsKICAgICAgICAgIHN5bGxhYmkgPSBhd2FpdCBhcGlSZXF1ZXN0KCcvc3lsbGFi'+'dXMnKTsKICAgICAgICAgIHJlbmRlclN5bGxhYmkoc3lsbGFiaSk7CiAgICAgICAgfSBjYXRjaCAoZXJyKSB7CiAgICAgICAgICBz'+'ZXRFcnJvclZpZXcoJ0NvdWxkIG5vdCBsb2FkIHN5bGxhYnVzLicpOwogICAgICAgIH0KICAgICAgfQoKICAgICAgZnVuY3Rpb24g'+'cmVuZGVyU3lsbGFiaShkYXRhTGlzdCkgewogICAgICAgIGNvbnN0IGNvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlk'+'KCdzeWwtZ3JpZC1jb250YWluZXInKTsKICAgICAgICBpZiAoZGF0YUxpc3QubGVuZ3RoID09PSAwKSB7CiAgICAgICAgICBjb250'+'YWluZXIuaW5uZXJIVE1MID0gYAogICAgICAgICAgICA8ZGl2IGNsYXNzPSJ0ZXh0LWNlbnRlciBweS0xMiBiZy13aGl0ZSBkYXJr'+'OmJnLVsjMGMwYzBmXSBib3JkZXIgYm9yZGVyLXppbmMtMjAwIGRhcms6Ym9yZGVyLXppbmMtODAwIHJvdW5kZWQteGwgY29sLXNw'+'YW4tMiI+CiAgICAgICAgICAgICAgPGkgZGF0YS1sdWNpZGU9ImZpbGUtdGV4dCIgY2xhc3M9Im14LWF1dG8gdGV4dC16aW5jLTMw'+'MCBkYXJrOnRleHQtemluYy03MDAgbWItMiB3LTEyIGgtMTIiPjwvaT4KICAgICAgICAgICAgICA8cCBjbGFzcz0idGV4dC1zbSBm'+'b250LXNlbWlib2xkIHRleHQtemluYy04NTAgZGFyazp0ZXh0LXppbmMtMjAwIj5ObyBzeWxsYWJ1cyBsaXN0czwvcD4KICAgICAg'+'ICAgICAgPC9kaXY+CiAgICAgICAgICBgOwogICAgICAgICAgbHVjaWRlLmNyZWF0ZUljb25zKCk7CiAgICAgICAgICByZXR1cm47'+'CiAgICAgICAgfQoKICAgICAgICBjb250YWluZXIuaW5uZXJIVE1MID0gZGF0YUxpc3QubWFwKHMgPT4gYAogICAgICAgICAgPGRp'+'diBjbGFzcz0iYmctd2hpdGUgZGFyazpiZy1bIzBjMGMwZl0gYm9yZGVyIGJvcmRlci16aW5jLTIwMCBkYXJrOmJvcmRlci16aW5j'+'LTgwMCByb3VuZGVkLXhsIHAtNiBzaGFkb3ctc20gZmxleCBmbGV4LWNvbCBqdXN0aWZ5LWJldHdlZW4gZ3JvdXAgcmVsYXRpdmUg'+'aG92ZXI6c2hhZG93LW1kIHRyYW5zaXRpb24tc2hhZG93Ij4KICAgICAgICAgICAgPGRpdj4KICAgICAgICAgICAgICA8ZGl2IGNs'+'YXNzPSJmbGV4IGl0ZW1zLWNlbnRlciBnYXAtMyBtYi0yIHByLTgiPgogICAgICAgICAgICAgICAgPGRpdiBjbGFzcz0icC0yIGJn'+'LXB1cnBsZS01MCBkYXJrOmJnLXB1cnBsZS05MDAvMjAgdGV4dC1wdXJwbGUtNjUwIGRhcms6dGV4dC1wdXJwbGUtNDAwIHJvdW5k'+'ZWQtbGciPgogICAgICAgICAgICAgICAgICA8aSBkYXRhLWx1Y2lkZT0iZmlsZS10ZXh0IiBjbGFzcz0idy01IGgtNSI+PC9pPgog'+'ICAgICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgICAgICA8ZGl2PgogICAgICAgICAgICAgICAgICA8aDQgY2xhc3M9InRl'+'eHQtYmFzZSBmb250LWJvbGQgdGV4dC16aW5jLTk1MCBkYXJrOnRleHQtemluYy01MCBmb250LWRpc3BsYXkiPiR7cy50aXRsZX08'+'L2g0PgogICAgICAgICAgICAgICAgICA8cCBjbGFzcz0idGV4dC1bOXB4XSB0ZXh0LXppbmMtNDAwIGZvbnQtbW9ubyI+Q3JlYXRl'+'ZDogJHtuZXcgRGF0ZShzLmNyZWF0ZWRBdCkudG9Mb2NhbGVEYXRlU3RyaW5nKCl9PC9wPgogICAgICAgICAgICAgICAgPC9kaXY+'+'CiAgICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgICAgPHAgY2xhc3M9InRleHQtc20gdGV4dC16aW5jLTUwMCBkYXJrOnRl'+'eHQtemluYy00MDAgbXQtMiBtYi00IGxlYWRpbmctcmVsYXhlZCBsaW5lLWNsYW1wLTMiPiR7cy5kZXNjcmlwdGlvbiB8fCAnTm8g'+'ZGVzY3JpcHRpb24gcHJvdmlkZWQuJ308L3A+CiAgICAgICAgICAgICAgJHtzLnN1YmplY3RzICYmIHMuc3ViamVjdHMubGVuZ3Ro'+'ID4gMCA/IGAKICAgICAgICAgICAgICAgIDxkaXYgY2xhc3M9ImZsZXggZmxleC13cmFwIGdhcC0xIG1iLTIiPgogICAgICAgICAg'+'ICAgICAgICAke3Muc3ViamVjdHMubWFwKHN1YiA9PiBgPHNwYW4gY2xhc3M9InRleHQtWzlweF0gZm9udC1zZW1pYm9sZCBweC0y'+'IHB5LTAuNSBiZy16aW5jLTEwMCBkYXJrOmJnLXppbmMtODAwIHRleHQtemluYy02MDAgZGFyazp0ZXh0LXppbmMtMzAwIHJvdW5k'+'ZWQiPiR7c3VifTwvc3Bhbj5gKS5qb2luKCcnKX0KICAgICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICAgIGAgOiAnJ30K'+'ICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9InB0LTQgYm9yZGVyLXQgYm9yZGVyLXppbmMtMTAwIGRh'+'cms6Ym9yZGVyLXppbmMtODUwIG10LTQgZmxleCBpdGVtcy1jZW50ZXIganVzdGlmeS1iZXR3ZWVuIHRleHQteHMgdGV4dC16aW5j'+'LTQwMCI+CiAgICAgICAgICAgICAgPHNwYW4+Qnk6ICR7cy5jcmVhdGVkQnk/Lm5hbWUgfHwgJ0FkbWluJ308L3NwYW4+CiAgICAg'+'ICAgICAgICAgPHNwYW4+JHtzLnN1YmplY3RzPy5sZW5ndGggfHwgMH0gc3ViamVjdHM8L3NwYW4+CiAgICAgICAgICAgIDwvZGl2'+'PgogICAgICAgICAgICA8YnV0dG9uIG9uY2xpY2s9ImNvbmZpcm1EZWxldGVTeWwoJyR7cy5faWR9JykiIGNsYXNzPSJhYnNvbHV0'+'ZSB0b3AtNCByaWdodC00IHAtMS41IHRleHQtcm9zZS01MDAgaG92ZXI6Ymctcm9zZS01MCBkYXJrOmhvdmVyOmJnLXJvc2UtOTUw'+'LzIwIHJvdW5kZWQgdHJhbnNpdGlvbi1jb2xvcnMgb3BhY2l0eS0wIGdyb3VwLWhvdmVyOm9wYWNpdHktMTAwIj4KICAgICAgICAg'+'ICAgICA8aSBkYXRhLWx1Y2lkZT0idHJhc2gtMiIgY2xhc3M9InctNCBoLTQiPjwvaT4KICAgICAgICAgICAgPC9idXR0b24+CiAg'+'ICAgICAgICA8L2Rpdj4KICAgICAgICBgKS5qb2luKCcnKTsKICAgICAgICBsdWNpZGUuY3JlYXRlSWNvbnMoKTsKICAgICAgfQoK'+'ICAgICAgYXN5bmMgZnVuY3Rpb24gaGFuZGxlU3lsU3VibWl0KGUpIHsKICAgICAgICBlLnByZXZlbnREZWZhdWx0KCk7CiAgICAg'+'ICAgY29uc3QgdGl0bGUgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnc3lsLXRpdGxlJykudmFsdWU7CiAgICAgICAgY29uc3Qg'+'ZGVzY3JpcHRpb24gPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnc3lsLWRlc2MnKS52YWx1ZTsKICAgICAgICBjb25zdCBzdWJq'+'ZWN0c1ZhbCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdzeWwtc3ViamVjdHMnKS52YWx1ZTsKCiAgICAgICAgY29uc3Qgc3Vi'+'amVjdHMgPSBzdWJqZWN0c1ZhbC5zcGxpdCgnLCcpLm1hcChzID0+IHMudHJpbSgpKS5maWx0ZXIocyA9PiBzLmxlbmd0aCA+IDAp'+'OwoKICAgICAgICBjb25zdCBidG4gPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnc3lsLXN1Ym1pdC1idG4nKTsKICAgICAgICBi'+'dG4uZGlzYWJsZWQgPSB0cnVlOwogICAgICAgIGJ0bi5pbm5lckhUTUwgPSAnU2F2aW5nLi4uJzsKCiAgICAgICAgdHJ5IHsKICAg'+'ICAgICAgIGF3YWl0IGFwaVJlcXVlc3QoJy9zeWxsYWJ1cycsICdQT1NUJywgeyB0aXRsZSwgZGVzY3JpcHRpb24sIHN1YmplY3Rz'+'IH0pOwogICAgICAgICAgc2hvd0FjdGlvbkFsZXJ0KCdzdWNjZXNzJywgJ1N5bGxhYnVzIGd1aWRlbGluZXMgY3JlYXRlZC4nKTsK'+'ICAgICAgICAgIAogICAgICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3N5bC1mb3JtJykucmVzZXQoKTsKICAgICAgICAg'+'IHRvZ2dsZVNpZGVQYW5lbCgnc3lsJywgZmFsc2UpOwogICAgICAgICAgbG9hZFN5bGxhYmlMaXN0KCk7CiAgICAgICAgfSBjYXRj'+'aCAoZXJyKSB7CiAgICAgICAgICBzaG93QWN0aW9uQWxlcnQoJ2Vycm9yJywgZXJyLm1lc3NhZ2UpOwogICAgICAgIH0gZmluYWxs'+'eSB7CiAgICAgICAgICBidG4uZGlzYWJsZWQgPSBmYWxzZTsKICAgICAgICAgIGJ0bi5pbm5lckhUTUwgPSAnU2F2ZSBTeWxsYWJ1'+'cyc7CiAgICAgICAgfQogICAgICB9CgogICAgICBmdW5jdGlvbiBjb25maXJtRGVsZXRlU3lsKGlkKSB7CiAgICAgICAgb3BlbkNv'+'bmZpcm1Nb2RhbCgnRGVsZXRlIHRoaXMgY2xhc3Mgc3lsbGFidXMgY29uZmlndXJhdGlvbnM/JywgYXN5bmMgKCkgPT4gewogICAg'+'ICAgICAgdHJ5IHsKICAgICAgICAgICAgYXdhaXQgYXBpUmVxdWVzdChgL3N5bGxhYnVzLyR7aWR9YCwgJ0RFTEVURScpOwogICAg'+'ICAgICAgICBzaG93QWN0aW9uQWxlcnQoJ3N1Y2Nlc3MnLCAnU3lsbGFidXMgY291cnNlIG91dGxpbmUgcmVtb3ZlZC4nKTsKICAg'+'ICAgICAgICAgbG9hZFN5bGxhYmlMaXN0KCk7CiAgICAgICAgICB9IGNhdGNoIChlcnIpIHsKICAgICAgICAgICAgc2hvd0FjdGlv'+'bkFsZXJ0KCdlcnJvcicsIGVyci5tZXNzYWdlKTsKICAgICAgICAgIH0KICAgICAgICB9KTsKICAgICAgfQoKICAgICAgLy8gPT09'+'PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAvLyA4LiBQQVBFUlMgVklFVyBMT0dJQwog'+'ICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgIGFzeW5jIGZ1bmN0aW9u'+'IGxvYWRQYXBlcnNMaXN0KCkgewogICAgICAgIHRyeSB7CiAgICAgICAgICBwYXBlcnMgPSBhd2FpdCBhcGlSZXF1ZXN0KCcvcGFw'+'ZXJzJyk7CiAgICAgICAgICByZW5kZXJQYXBlcnNUYWJsZShwYXBlcnMpOwogICAgICAgIH0gY2F0Y2ggKGVycikgewogICAgICAg'+'ICAgc2V0RXJyb3JWaWV3KCdDb3VsZCBub3QgZmV0Y2ggcGFwZXJzIGxpc3QuJyk7CiAgICAgICAgfQogICAgICB9CgogICAgICBm'+'dW5jdGlvbiByZW5kZXJQYXBlcnNUYWJsZShkYXRhTGlzdCkgewogICAgICAgIGNvbnN0IHRib2R5ID0gZG9jdW1lbnQuZ2V0RWxl'+'bWVudEJ5SWQoJ3BhcGVycy10YWJsZS1ib2R5Jyk7CiAgICAgICAgaWYgKGRhdGFMaXN0Lmxlbmd0aCA9PT0gMCkgewogICAgICAg'+'ICAgdGJvZHkuaW5uZXJIVE1MID0gYDx0cj48dGQgY29sc3Bhbj0iNSIgY2xhc3M9InB5LTggdGV4dC1jZW50ZXIgdGV4dC16aW5j'+'LTQwMCI+Tm8gcGFwZXJzIHVwbG9hZGVkLjwvdGQ+PC90cj5gOwogICAgICAgICAgcmV0dXJuOwogICAgICAgIH0KCiAgICAgICAg'+'dGJvZHkuaW5uZXJIVE1MID0gZGF0YUxpc3QubWFwKHAgPT4gYAogICAgICAgICAgPHRyIGNsYXNzPSJob3ZlcjpiZy16aW5jLTUw'+'IGRhcms6aG92ZXI6YmctemluYy05MDAvMzAgdGV4dC16aW5jLTkwMCBkYXJrOnRleHQtemluYy0yMDAgdHJhbnNpdGlvbi1jb2xv'+'cnMiPgogICAgICAgICAgICA8dGQgY2xhc3M9InB5LTQgcHgtNiBmb250LXNlbWlib2xkIGZsZXggaXRlbXMtY2VudGVyIGdhcC0y'+'Ij4KICAgICAgICAgICAgICA8aSBkYXRhLWx1Y2lkZT0iZmlsZS1jaGVjayIgY2xhc3M9InctNCBoLTQgdGV4dC1wdXJwbGUtNTAw'+'IHNocmluay0wIj48L2k+CiAgICAgICAgICAgICAgPHNwYW4gY2xhc3M9InRydW5jYXRlIG1heC13LVsxNTBweF0iPiR7cC50aXRs'+'ZX08L3NwYW4+CiAgICAgICAgICAgIDwvdGQ+CiAgICAgICAgICAgIDx0ZCBjbGFzcz0icHktNCBweC02IHRleHQtemluYy00MDAg'+'dHJ1bmNhdGUgbWF4LXctWzIwMHB4XSI+JHtwLnN1YmplY3R9PC90ZD4KICAgICAgICAgICAgPHRkIGNsYXNzPSJweS00IHB4LTYg'+'dGV4dC16aW5jLTUwMCI+JHtwLmNyZWF0ZWRCeT8ubmFtZSB8fCAnQWRtaW4nfTwvdGQ+CiAgICAgICAgICAgIDx0ZCBjbGFzcz0i'+'cHktNCBweC02IHRleHQtemluYy00MDAgdGV4dC14cyI+JHtuZXcgRGF0ZShwLmNyZWF0ZWRBdCkudG9Mb2NhbGVEYXRlU3RyaW5n'+'KCl9PC90ZD4KICAgICAgICAgICAgPHRkIGNsYXNzPSJweS00IHB4LTYgdGV4dC1yaWdodCBmbGV4IGl0ZW1zLWNlbnRlciBqdXN0'+'aWZ5LWVuZCBnYXAtMS41Ij4KICAgICAgICAgICAgICAke3AuZmlsZVVybCA/IGAKICAgICAgICAgICAgICAgIDxhIGhyZWY9IiR7'+'cC5maWxlVXJsLnN0YXJ0c1dpdGgoJ2h0dHAnKSA/IHAuZmlsZVVybCA6IGFwaUJhc2VVcmwucmVwbGFjZSgnL2FwaScsICcnKSAr'+'IHAuZmlsZVVybH0iIHRhcmdldD0iX2JsYW5rIiBjbGFzcz0icC0xLjUgdGV4dC1wdXJwbGUtNjAwIGRhcms6dGV4dC1wdXJwbGUt'+'NDAwIGhvdmVyOmJnLXB1cnBsZS01MCBkYXJrOmhvdmVyOmJnLXB1cnBsZS05NTAvMjAgcm91bmRlZCB0cmFuc2l0aW9uLWNvbG9y'+'cyBpbmxpbmUtZmxleCI+CiAgICAgICAgICAgICAgICAgIDxpIGRhdGEtbHVjaWRlPSJkb3dubG9hZCIgY2xhc3M9InctNCBoLTQi'+'PjwvaT4KICAgICAgICAgICAgICAgIDwvYT4KICAgICAgICAgICAgICBgIDogJyd9CiAgICAgICAgICAgICAgPGJ1dHRvbiBvbmNs'+'aWNrPSJjb25maXJtRGVsZXRlUGFwZXIoJyR7cC5faWR9JykiIGNsYXNzPSJwLTEuNSB0ZXh0LXJvc2UtNTAwIGhvdmVyOmJnLXJv'+'c2UtNTAgZGFyazpob3ZlcjpiZy1yb3NlLTk1MC8yMCByb3VuZGVkIHRyYW5zaXRpb24tY29sb3JzIGlubGluZS1mbGV4Ij4KICAg'+'ICAgICAgICAgICAgIDxpIGRhdGEtbHVjaWRlPSJ0cmFzaC0yIiBjbGFzcz0idy00IGgtNCI+PC9pPgogICAgICAgICAgICAgIDwv'+'YnV0dG9uPgogICAgICAgICAgICA8L3RkPgogICAgICAgICAgPC90cj4KICAgICAgICBgKS5qb2luKCcnKTsKICAgICAgICBsdWNp'+'ZGUuY3JlYXRlSWNvbnMoKTsKICAgICAgfQoKICAgICAgZnVuY3Rpb24gZmlsdGVyUGFwZXJzVGFibGUoKSB7CiAgICAgICAgY29u'+'c3QgcXVlcnkgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncGFwZXJzLXNlYXJjaCcpLnZhbHVlLnRvTG93ZXJDYXNlKCk7CiAg'+'ICAgICAgY29uc3QgZmlsdGVyZWQgPSBwYXBlcnMuZmlsdGVyKHAgPT4gCiAgICAgICAgICBwLnRpdGxlLnRvTG93ZXJDYXNlKCku'+'aW5jbHVkZXMocXVlcnkpIHx8IAogICAgICAgICAgcC5zdWJqZWN0LnRvTG93ZXJDYXNlKCkuaW5jbHVkZXMocXVlcnkpCiAgICAg'+'ICAgKTsKICAgICAgICByZW5kZXJQYXBlcnNUYWJsZShmaWx0ZXJlZCk7CiAgICAgIH0KCiAgICAgIGFzeW5jIGZ1bmN0aW9uIGhh'+'bmRsZVBhcGVyU3VibWl0KGUpIHsKICAgICAgICBlLnByZXZlbnREZWZhdWx0KCk7CiAgICAgICAgY29uc3QgdGl0bGUgPSBkb2N1'+'bWVudC5nZXRFbGVtZW50QnlJZCgncGFwZXItdGl0bGUnKS52YWx1ZTsKICAgICAgICBjb25zdCBzdWJqZWN0ID0gZG9jdW1lbnQu'+'Z2V0RWxlbWVudEJ5SWQoJ3BhcGVyLXN1YmplY3QnKS52YWx1ZTsKICAgICAgICBjb25zdCBmaWxlSW5wdXQgPSBkb2N1bWVudC5n'+'ZXRFbGVtZW50QnlJZCgncGFwZXItZmlsZScpOwogICAgICAgIAogICAgICAgIGlmICghZmlsZUlucHV0LmZpbGVzLmxlbmd0aCkg'+'ewogICAgICAgICAgc2hvd0FjdGlvbkFsZXJ0KCdlcnJvcicsICdTZWxlY3QgZmlsZSB0byB1cGxvYWQuJyk7CiAgICAgICAgICBy'+'ZXR1cm47CiAgICAgICAgfQoKICAgICAgICBjb25zdCBidG4gPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncGFwZXItc3VibWl0'+'LWJ0bicpOwogICAgICAgIGJ0bi5kaXNhYmxlZCA9IHRydWU7CiAgICAgICAgYnRuLmlubmVySFRNTCA9ICdVcGxvYWRpbmcuLi4n'+'OwoKICAgICAgICB0cnkgewogICAgICAgICAgY29uc3QgZm9ybSA9IG5ldyBGb3JtRGF0YSgpOwogICAgICAgICAgZm9ybS5hcHBl'+'bmQoJ3RpdGxlJywgdGl0bGUpOwogICAgICAgICAgZm9ybS5hcHBlbmQoJ3N1YmplY3QnLCBzdWJqZWN0KTsKICAgICAgICAgIGZv'+'cm0uYXBwZW5kKCdmaWxlJywgZmlsZUlucHV0LmZpbGVzWzBdKTsKCiAgICAgICAgICBhd2FpdCBhcGlSZXF1ZXN0KCcvcGFwZXJz'+'JywgJ1BPU1QnLCBmb3JtLCB0cnVlKTsKICAgICAgICAgIHNob3dBY3Rpb25BbGVydCgnc3VjY2VzcycsICdFeGFtIHBhcGVyIHVw'+'bG9hZGVkIHN1Y2Nlc3NmdWxseS4nKTsKICAgICAgICAgIAogICAgICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3BhcGVy'+'LWZvcm0nKS5yZXNldCgpOwogICAgICAgICAgdG9nZ2xlU2lkZVBhbmVsKCdwYXBlcicsIGZhbHNlKTsKICAgICAgICAgIGxvYWRQ'+'YXBlcnNMaXN0KCk7CiAgICAgICAgfSBjYXRjaCAoZXJyKSB7CiAgICAgICAgICBzaG93QWN0aW9uQWxlcnQoJ2Vycm9yJywgZXJy'+'Lm1lc3NhZ2UpOwogICAgICAgIH0gZmluYWxseSB7CiAgICAgICAgICBidG4uZGlzYWJsZWQgPSBmYWxzZTsKICAgICAgICAgIGJ0'+'bi5pbm5lckhUTUwgPSAnVXBsb2FkJzsKICAgICAgICB9CiAgICAgIH0KCiAgICAgIGZ1bmN0aW9uIGNvbmZpcm1EZWxldGVQYXBl'+'cihpZCkgewogICAgICAgIG9wZW5Db25maXJtTW9kYWwoJ0RlbGV0ZSB0aGlzIHByZXZpb3VzIHllYXIgZXhhbSBwYXBlcj8nLCBh'+'c3luYyAoKSA9PiB7CiAgICAgICAgICB0cnkgewogICAgICAgICAgICBhd2FpdCBhcGlSZXF1ZXN0KGAvcGFwZXJzLyR7aWR9YCwg'+'J0RFTEVURScpOwogICAgICAgICAgICBzaG93QWN0aW9uQWxlcnQoJ3N1Y2Nlc3MnLCAnRXhhbSBwYXBlciBkZWxldGVkLicpOwog'+'ICAgICAgICAgICBsb2FkUGFwZXJzTGlzdCgpOwogICAgICAgICAgfSBjYXRjaCAoZXJyKSB7CiAgICAgICAgICAgIHNob3dBY3Rp'+'b25BbGVydCgnZXJyb3InLCBlcnIubWVzc2FnZSk7CiAgICAgICAgICB9CiAgICAgICAgfSk7CiAgICAgIH0KCiAgICAgIC8vID09'+'PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgLy8gOS4gQ0FURUdPUklFUyBWSUVXIExP'+'R0lDCiAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgYXN5bmMgZnVu'+'Y3Rpb24gbG9hZENhdGVnb3JpZXNMaXN0KCkgewogICAgICAgIHRyeSB7CiAgICAgICAgICBjYXRlZ29yaWVzID0gYXdhaXQgYXBp'+'UmVxdWVzdCgnL2NhdGVnb3JpZXMnKTsKICAgICAgICAgIHJlbmRlckNhdGVnb3JpZXMoY2F0ZWdvcmllcyk7CiAgICAgICAgfSBj'+'YXRjaCAoZXJyKSB7CiAgICAgICAgICBzZXRFcnJvclZpZXcoJ0NvdWxkIG5vdCBsb2FkIGNhdGVnb3JpZXMuJyk7CiAgICAgICAg'+'fQogICAgICB9CgogICAgICBmdW5jdGlvbiByZW5kZXJDYXRlZ29yaWVzKGRhdGFMaXN0KSB7CiAgICAgICAgY29uc3QgY29udGFp'+'bmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2NhdC1ncmlkLWNvbnRhaW5lcicpOwogICAgICAgIGlmIChkYXRhTGlzdC5s'+'ZW5ndGggPT09IDApIHsKICAgICAgICAgIGNvbnRhaW5lci5pbm5lckhUTUwgPSBgCiAgICAgICAgICAgIDxkaXYgY2xhc3M9InRl'+'eHQtY2VudGVyIHB5LTEyIGJnLXdoaXRlIGRhcms6YmctWyMwYzBjMGZdIGJvcmRlciBib3JkZXItemluYy0yMDAgZGFyazpib3Jk'+'ZXItemluYy04MDAgcm91bmRlZC14bCBjb2wtc3Bhbi0yIj4KICAgICAgICAgICAgICA8aSBkYXRhLWx1Y2lkZT0ibGF5ZXJzIiBj'+'bGFzcz0ibXgtYXV0byB0ZXh0LXppbmMtMzAwIGRhcms6dGV4dC16aW5jLTcwMCBtYi0yIHctMTIgaC0xMiI+PC9pPgogICAgICAg'+'ICAgICAgIDxwIGNsYXNzPSJ0ZXh0LXNtIGZvbnQtc2VtaWJvbGQgdGV4dC16aW5jLTg1MCBkYXJrOnRleHQtemluYy0yMDAiPk5v'+'IGNhdGVnb3JpZXMgZm91bmQ8L3A+CiAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgYDsKICAgICAgICAgIGx1Y2lkZS5jcmVh'+'dGVJY29ucygpOwogICAgICAgICAgcmV0dXJuOwogICAgICAgIH0KCiAgICAgICAgY29udGFpbmVyLmlubmVySFRNTCA9IGRhdGFM'+'aXN0Lm1hcChjYXQgPT4gYAogICAgICAgICAgPGRpdiBjbGFzcz0iYmctd2hpdGUgZGFyazpiZy1bIzBjMGMwZl0gYm9yZGVyIGJv'+'cmRlci16aW5jLTIwMCBkYXJrOmJvcmRlci16aW5jLTgwMCByb3VuZGVkLXhsIHAtNSBob3ZlcjpzaGFkb3ctbWQgdHJhbnNpdGlv'+'bi1zaGFkb3cgcmVsYXRpdmUgZ3JvdXAgZmxleCBpdGVtcy1zdGFydCBnYXAtNCI+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9InAt'+'MyBiZy1wdXJwbGUtNTAgZGFyazpiZy1wdXJwbGUtOTAwLzIwIHRleHQtcHVycGxlLTY1MCBkYXJrOnRleHQtcHVycGxlLTQwMCBy'+'b3VuZGVkLWxnIHNocmluay0wIj4KICAgICAgICAgICAgICA8aSBkYXRhLWx1Y2lkZT0ibGF5ZXJzIiBjbGFzcz0idy01IGgtNSI+'+'PC9pPgogICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgPGRpdiBjbGFzcz0iZmxleC0xIG1pbi13LTAgcHItOCI+CiAgICAg'+'ICAgICAgICAgPGg0IGNsYXNzPSJ0ZXh0LWJhc2UgZm9udC1ib2xkIHRleHQtemluYy05NTAgZGFyazp0ZXh0LXppbmMtNTAgZm9u'+'dC1kaXNwbGF5IHRydW5jYXRlIj4ke2NhdC5uYW1lfTwvaDQ+CiAgICAgICAgICAgICAgPHAgY2xhc3M9InRleHQteHMgdGV4dC16'+'aW5jLTUwMCBkYXJrOnRleHQtemluYy00MDAgbXQtMSBsZWFkaW5nLXJlbGF4ZWQgbGluZS1jbGFtcC0yIj4ke2NhdC5kZXNjcmlw'+'dGlvbiB8fCAnTm8gZGVzY3JpcHRpb24gcHJvdmlkZWQuJ308L3A+CiAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICA8YnV0'+'dG9uIG9uY2xpY2s9ImNvbmZpcm1EZWxldGVDYXQoJyR7Y2F0Ll9pZH0nKSIgY2xhc3M9ImFic29sdXRlIHRvcC00IHJpZ2h0LTQg'+'cC0xLjUgdGV4dC1yb3NlLTUwMCBob3ZlcjpiZy1yb3NlLTUwIGRhcms6aG92ZXI6Ymctcm9zZS05NTAvMjAgcm91bmRlZCB0cmFu'+'c2l0aW9uLWNvbG9ycyBvcGFjaXR5LTAgZ3JvdXAtaG92ZXI6b3BhY2l0eS0xMDAiPgogICAgICAgICAgICAgIDxpIGRhdGEtbHVj'+'aWRlPSJ0cmFzaC0yIiBjbGFzcz0idy00IGgtNCI+PC9pPgogICAgICAgICAgICA8L2J1dHRvbj4KICAgICAgICAgIDwvZGl2Pgog'+'ICAgICAgIGApLmpvaW4oJycpOwogICAgICAgIGx1Y2lkZS5jcmVhdGVJY29ucygpOwogICAgICB9CgogICAgICBhc3luYyBmdW5j'+'dGlvbiBoYW5kbGVDYXRTdWJtaXQoZSkgewogICAgICAgIGUucHJldmVudERlZmF1bHQoKTsKICAgICAgICBjb25zdCBuYW1lID0g'+'ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2NhdC1uYW1lJykudmFsdWU7CiAgICAgICAgY29uc3QgZGVzY3JpcHRpb24gPSBkb2N1'+'bWVudC5nZXRFbGVtZW50QnlJZCgnY2F0LWRlc2MnKS52YWx1ZTsKCiAgICAgICAgY29uc3QgYnRuID0gZG9jdW1lbnQuZ2V0RWxl'+'bWVudEJ5SWQoJ2NhdC1zdWJtaXQtYnRuJyk7CiAgICAgICAgYnRuLmRpc2FibGVkID0gdHJ1ZTsKICAgICAgICBidG4uaW5uZXJI'+'VE1MID0gJ1NhdmluZy4uLic7CgogICAgICAgIHRyeSB7CiAgICAgICAgICBhd2FpdCBhcGlSZXF1ZXN0KCcvY2F0ZWdvcmllcycs'+'ICdQT1NUJywgeyBuYW1lLCBkZXNjcmlwdGlvbiB9KTsKICAgICAgICAgIHNob3dBY3Rpb25BbGVydCgnc3VjY2VzcycsICdDYXRl'+'Z29yeSBjcmVhdGVkIHN1Y2Nlc3NmdWxseS4nKTsKICAgICAgICAgIAogICAgICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQo'+'J2NhdC1mb3JtJykucmVzZXQoKTsKICAgICAgICAgIHRvZ2dsZVNpZGVQYW5lbCgnY2F0JywgZmFsc2UpOwogICAgICAgICAgbG9h'+'ZENhdGVnb3JpZXNMaXN0KCk7CiAgICAgICAgfSBjYXRjaCAoZXJyKSB7CiAgICAgICAgICBzaG93QWN0aW9uQWxlcnQoJ2Vycm9y'+'JywgZXJyLm1lc3NhZ2UpOwogICAgICAgIH0gZmluYWxseSB7CiAgICAgICAgICBidG4uZGlzYWJsZWQgPSBmYWxzZTsKICAgICAg'+'ICAgIGJ0bi5pbm5lckhUTUwgPSAnU2F2ZSBDYXRlZ29yeSc7CiAgICAgICAgfQogICAgICB9CgogICAgICBmdW5jdGlvbiBjb25m'+'aXJtRGVsZXRlQ2F0KGlkKSB7CiAgICAgICAgb3BlbkNvbmZpcm1Nb2RhbCgnRGVsZXRlIHRoaXMgY2F0ZWdvcnk/IFJlc291cmNl'+'cyB0YWdnZWQgd2l0aCBpdCB3aWxsIHJlbWFpbi4nLCBhc3luYyAoKSA9PiB7CiAgICAgICAgICB0cnkgewogICAgICAgICAgICBh'+'d2FpdCBhcGlSZXF1ZXN0KGAvY2F0ZWdvcmllcy8ke2lkfWAsICdERUxFVEUnKTsKICAgICAgICAgICAgc2hvd0FjdGlvbkFsZXJ0'+'KCdzdWNjZXNzJywgJ0NhdGVnb3J5IHN1Y2Nlc3NmdWxseSBkZWxldGVkLicpOwogICAgICAgICAgICBsb2FkQ2F0ZWdvcmllc0xp'+'c3QoKTsKICAgICAgICAgIH0gY2F0Y2ggKGVycikgewogICAgICAgICAgICBzaG93QWN0aW9uQWxlcnQoJ2Vycm9yJywgZXJyLm1l'+'c3NhZ2UpOwogICAgICAgICAgfQogICAgICAgIH0pOwogICAgICB9CgogICAgICAvLyBTaWRlYmFyIHBhbmVsIGxvZ2ljIGhlbHBl'+'ciB0cmlnZ2VycwogICAgICBmdW5jdGlvbiB0b2dnbGVTaWRlUGFuZWwocGFuZWxOYW1lLCBzaG93KSB7CiAgICAgICAgY29uc3Qg'+'cGFuZWwgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChgJHtwYW5lbE5hbWV9LXNpZGUtcGFuZWxgKTsKICAgICAgICBpZiAoc2hv'+'dykgewogICAgICAgICAgcGFuZWwuY2xhc3NMaXN0LnJlbW92ZSgnaGlkZGVuJyk7CiAgICAgICAgICBpZiAocGFuZWxOYW1lID09'+'PSAndHQnKSBpbml0VHRTaWRlRm9ybSgpOwogICAgICAgIH0gZWxzZSB7CiAgICAgICAgICBwYW5lbC5jbGFzc0xpc3QuYWRkKCdo'+'aWRkZW4nKTsKICAgICAgICB9CiAgICAgIH0='))</script>
   <div id="pwa-banner" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;width:calc(100% - 48px);max-width:420px;background:linear-gradient(135deg,#1e1b4b,#312e81);border:1px solid rgba(139,92,246,0.4);border-radius:1.25rem;padding:16px 20px;box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 40px rgba(139,92,246,0.2);backdrop-filter:blur(20px);animation:slideUp 0.4s ease">
     <style>
       @keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(30px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
@@ -2126,23 +680,6 @@
       <button class="install-btn" onclick="installPWA()" style="flex:1">📲 Install App</button>
     </div>
   </div>
-  <script>
-    let _pwaPrompt=null;
-    window.addEventListener('beforeinstallprompt',e=>{
-      e.preventDefault();
-      _pwaPrompt=e;
-      setTimeout(()=>{document.getElementById('pwa-banner').style.display='block';},1500);
-    });
-    async function installPWA(){
-      if(!_pwaPrompt)return;
-      _pwaPrompt.prompt();
-      const{outcome}=await _pwaPrompt.userChoice;
-      _pwaPrompt=null;
-      document.getElementById('pwa-banner').style.display='none';
-    }
-    window.addEventListener('appinstalled',()=>{
-      document.getElementById('pwa-banner').style.display='none';
-    });
-  </script>
+  <script>eval(atob('bGV0IF9wd2FQcm9tcHQ9bnVsbDsKICAgIHdpbmRvdy5hZGRFdmVudExpc3RlbmVyKCdiZWZvcmVpbnN0YWxscHJvbXB0JyxlPT57'+'CiAgICAgIGUucHJldmVudERlZmF1bHQoKTsKICAgICAgX3B3YVByb21wdD1lOwogICAgICBzZXRUaW1lb3V0KCgpPT57ZG9jdW1l'+'bnQuZ2V0RWxlbWVudEJ5SWQoJ3B3YS1iYW5uZXInKS5zdHlsZS5kaXNwbGF5PSdibG9jayc7fSwxNTAwKTsKICAgIH0pOwogICAg'+'YXN5bmMgZnVuY3Rpb24gaW5zdGFsbFBXQSgpewogICAgICBpZighX3B3YVByb21wdClyZXR1cm47CiAgICAgIF9wd2FQcm9tcHQu'+'cHJvbXB0KCk7CiAgICAgIGNvbnN0e291dGNvbWV9PWF3YWl0IF9wd2FQcm9tcHQudXNlckNob2ljZTsKICAgICAgX3B3YVByb21w'+'dD1udWxsOwogICAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncHdhLWJhbm5lcicpLnN0eWxlLmRpc3BsYXk9J25vbmUnOwog'+'ICAgfQogICAgd2luZG93LmFkZEV2ZW50TGlzdGVuZXIoJ2FwcGluc3RhbGxlZCcsKCk9PnsKICAgICAgZG9jdW1lbnQuZ2V0RWxl'+'bWVudEJ5SWQoJ3B3YS1iYW5uZXInKS5zdHlsZS5kaXNwbGF5PSdub25lJzsKICAgIH0pOw=='))</script>
   </body>
 </html>
