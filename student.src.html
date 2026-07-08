@@ -41,7 +41,7 @@
   <script>
 if('serviceWorker' in navigator){
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=17').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=18').then(reg => {
           reg.addEventListener('updatefound', () => {
             const nw = reg.installing;
             if (nw) {
@@ -445,6 +445,40 @@ tailwind.config = {
           </button>
       </section>
 
+      <!-- ── Attendance Tracker View ── -->
+      <section id="view-attendance" class="hidden fade-in space-y-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-bold text-zinc-900 dark:text-white">Attendance Tracker</h3>
+            <p class="text-xs text-zinc-500 font-medium">Track your class attendance and maintain at least 75%.</p>
+          </div>
+          <button onclick="resetAttendance()" class="px-3.5 py-1.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>Reset All
+          </button>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-4" id="attendance-list"></div>
+      </section>
+
+      <!-- ── Discussion Board View ── -->
+      <section id="view-forum" class="hidden fade-in space-y-6">
+        <div class="card p-5 space-y-4">
+          <h3 class="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+            <i data-lucide="messages-square" class="w-4 h-4 text-violet-500"></i>Create New Post
+          </h3>
+          <div class="space-y-3">
+            <textarea id="forum-post-input" rows="3" placeholder="Share a question, study tip, or updates..." class="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all resize-none"></textarea>
+            <div class="flex justify-end">
+              <button onclick="createForumPost()" class="px-5 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl font-bold text-xs shadow-lg shadow-violet-600/20 transition-all flex items-center gap-2">
+                <i data-lucide="send" class="w-3.5 h-3.5"></i>Post to Board
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="space-y-4" id="forum-posts-container"></div>
+      </section>
+
       <!-- ── Dynamic Custom Feature Section ── -->
       <section id="view-dynamic-feature" class="hidden fade-in space-y-6">
         <div class="card p-6 min-h-[50vh]" id="dynamic-feature-content"></div>
@@ -586,7 +620,9 @@ const API = (window.location.hostname === 'localhost' || window.location.hostnam
     timetable:     ['Timetable &#128197;', 'Your weekly class schedule'],
     syllabus:      ['Syllabus &#128218;', 'Course topics and content'],
     papers:        ['Previous Papers &#128196;', 'Past exam papers for practice'],
-    focus:         ['Focus Zone &#9201;', 'Pomodoro timer for distraction-free study']
+    focus:         ['Focus Zone &#9201;', 'Pomodoro timer for distraction-free study'],
+    forum:         ['Discussion Board &#128172;', 'Connect and learn with other students'],
+    attendance:    ['Attendance Tracker &#9989;', 'Track your lectures and maintain 75% attendance']
   };
 
   function goto(view, customData = null) {
@@ -644,7 +680,9 @@ const API = (window.location.hostname === 'localhost' || window.location.hostnam
       assignments:   loadAssignments,
       timetable:     loadTimetable,
       syllabus:      loadSyllabus,
-      papers:        () => loadPapersPaginated(true)
+      papers:        () => loadPapersPaginated(true),
+      forum:         loadForum,
+      attendance:    loadAttendance
     };
     if (map[v]) { await map[v](); loaded[v] = true; }
   }
@@ -1110,6 +1148,202 @@ const API = (window.location.hostname === 'localhost' || window.location.hostnam
   function closePdfModal(e) { if (e.target === document.getElementById('pdf-modal')) closePdfModalDirect(); }
   function closePdfModalDirect() { document.getElementById('pdf-modal').style.display = 'none'; document.getElementById('pdf-iframe').src = ''; }
 
+  // ─── DISCUSSION BOARD ──────────────────────────────────────────────────────
+  async function loadForum() {
+    const container = document.getElementById('forum-posts-container');
+    if (!container) return;
+    container.innerHTML = '<div class="flex justify-center py-8"><div class="w-8 h-8 rounded-full border-4 border-violet-500 border-t-transparent animate-spin"></div></div>';
+    
+    try {
+      const posts = await apiFetch('/forum');
+      if (!posts.length) {
+        container.innerHTML = `<div class="card p-8 text-center text-zinc-400 text-sm flex flex-col items-center gap-2"><i data-lucide="messages-square" class="w-8 h-8 text-zinc-500"></i>No discussions yet. Start the conversation!</div>`;
+        lucide.createIcons();
+        return;
+      }
+      
+      container.innerHTML = posts.map(p => {
+        const date = new Date(p.createdAt);
+        return `
+          <div class="card p-5 space-y-2 fade-in">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shrink-0">
+                ${(p.username || 'A')[0].toUpperCase()}
+              </div>
+              <div class="min-w-0 flex-1">
+                <p class="text-sm font-semibold text-zinc-900 dark:text-white truncate">${p.username}</p>
+                <p class="text-[10px] text-zinc-400">${date.toLocaleString()}</p>
+              </div>
+            </div>
+            <p class="text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed whitespace-pre-wrap pl-12">${p.content}</p>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    } catch (err) {
+      container.innerHTML = `<p class="text-xs text-red-500 text-center">Failed to load forum posts: ${err.message}</p>`;
+    }
+  }
+
+  async function createForumPost() {
+    const input = document.getElementById('forum-post-input');
+    if (!input) return;
+    const content = input.value.trim();
+    if (!content) {
+      showAlert('Post content cannot be empty.');
+      return;
+    }
+    
+    try {
+      const r = await fetch(API + '/forum', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: 'Bearer ' + token } : {})
+        },
+        body: JSON.stringify({ content })
+      });
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.msg || 'Failed to post');
+      
+      input.value = '';
+      pushNotif('&#10003; Post published!', 'success');
+      await loadForum();
+    } catch (err) {
+      showAlert(err.message);
+    }
+  }
+
+  // ─── ATTENDANCE TRACKER ────────────────────────────────────────────────────
+  const ATTENDANCE_KEY = 'student_attendance_data';
+  
+  function getAttendanceData() {
+    let data = {};
+    try {
+      data = JSON.parse(localStorage.getItem(ATTENDANCE_KEY)) || {};
+    } catch (e) {
+      data = {};
+    }
+    
+    // Default subjects
+    const defaults = ["Mathematics", "Object Oriented Programming (OOPs)", "Database Management Systems (DBMS)", "Computer Networks", "Web Technologies"];
+    
+    defaults.forEach(sub => {
+      if (!data[sub]) {
+        data[sub] = { present: 0, absent: 0 };
+      }
+    });
+    
+    return data;
+  }
+  
+  function loadAttendance() {
+    renderAttendance();
+  }
+  
+  function renderAttendance() {
+    const container = document.getElementById('attendance-list');
+    if (!container) return;
+    
+    const data = getAttendanceData();
+    const subjects = Object.keys(data);
+    
+    if (!subjects.length) {
+      container.innerHTML = `<div class="card p-8 text-center text-zinc-400 text-sm">No subjects found.</div>`;
+      return;
+    }
+    
+    container.innerHTML = subjects.map(sub => {
+      const { present, absent } = data[sub];
+      const total = present + absent;
+      const pct = total > 0 ? Math.round((present / total) * 100) : 0;
+      
+      let warningMsg = '';
+      let statusClass = 'text-emerald-500 dark:text-emerald-400 font-semibold';
+      let progressColor = 'stroke-emerald-500';
+      
+      if (total === 0) {
+        warningMsg = 'No classes logged yet.';
+        statusClass = 'text-zinc-400';
+        progressColor = 'stroke-zinc-300 dark:stroke-zinc-700';
+      } else if (pct < 75) {
+        statusClass = 'text-red-500 dark:text-red-400 font-semibold';
+        progressColor = 'stroke-red-500';
+        
+        const needed = 3 * absent - present;
+        if (needed > 0) {
+          warningMsg = `Attend next <strong>${needed}</strong> class${needed > 1 ? 'es' : ''} to reach 75%`;
+        }
+      } else {
+        const missable = Math.floor(present / 0.75 - total);
+        if (missable > 0) {
+          warningMsg = `You can miss next <strong>${missable}</strong> class${missable > 1 ? 'es' : ''}`;
+        } else {
+          warningMsg = 'Attendance is safe. Don\'t miss the next class.';
+        }
+      }
+      
+      const circumference = 2 * Math.PI * 28;
+      const offset = circumference - (pct / 100) * circumference;
+      
+      return `
+        <div class="card p-5 flex items-center justify-between gap-4 fade-in">
+          <div class="flex-1 min-w-0 space-y-1">
+            <h4 class="font-bold text-sm text-zinc-900 dark:text-white truncate">${sub}</h4>
+            <p class="text-xs text-zinc-400">Classes: ${present} Present / ${total} Total</p>
+            <p class="text-[10px] text-zinc-500 ${statusClass}">${warningMsg}</p>
+          </div>
+          
+          <div class="flex items-center gap-4 shrink-0">
+            <div class="relative w-16 h-16 flex items-center justify-center shrink-0">
+              <svg class="w-full h-full transform -rotate-90">
+                <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="4.5" class="text-zinc-150 dark:text-zinc-800" fill="transparent" />
+                <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="4.5" class="${progressColor} transition-all duration-500" fill="transparent" stroke-dasharray="${circumference}" stroke-dashoffset="${offset}" />
+              </svg>
+              <span class="absolute text-xs font-bold text-zinc-950 dark:text-white">${pct}%</span>
+            </div>
+            
+            <div class="flex flex-col gap-1.5">
+              <button onclick="logAttendance('${sub.replace(/'/g, "\\'")}', true)" class="px-2.5 py-1 bg-emerald-500/10 dark:bg-emerald-500/20 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1">
+                <i data-lucide="plus" class="w-3 h-3"></i>Present
+              </button>
+              <button onclick="logAttendance('${sub.replace(/'/g, "\\'")}', false)" class="px-2.5 py-1 bg-red-500/10 dark:bg-red-500/20 hover:bg-red-500/20 text-red-600 dark:text-red-400 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1">
+                <i data-lucide="minus" class="w-3 h-3"></i>Absent
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    lucide.createIcons();
+  }
+  
+  window.logAttendance = function(subject, isPresent) {
+    const data = getAttendanceData();
+    if (!data[subject]) data[subject] = { present: 0, absent: 0 };
+    
+    if (isPresent) {
+      data[subject].present += 1;
+    } else {
+      data[subject].absent += 1;
+    }
+    
+    localStorage.setItem(ATTENDANCE_KEY, JSON.stringify(data));
+    pushNotif(`Logged ${isPresent ? 'Present' : 'Absent'} for ${subject}`, 'success');
+    renderAttendance();
+  };
+  
+  window.resetAttendance = function() {
+    if (!confirm('Are you sure you want to reset attendance data?')) return;
+    const data = getAttendanceData();
+    Object.keys(data).forEach(sub => {
+      data[sub] = { present: 0, absent: 0 };
+    });
+    localStorage.setItem(ATTENDANCE_KEY, JSON.stringify(data));
+    pushNotif('Attendance data reset.', 'success');
+    renderAttendance();
+  };
+
   // ─── STUDY PLANNER ────────────────────────────────────────────────────────
   let countdownInterval;
   function initPlanner() {
@@ -1411,6 +1645,8 @@ const API = (window.location.hostname === 'localhost' || window.location.hostnam
     syllabus:     { nav: 'nav-syllabus',      section: 'view-syllabus' },
     papers:       { nav: 'nav-papers',        section: 'view-papers' },
     assignments:  { nav: 'nav-assignments',   section: 'view-assignments' },
+    forum:        { nav: 'nav-forum',         section: 'view-forum' },
+    attendance:   { nav: 'nav-attendance',    section: 'view-attendance' },
     events:       { extras: ['home-events-section'] },
     quickLinks:   { extras: ['home-quicklinks-section'] },
     banners:      { extras: ['home-banners-section'] }
@@ -1453,7 +1689,9 @@ const API = (window.location.hostname === 'localhost' || window.location.hostnam
         { key:'timetable',     title:'Timetable',       icon:'calendar-days',  type:'builtin', enabled:true },
         { key:'syllabus',      title:'Syllabus',        icon:'book-open',      type:'builtin', enabled:true },
         { key:'papers',        title:'Previous Papers', icon:'file-text',      type:'builtin', enabled:true },
-        { key:'focus',         title:'Focus Zone',      icon:'timer',          type:'builtin', enabled:true }
+        { key:'focus',         title:'Focus Zone',      icon:'timer',          type:'builtin', enabled:true },
+        { key:'forum',         title:'Discussion Board',icon:'messages-square',type:'builtin', enabled:true },
+        { key:'attendance',    title:'Attendance',      icon:'calendar-check-2',type:'builtin', enabled:true }
       ];
       renderSidebarNav(defaults);
     }

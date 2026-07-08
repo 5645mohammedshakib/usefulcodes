@@ -37,7 +37,7 @@
   <script>
 if('serviceWorker' in navigator){
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=17').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=18').then(reg => {
           reg.update();
         }).catch(err => console.error('SW registration failed:', err));
       });
@@ -256,6 +256,10 @@ tailwind.config = {
             <button onclick="navigateTo('bulktools')" id="nav-bulktools" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
               <i data-lucide="database" class="w-5 h-5"></i>
               <span>Bulk Tools</span>
+            </button>
+            <button onclick="navigateTo('forum')" id="nav-forum" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
+              <i data-lucide="messages-square" class="w-5 h-5"></i>
+              <span>Forum Moderation</span>
             </button>
             <button onclick="navigateTo('appsettings')" id="nav-appsettings" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50">
               <i data-lucide="settings-2" class="w-5 h-5"></i>
@@ -1262,6 +1266,31 @@ tailwind.config = {
             </div>
           </div>
 
+          <!-- ═══════════ FORUM MODERATION ═══════════ -->
+          <div id="view-forum" class="view-section hidden space-y-6">
+            <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm">
+              <h3 class="text-base font-bold font-display text-zinc-950 dark:text-zinc-50 mb-4 flex items-center gap-2">
+                <i data-lucide="messages-square" class="w-5 h-5 text-purple-500"></i>Forum Moderation
+              </h3>
+              <p class="text-xs text-zinc-500 mb-6">Monitor and delete community forum posts.</p>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-zinc-500 dark:text-zinc-400">
+                  <thead class="text-xs uppercase bg-zinc-50 dark:bg-[#09090b] text-zinc-400 border-b border-zinc-200 dark:border-zinc-800">
+                    <tr>
+                      <th class="px-6 py-3 font-semibold">User</th>
+                      <th class="px-6 py-3 font-semibold">Content</th>
+                      <th class="px-6 py-3 font-semibold">Date</th>
+                      <th class="px-6 py-3 font-semibold text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="forum-moderation-list" class="divide-y divide-zinc-200 dark:divide-zinc-800">
+                    <!-- Loaded dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
         </main>
       </div>
       <div id="sidebar-overlay" onclick="toggleMobileSidebar(false)" class="hidden md:hidden fixed inset-0 z-40 bg-zinc-950/50 backdrop-blur-xs"></div>
@@ -1417,7 +1446,8 @@ tailwind.config = {
           featurecontrol: 'Feature Control Panel',
           notifications: 'Notifications',
           bulktools: 'Bulk Tools',
-          appsettings: 'App Settings'
+          appsettings: 'App Settings',
+          forum: 'Forum Moderation'
         };
         document.getElementById('view-title').innerText = titles[viewName] || 'Admin Dashboard';
         activeView = viewName;
@@ -1606,6 +1636,7 @@ tailwind.config = {
           case 'featurecontrol': loadFeatureControl(); break;
           case 'notifications': loadNotificationsList(); break;
           case 'appsettings':   loadAppSettings(); break;
+          case 'forum':         loadForumModerationList(); break;
           case 'bulktools':     break;
         }
       }
@@ -1746,6 +1777,59 @@ tailwind.config = {
           `;
         }).join('');
       }
+
+      // ==============================================
+      // FORUM MODERATION LOGIC
+      // ==============================================
+      async function loadForumModerationList() {
+        const tbody = document.getElementById('forum-moderation-list');
+        if (!tbody) return;
+        tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center">Loading posts...</td></tr>`;
+        
+        try {
+          const posts = await apiRequest('/forum');
+          if (!posts || !posts.length) {
+            tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-zinc-500">No forum posts found.</td></tr>`;
+            return;
+          }
+          
+          tbody.innerHTML = posts.map(p => {
+            const date = new Date(p.createdAt);
+            return `
+              <tr class="bg-white dark:bg-[#0c0c0f] border-b border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-[#16161a] transition-all">
+                <td class="px-6 py-4 font-medium text-zinc-950 dark:text-zinc-150">
+                  <div class="flex flex-col">
+                    <span>${p.username || 'Anonymous'}</span>
+                    <span class="text-[10px] text-zinc-500">${p.email || ''}</span>
+                  </div>
+                </td>
+                <td class="px-6 py-4 text-xs text-zinc-700 dark:text-zinc-300 max-w-md truncate">${p.content}</td>
+                <td class="px-6 py-4 text-xs text-zinc-500">${date.toLocaleString()}</td>
+                <td class="px-6 py-4 text-right">
+                  <button onclick="confirmDeleteForumPost('${p._id}')" class="text-red-500 hover:text-red-700 font-semibold text-xs flex items-center gap-1 ml-auto">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>Delete
+                  </button>
+                </td>
+              </tr>
+            `;
+          }).join('');
+          lucide.createIcons();
+        } catch (err) {
+          tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-red-500">Failed to load posts: ${err.message}</td></tr>`;
+        }
+      }
+
+      window.confirmDeleteForumPost = function(postId) {
+        openConfirmModal('Are you sure you want to delete this forum post? This action is irreversible.', async () => {
+          try {
+            await apiRequest(`/forum/${postId}`, 'DELETE');
+            showActionAlert('success', 'Forum post deleted successfully!');
+            loadForumModerationList();
+          } catch (err) {
+            showActionAlert('error', 'Failed to delete post.');
+          }
+        });
+      };
 
       // ==============================================
       // 2. STUDENTS VIEW LOGIC

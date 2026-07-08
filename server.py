@@ -62,6 +62,7 @@ semesters_col     = db["semesters"]
 quick_links_col   = db["quick_links"]
 banners_col       = db["banners"]
 notifications_col = db["notifications"]
+forum_col         = db["forum"]
 
 # ─── Indexes ───────────────────────────────────────────────────────────────────
 try:
@@ -94,6 +95,7 @@ try:
     clicks_col.create_index([("clicks", DESCENDING)])
     activity_logs.create_index("timestamp")
     error_logs.create_index("timestamp")
+    forum_col.create_index("createdAt")
 except Exception as e:
     print("Warning: Index creation issue:", e)
 
@@ -1256,6 +1258,59 @@ def get_full_stats():
         "maxStorage": 100 * 1024 * 1024, "studentGrowth": growth_data,
     })
 
+
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  FORUM (DISCUSSION BOARD)  /api/forum
+# ══════════════════════════════════════════════════════════════════════════════
+@app.get("/api/forum")
+def get_forum_posts():
+    limit  = int(request.args.get("limit", 100))
+    skip   = int(request.args.get("skip", 0))
+    cursor = forum_col.find({}).sort("createdAt", DESCENDING).skip(skip).limit(limit)
+    return jsonify([serialize(p) for p in cursor])
+
+@app.post("/api/forum")
+@auth_required
+def create_forum_post():
+    data = request.get_json(force=True)
+    content = data.get("content", "").strip()
+    if not content:
+        return jsonify({"msg": "Content is required"}), 400
+    
+    # Get user details
+    user_id = request.user_id
+    user_doc = users.find_one({"_id": ObjectId(user_id)})
+    if not user_doc:
+        return jsonify({"msg": "User not found"}), 404
+        
+    username = user_doc.get("username") or user_doc.get("fullName") or "Anonymous"
+    email = user_doc.get("email") or ""
+    
+    post = {
+        "content": content,
+        "userId": user_id,
+        "username": username,
+        "email": email,
+        "createdAt": datetime.datetime.utcnow()
+    }
+    
+    forum_col.insert_one(post)
+    return jsonify({"status": "ok", "post": serialize(post)})
+
+@app.delete("/api/forum/<post_id>")
+@auth_required
+def delete_forum_post(post_id):
+    if not is_admin(request.user_id):
+        return jsonify({"msg": "Admin required"}), 403
+        
+    res = forum_col.delete_one({"_id": ObjectId(post_id)})
+    if res.deleted_count == 0:
+        return jsonify({"msg": "Post not found"}), 404
+        
+    log_admin_action("DELETE_FORUM_POST", f"Deleted post {post_id}")
+    return jsonify({"status": "ok", "msg": "Post deleted successfully!"})
 
 
 # ─── Error Handler ─────────────────────────────────────────────────────────────
