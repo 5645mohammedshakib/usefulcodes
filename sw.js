@@ -1,5 +1,5 @@
-const CACHE='student-hub-v5';
-const STATIC=['./student.html','./index.html','./icon-192.png','./icon-512.png'];
+const CACHE='student-hub-v6';
+const STATIC=['./student.html','./index.html','./icon-192.png','./icon-512.png','./student-manifest.json','./admin-manifest.json'];
 
 self.addEventListener('install',e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(STATIC)));
@@ -12,18 +12,18 @@ self.addEventListener('activate',e=>{
 });
 
 self.addEventListener('fetch',e=>{
-  // Only handle GET requests for static assets.
-  // Never intercept POST/PUT/DELETE or API calls!
   if (e.request.method !== 'GET' || e.request.url.includes('onrender.com') || e.request.url.includes('/api/')) {
-    return; // Let the browser handle it naturally from network
+    return;
   }
-  
   e.respondWith(
-    caches.match(e.request).then(cachedResponse => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      return fetch(e.request);
+    caches.match(e.request).then(cached=>{
+      if (cached) return cached;
+      return fetch(e.request).then(res=>{
+        if(!res || res.status!==200 || res.type!=='basic') return res;
+        const clone=res.clone();
+        caches.open(CACHE).then(c=>c.put(e.request,clone));
+        return res;
+      });
     })
   );
 });

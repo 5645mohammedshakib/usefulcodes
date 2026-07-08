@@ -1,20 +1,18 @@
 """
 Student Hub - Python Flask Backend Server
 Run: python server.py
-API runs at: http://localhost:5000
+API: http://localhost:5000
 """
 
-import os
-import uuid
-import datetime
+import os, uuid, datetime, gzip, json
 from functools import wraps
+from io import BytesIO
 
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, Response, after_this_request
 from flask_cors import CORS
-from pymongo import MongoClient
+from pymongo import MongoClient, DESCENDING, ASCENDING
 from bson import ObjectId
-import bcrypt
-import jwt
+import bcrypt, jwt
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -23,15 +21,21 @@ app = Flask(__name__)
 CORS(app)
 
 # ─── Config ────────────────────────────────────────────────────────────────────
-MONGO_URI   = os.getenv("MONGO_URI",   "mongodb://127.0.0.1:27017/student_hub")
-JWT_SECRET  = os.getenv("JWT_SECRET",  "student_hub_admin_supersecretkey_2026!@#")
-PORT        = int(os.getenv("PORT",    5000))
+MONGO_URI   = os.getenv("MONGO_URI",  "mongodb://127.0.0.1:27017/student_hub")
+JWT_SECRET  = os.getenv("JWT_SECRET", "student_hub_admin_supersecretkey_2026!@#")
+PORT        = int(os.getenv("PORT",   5000))
 UPLOAD_DIR  = os.path.join(os.path.dirname(__file__), "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-# ─── DB ────────────────────────────────────────────────────────────────────────
-client = MongoClient(MONGO_URI)
-db     = client.get_database()
+# ─── DB Setup ──────────────────────────────────────────────────────────────────
+client = MongoClient(
+    MONGO_URI,
+    maxPoolSize=5,          # keep pool small for free tier
+    serverSelectionTimeoutMS=5000,
+    connectTimeoutMS=10000,
+    socketTimeoutMS=20000,
+)
+db = client.get_database()
 
 users         = db["users"]
 notes_col     = db["notes"]
@@ -41,19 +45,58 @@ announcements = db["announcements"]
 timetables    = db["timetables"]
 syllabi       = db["syllabi"]
 categories    = db["categories"]
+clicks_col    = db["clicks"]
+activity_logs = db["activity_logs"]
+error_logs    = db["error_logs"]
+feedback_col  = db["feedback"]
 
-# ─── Health / Keep-Alive ───────────────────────────────────────────────────────
-@app.route('/')
-def root():
-    return jsonify({"status": "ok", "app": "Student Hub API", "version": "1.0"})
+# ─── Indexes ───────────────────────────────────────────────────────────────────
+try:
+    users.create_index("email",    unique=True, sparse=True)
+    users.create_index("username", unique=True, sparse=True)
+    notes_col.create_index([("title","text"),("description","text"),("category","text")])
+    notes_col.create_index("createdAt")
+    notes_col.create_index("category")
+    assignments.create_index("createdAt")
+    papers_col.create_index([("title","text"),("subject","text")])
+    papers_col.create_index("createdAt")
+    papers_col.create_index("subject")
+    announcements.create_index("createdAt")
+    timetables.create_index("createdAt")
+    syllabi.create_index("createdAt")
+    clicks_col.create_index("resourceId", unique=True)
+    clicks_col.create_index([("clicks", DESCENDING)])
+    activity_logs.create_index("timestamp")
+    error_logs.create_index("timestamp")
+except Exception as e:
+    print("Warning: Index creation issue:", e)
 
-@app.route('/api/health')
-def health():
-    return jsonify({"status": "ok", "message": "Server is alive!"})
+# ─── GZIP Compression ──────────────────────────────────────────────────────────
+def gzip_response(response):
+    if (response.status_code < 200 or response.status_code >= 300
+            or response.direct_passthrough
+            or 'gzip' not in request.headers.get('Accept-Encoding', '')):
+        return response
+    data = response.get_data()
+    if len(data) < 500:
+        return response
+    buf = BytesIO()
+    with gzip.GzipFile(mode='wb', fileobj=buf, compresslevel=6) as f:
+        f.write(data)
+    response.set_data(buf.getvalue())
+    response.headers['Content-Encoding'] = 'gzip'
+    response.headers['Content-Length']   = len(response.get_data())
+    return response
+
+app.after_request(gzip_response)
+
+# ─── Cache Control ─────────────────────────────────────────────────────────────
+def add_cache_headers(response, seconds=60):
+    response.headers['Cache-Control'] = f'public, max-age={seconds}'
+    return response
 
 # ─── Helpers ───────────────────────────────────────────────────────────────────
 def serialize(doc):
-    """Convert MongoDB document to JSON-serialisable dict."""
     if doc is None:
         return None
     doc = dict(doc)
@@ -73,7 +116,6 @@ def make_token(user_id: str) -> str:
     return jwt.encode(payload, JWT_SECRET, algorithm="HS256")
 
 def auth_required(f):
-    """JWT auth decorator — sets request.user_id."""
     @wraps(f)
     def decorated(*args, **kwargs):
         header = request.headers.get("Authorization") or request.headers.get("x-auth-token")
@@ -90,8 +132,21 @@ def auth_required(f):
         return f(*args, **kwargs)
     return decorated
 
+def is_admin(user_id: str) -> bool:
+    u = users.find_one({"_id": ObjectId(user_id)})
+    return u is not None and u.get("role") == "admin"
+
+def log_admin_action(action, details):
+    try:
+        activity_logs.insert_one({
+            "action": action, "details": details,
+            "adminId": request.user_id,
+            "timestamp": datetime.datetime.utcnow()
+        })
+    except Exception:
+        pass
+
 def save_file(file_obj) -> str | None:
-    """Save uploaded file, return relative URL."""
     if not file_obj or not file_obj.filename:
         return None
     ext      = os.path.splitext(file_obj.filename)[1]
@@ -102,12 +157,15 @@ def save_file(file_obj) -> str | None:
 # ─── Static uploads ────────────────────────────────────────────────────────────
 @app.route("/uploads/<path:filename>")
 def serve_upload(filename):
-    return send_from_directory(UPLOAD_DIR, filename)
+    resp = send_from_directory(UPLOAD_DIR, filename)
+    resp.headers['Cache-Control'] = 'public, max-age=86400'
+    return resp
 
-# ─── Root ──────────────────────────────────────────────────────────────────────
+# ─── Health / Keep-Alive ───────────────────────────────────────────────────────
 @app.get("/")
-def index():
-    return jsonify({"msg": "Student Hub Python Backend Running ✅"})
+@app.get("/api/health")
+def health():
+    return jsonify({"status": "ok", "app": "Student Hub API", "version": "2.0", "time": datetime.datetime.utcnow().isoformat()})
 
 # ══════════════════════════════════════════════════════════════════════════════
 #  AUTH  /api/auth
@@ -117,46 +175,32 @@ def register():
     data     = request.get_json(force=True)
     name     = data.get("name", "").strip()
     email    = data.get("email", "").strip().lower()
-    username = data.get("username", email).strip()   # support plain username too
+    username = data.get("username", email).strip()
     password = data.get("password", "")
 
     if not email or not password:
         return jsonify({"errors": [{"msg": "Email and password required"}]}), 400
-
+    if len(password) < 6:
+        return jsonify({"errors": [{"msg": "Password must be at least 6 characters"}]}), 400
     if users.find_one({"$or": [{"email": email}, {"username": username}]}):
         return jsonify({"errors": [{"msg": "User already exists"}]}), 400
 
     hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
-    uid    = users.insert_one({
-        "name":      name or username,
-        "email":     email,
-        "username":  username,
-        "password":  hashed,
-        "role":      "user",
+    uid = users.insert_one({
+        "name": name or username, "email": email, "username": username,
+        "password": hashed, "role": "user",
         "createdAt": datetime.datetime.utcnow(),
     }).inserted_id
-
     return jsonify({"token": make_token(str(uid))})
 
 @app.post("/api/auth/login")
 def login():
-    data     = request.get_json(force=True)
-    # Accept either email or username in the "email" field
-    email_or_username = (data.get("email") or data.get("username") or "").strip().lower()
-    password = data.get("password", "")
-
-    user = users.find_one({
-        "$or": [
-            {"email":    email_or_username},
-            {"username": email_or_username},
-        ]
-    })
-    if not user:
+    data = request.get_json(force=True)
+    eid  = (data.get("email") or data.get("username") or "").strip().lower()
+    pwd  = data.get("password", "")
+    user = users.find_one({"$or": [{"email": eid}, {"username": eid}]})
+    if not user or not bcrypt.checkpw(pwd.encode(), user["password"].encode()):
         return jsonify({"errors": [{"msg": "Invalid credentials"}]}), 400
-
-    if not bcrypt.checkpw(password.encode(), user["password"].encode()):
-        return jsonify({"errors": [{"msg": "Invalid credentials"}]}), 400
-
     return jsonify({"token": make_token(str(user["_id"]))})
 
 @app.get("/api/auth/me")
@@ -173,15 +217,16 @@ def get_me():
 @app.get("/api/users")
 @auth_required
 def get_users():
-    all_users = [serialize(u) for u in users.find({}, {"password": 0})]
+    if not is_admin(request.user_id):
+        return jsonify({"msg": "Admin required"}), 403
+    all_users = [serialize(u) for u in users.find({}, {"password": 0}).sort("createdAt", DESCENDING)]
     return jsonify(all_users)
 
 @app.delete("/api/users/<user_id>")
 @auth_required
 def delete_user(user_id):
-    requester = users.find_one({"_id": ObjectId(request.user_id)})
-    if not requester or requester.get("role") != "admin":
-        return jsonify({"msg": "Admin privileges required"}), 403
+    if not is_admin(request.user_id):
+        return jsonify({"msg": "Admin required"}), 403
     users.delete_one({"_id": ObjectId(user_id)})
     return jsonify({"msg": "User deleted"})
 
@@ -190,7 +235,18 @@ def delete_user(user_id):
 # ══════════════════════════════════════════════════════════════════════════════
 @app.get("/api/notes")
 def get_notes():
-    return jsonify([serialize(n) for n in notes_col.find().sort("createdAt", -1)])
+    limit    = int(request.args.get("limit", 50))
+    skip     = int(request.args.get("skip", 0))
+    category = request.args.get("category", "")
+    q        = request.args.get("q", "").strip()
+    query    = {}
+    if category:
+        query["category"] = category
+    if q:
+        query["$text"] = {"$search": q}
+    cursor = notes_col.find(query).sort("createdAt", DESCENDING).skip(skip).limit(limit)
+    resp = jsonify([serialize(n) for n in cursor])
+    return add_cache_headers(resp, 30)
 
 @app.post("/api/notes")
 @auth_required
@@ -200,38 +256,42 @@ def create_note():
     category    = request.form.get("category", "")
     file_url    = save_file(request.files.get("file"))
     doc = {
-        "title":       title,
-        "description": description,
-        "category":    category,
-        "fileUrl":     file_url,
-        "createdBy":   request.user_id,
-        "createdAt":   datetime.datetime.utcnow(),
+        "title": title, "description": description, "category": category,
+        "fileUrl": file_url, "createdBy": request.user_id,
+        "createdAt": datetime.datetime.utcnow(), "downloads": 0,
     }
     ins = notes_col.insert_one(doc)
     doc["_id"] = str(ins.inserted_id)
     doc["createdAt"] = doc["createdAt"].isoformat()
+    log_admin_action("CREATE_NOTE", f"Created note: {title}")
     return jsonify(doc), 201
 
-@app.delete("/api/notes/<note_id>")
+@app.delete("/api/notes/<nid>")
 @auth_required
-def delete_note(note_id):
-    notes_col.delete_one({"_id": ObjectId(note_id)})
+def delete_note(nid):
+    notes_col.delete_one({"_id": ObjectId(nid)})
+    log_admin_action("DELETE_NOTE", f"Deleted note: {nid}")
     return jsonify({"msg": "Note deleted"})
 
-@app.put("/api/notes/<note_id>")
+@app.put("/api/notes/<nid>")
 @auth_required
-def update_note(note_id):
+def update_note(nid):
     data = request.get_json(force=True)
-    notes_col.update_one({"_id": ObjectId(note_id)}, {"$set": data})
-    note = notes_col.find_one({"_id": ObjectId(note_id)})
-    return jsonify(serialize(note))
+    notes_col.update_one({"_id": ObjectId(nid)}, {"$set": data})
+    doc = notes_col.find_one({"_id": ObjectId(nid)})
+    log_admin_action("UPDATE_NOTE", f"Updated note: {nid}")
+    return jsonify(serialize(doc))
 
 # ══════════════════════════════════════════════════════════════════════════════
 #  ASSIGNMENTS  /api/assignments
 # ══════════════════════════════════════════════════════════════════════════════
 @app.get("/api/assignments")
 def get_assignments():
-    return jsonify([serialize(a) for a in assignments.find().sort("createdAt", -1)])
+    limit  = int(request.args.get("limit", 50))
+    skip   = int(request.args.get("skip", 0))
+    cursor = assignments.find({}).sort("createdAt", DESCENDING).skip(skip).limit(limit)
+    resp = jsonify([serialize(a) for a in cursor])
+    return add_cache_headers(resp, 30)
 
 @app.post("/api/assignments")
 @auth_required
@@ -241,22 +301,21 @@ def create_assignment():
     due_date    = request.form.get("dueDate", "")
     file_url    = save_file(request.files.get("file"))
     doc = {
-        "title":       title,
-        "description": description,
-        "dueDate":     due_date,
-        "fileUrl":     file_url,
-        "createdBy":   request.user_id,
-        "createdAt":   datetime.datetime.utcnow(),
+        "title": title, "description": description, "dueDate": due_date,
+        "fileUrl": file_url, "createdBy": request.user_id,
+        "createdAt": datetime.datetime.utcnow(),
     }
     ins = assignments.insert_one(doc)
     doc["_id"] = str(ins.inserted_id)
     doc["createdAt"] = doc["createdAt"].isoformat()
+    log_admin_action("CREATE_ASSIGNMENT", f"Created assignment: {title}")
     return jsonify(doc), 201
 
 @app.delete("/api/assignments/<aid>")
 @auth_required
 def delete_assignment(aid):
     assignments.delete_one({"_id": ObjectId(aid)})
+    log_admin_action("DELETE_ASSIGNMENT", f"Deleted: {aid}")
     return jsonify({"msg": "Assignment deleted"})
 
 @app.put("/api/assignments/<aid>")
@@ -265,6 +324,7 @@ def update_assignment(aid):
     data = request.get_json(force=True)
     assignments.update_one({"_id": ObjectId(aid)}, {"$set": data})
     doc = assignments.find_one({"_id": ObjectId(aid)})
+    log_admin_action("UPDATE_ASSIGNMENT", f"Updated: {aid}")
     return jsonify(serialize(doc))
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -272,7 +332,18 @@ def update_assignment(aid):
 # ══════════════════════════════════════════════════════════════════════════════
 @app.get("/api/papers")
 def get_papers():
-    return jsonify([serialize(p) for p in papers_col.find().sort("createdAt", -1)])
+    limit   = int(request.args.get("limit", 50))
+    skip    = int(request.args.get("skip", 0))
+    subject = request.args.get("subject", "")
+    q       = request.args.get("q", "").strip()
+    query   = {}
+    if subject:
+        query["subject"] = subject
+    if q:
+        query["$text"] = {"$search": q}
+    cursor = papers_col.find(query).sort("createdAt", DESCENDING).skip(skip).limit(limit)
+    resp = jsonify([serialize(p) for p in cursor])
+    return add_cache_headers(resp, 30)
 
 @app.post("/api/papers")
 @auth_required
@@ -282,22 +353,21 @@ def create_paper():
     year     = request.form.get("year", "")
     file_url = save_file(request.files.get("file"))
     doc = {
-        "title":     title,
-        "subject":   subject,
-        "year":      year,
-        "fileUrl":   file_url,
-        "createdBy": request.user_id,
+        "title": title, "subject": subject, "year": year,
+        "fileUrl": file_url, "createdBy": request.user_id,
         "createdAt": datetime.datetime.utcnow(),
     }
     ins = papers_col.insert_one(doc)
     doc["_id"] = str(ins.inserted_id)
     doc["createdAt"] = doc["createdAt"].isoformat()
+    log_admin_action("CREATE_PAPER", f"Created paper: {title}")
     return jsonify(doc), 201
 
 @app.delete("/api/papers/<pid>")
 @auth_required
 def delete_paper(pid):
     papers_col.delete_one({"_id": ObjectId(pid)})
+    log_admin_action("DELETE_PAPER", f"Deleted: {pid}")
     return jsonify({"msg": "Paper deleted"})
 
 @app.put("/api/papers/<pid>")
@@ -306,6 +376,7 @@ def update_paper(pid):
     data = request.get_json(force=True)
     papers_col.update_one({"_id": ObjectId(pid)}, {"$set": data})
     doc = papers_col.find_one({"_id": ObjectId(pid)})
+    log_admin_action("UPDATE_PAPER", f"Updated: {pid}")
     return jsonify(serialize(doc))
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -313,27 +384,31 @@ def update_paper(pid):
 # ══════════════════════════════════════════════════════════════════════════════
 @app.get("/api/announcements")
 def get_announcements():
-    return jsonify([serialize(a) for a in announcements.find().sort("createdAt", -1)])
+    limit  = int(request.args.get("limit", 50))
+    skip   = int(request.args.get("skip", 0))
+    cursor = announcements.find({}).sort("createdAt", DESCENDING).skip(skip).limit(limit)
+    resp = jsonify([serialize(a) for a in cursor])
+    return add_cache_headers(resp, 15)
 
 @app.post("/api/announcements")
 @auth_required
 def create_announcement():
     data = request.get_json(force=True)
     doc = {
-        "title":     data.get("title", ""),
-        "message":   data.get("message", ""),
-        "createdBy": request.user_id,
-        "createdAt": datetime.datetime.utcnow(),
+        "title": data.get("title", ""), "message": data.get("message", ""),
+        "createdBy": request.user_id, "createdAt": datetime.datetime.utcnow(),
     }
     ins = announcements.insert_one(doc)
     doc["_id"] = str(ins.inserted_id)
     doc["createdAt"] = doc["createdAt"].isoformat()
+    log_admin_action("CREATE_ANNOUNCEMENT", f"Posted: {data.get('title')}")
     return jsonify(doc), 201
 
 @app.delete("/api/announcements/<aid>")
 @auth_required
 def delete_announcement(aid):
     announcements.delete_one({"_id": ObjectId(aid)})
+    log_admin_action("DELETE_ANNOUNCEMENT", f"Deleted: {aid}")
     return jsonify({"msg": "Announcement deleted"})
 
 @app.put("/api/announcements/<aid>")
@@ -342,17 +417,16 @@ def update_announcement(aid):
     data = request.get_json(force=True)
     announcements.update_one({"_id": ObjectId(aid)}, {"$set": data})
     doc = announcements.find_one({"_id": ObjectId(aid)})
+    log_admin_action("UPDATE_ANNOUNCEMENT", f"Updated: {aid}")
     return jsonify(serialize(doc))
 
 # ══════════════════════════════════════════════════════════════════════════════
 #  TIMETABLE  /api/timetable
 # ══════════════════════════════════════════════════════════════════════════════
 def serialize_tt(doc):
-    """Serialize timetable doc — normalise old 'entries' field to 'slots'."""
     s = serialize(doc)
     if s is None:
         return None
-    # backward-compat: old records stored period rows under 'entries' key
     if not s.get("slots") and s.get("entries"):
         s["slots"] = s["entries"]
     if "slots" not in s:
@@ -361,83 +435,70 @@ def serialize_tt(doc):
 
 @app.get("/api/timetable")
 def get_timetables():
-    return jsonify([serialize_tt(t) for t in timetables.find().sort("createdAt", -1)])
+    resp = jsonify([serialize_tt(t) for t in timetables.find().sort("createdAt", DESCENDING)])
+    return add_cache_headers(resp, 60)
 
 @app.post("/api/timetable")
 @auth_required
 def create_timetable():
-    data = request.get_json(force=True)
-    # accept both 'slots' (new) and 'entries' (legacy) key names
+    data  = request.get_json(force=True)
     slots = data.get("slots") or data.get("entries") or []
     doc = {
-        "title":     data.get("title", ""),
-        "slots":     slots,
-        "createdBy": request.user_id,
-        "createdAt": datetime.datetime.utcnow(),
+        "title": data.get("title", ""), "slots": slots,
+        "createdBy": request.user_id, "createdAt": datetime.datetime.utcnow(),
     }
     ins = timetables.insert_one(doc)
     doc["_id"] = str(ins.inserted_id)
     doc["createdAt"] = doc["createdAt"].isoformat()
+    log_admin_action("CREATE_TIMETABLE", f"Saved timetable: {data.get('title')}")
     return jsonify(doc), 201
 
 @app.delete("/api/timetable/<tid>")
 @auth_required
 def delete_timetable(tid):
     timetables.delete_one({"_id": ObjectId(tid)})
+    log_admin_action("DELETE_TIMETABLE", f"Deleted: {tid}")
     return jsonify({"msg": "Timetable deleted"})
 
 @app.put("/api/timetable/<tid>")
 @auth_required
 def update_timetable(tid):
     data = request.get_json(force=True)
-    # normalise key if client sends 'entries'
     if "entries" in data and "slots" not in data:
         data["slots"] = data.pop("entries")
     timetables.update_one({"_id": ObjectId(tid)}, {"$set": data})
     doc = timetables.find_one({"_id": ObjectId(tid)})
+    log_admin_action("UPDATE_TIMETABLE", f"Updated: {tid}")
     return jsonify(serialize_tt(doc))
-
-@app.post("/api/timetable/migrate")
-@auth_required
-def migrate_timetables():
-    """One-shot: copy 'entries' -> 'slots' for all old records missing slots."""
-    updated = 0
-    for doc in timetables.find({"slots": {"$in": [[], None]}, "entries": {"$exists": True}}):
-        timetables.update_one(
-            {"_id": doc["_id"]},
-            {"$set": {"slots": doc.get("entries", [])}, "$unset": {"entries": ""}}
-        )
-        updated += 1
-    return jsonify({"msg": f"Migrated {updated} timetable records"})
 
 # ══════════════════════════════════════════════════════════════════════════════
 #  SYLLABUS  /api/syllabus
 # ══════════════════════════════════════════════════════════════════════════════
 @app.get("/api/syllabus")
 def get_syllabi():
-    return jsonify([serialize(s) for s in syllabi.find().sort("createdAt", -1)])
+    resp = jsonify([serialize(s) for s in syllabi.find().sort("createdAt", DESCENDING)])
+    return add_cache_headers(resp, 60)
 
 @app.post("/api/syllabus")
 @auth_required
 def create_syllabus():
     data = request.get_json(force=True)
     doc = {
-        "title":       data.get("title", ""),
-        "subject":     data.get("subject", ""),
-        "description": data.get("description", ""),
-        "topics":      data.get("topics", []),
-        "createdBy":   request.user_id,
-        "createdAt":   datetime.datetime.utcnow(),
+        "title": data.get("title", ""), "subject": data.get("subject", ""),
+        "description": data.get("description", ""), "topics": data.get("topics", []),
+        "createdBy": request.user_id, "createdAt": datetime.datetime.utcnow(),
     }
     ins = syllabi.insert_one(doc)
     doc["_id"] = str(ins.inserted_id)
     doc["createdAt"] = doc["createdAt"].isoformat()
+    log_admin_action("CREATE_SYLLABUS", f"Created syllabus: {data.get('title')}")
     return jsonify(doc), 201
 
 @app.delete("/api/syllabus/<sid>")
 @auth_required
 def delete_syllabus(sid):
     syllabi.delete_one({"_id": ObjectId(sid)})
+    log_admin_action("DELETE_SYLLABUS", f"Deleted: {sid}")
     return jsonify({"msg": "Syllabus deleted"})
 
 @app.put("/api/syllabus/<sid>")
@@ -446,6 +507,7 @@ def update_syllabus(sid):
     data = request.get_json(force=True)
     syllabi.update_one({"_id": ObjectId(sid)}, {"$set": data})
     doc = syllabi.find_one({"_id": ObjectId(sid)})
+    log_admin_action("UPDATE_SYLLABUS", f"Updated: {sid}")
     return jsonify(serialize(doc))
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -453,27 +515,28 @@ def update_syllabus(sid):
 # ══════════════════════════════════════════════════════════════════════════════
 @app.get("/api/categories")
 def get_categories():
-    return jsonify([serialize(c) for c in categories.find().sort("createdAt", -1)])
+    resp = jsonify([serialize(c) for c in categories.find().sort("createdAt", DESCENDING)])
+    return add_cache_headers(resp, 120)
 
 @app.post("/api/categories")
 @auth_required
 def create_category():
     data = request.get_json(force=True)
     doc = {
-        "name":        data.get("name", ""),
-        "description": data.get("description", ""),
-        "createdBy":   request.user_id,
-        "createdAt":   datetime.datetime.utcnow(),
+        "name": data.get("name", ""), "description": data.get("description", ""),
+        "createdBy": request.user_id, "createdAt": datetime.datetime.utcnow(),
     }
     ins = categories.insert_one(doc)
     doc["_id"] = str(ins.inserted_id)
     doc["createdAt"] = doc["createdAt"].isoformat()
+    log_admin_action("CREATE_CATEGORY", f"Created: {data.get('name')}")
     return jsonify(doc), 201
 
 @app.delete("/api/categories/<cid>")
 @auth_required
 def delete_category(cid):
     categories.delete_one({"_id": ObjectId(cid)})
+    log_admin_action("DELETE_CATEGORY", f"Deleted: {cid}")
     return jsonify({"msg": "Category deleted"})
 
 @app.put("/api/categories/<cid>")
@@ -482,6 +545,7 @@ def update_category(cid):
     data = request.get_json(force=True)
     categories.update_one({"_id": ObjectId(cid)}, {"$set": data})
     doc = categories.find_one({"_id": ObjectId(cid)})
+    log_admin_action("UPDATE_CATEGORY", f"Updated: {cid}")
     return jsonify(serialize(doc))
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -490,20 +554,240 @@ def update_category(cid):
 @app.get("/api/search")
 def search():
     q = request.args.get("q", "").strip()
-    if not q:
-        return jsonify({"notes": [], "assignments": [], "papers": []})
+    if not q or len(q) < 2:
+        return jsonify({"notes": [], "assignments": [], "papers": [], "syllabus": []})
     rx = {"$regex": q, "$options": "i"}
     results = {
-        "notes":       [serialize(n) for n in notes_col.find({"$or": [{"title": rx}, {"description": rx}]})],
-        "assignments": [serialize(a) for a in assignments.find({"$or": [{"title": rx}, {"description": rx}]})],
-        "papers":      [serialize(p) for p in papers_col.find({"$or": [{"title": rx}, {"subject": rx}]})],
+        "notes":       [serialize(n) for n in notes_col.find({"$or": [{"title": rx}, {"description": rx}, {"category": rx}]}).limit(10)],
+        "assignments": [serialize(a) for a in assignments.find({"$or": [{"title": rx}, {"description": rx}]}).limit(5)],
+        "papers":      [serialize(p) for p in papers_col.find({"$or": [{"title": rx}, {"subject": rx}]}).limit(10)],
+        "syllabus":    [serialize(s) for s in syllabi.find({"$or": [{"title": rx}, {"subject": rx}]}).limit(5)],
     }
     return jsonify(results)
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  ANALYTICS  /api/analytics
+# ══════════════════════════════════════════════════════════════════════════════
+@app.post("/api/analytics/click")
+def track_click():
+    data = request.get_json(force=True)
+    rid  = data.get("resourceId")
+    type_ = data.get("type")
+    if not rid:
+        return jsonify({"msg": "resourceId required"}), 400
+    clicks_col.update_one(
+        {"resourceId": rid},
+        {"$inc": {"clicks": 1}, "$set": {"type": type_, "updatedAt": datetime.datetime.utcnow()}},
+        upsert=True
+    )
+    # Also increment downloads counter on the doc
+    if type_ == "note":
+        notes_col.update_one({"_id": ObjectId(rid)}, {"$inc": {"downloads": 1}}, upsert=False)
+    return jsonify({"status": "ok"})
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  FEEDBACK  /api/feedback
+# ══════════════════════════════════════════════════════════════════════════════
+@app.post("/api/feedback")
+def submit_feedback():
+    data = request.get_json(force=True)
+    doc = {
+        "type": data.get("type", "feedback"),
+        "text": data.get("text", ""),
+        "userId": data.get("userId", "anonymous"),
+        "timestamp": datetime.datetime.utcnow(),
+    }
+    feedback_col.insert_one(doc)
+    return jsonify({"msg": "Feedback received. Thank you!"})
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  ADMIN  /api/admin
+# ══════════════════════════════════════════════════════════════════════════════
+@app.get("/api/admin/stats")
+@auth_required
+def get_admin_stats():
+    if not is_admin(request.user_id):
+        return jsonify({"msg": "Admin required"}), 403
+    total_students   = users.count_documents({"role": {"$ne": "admin"}})
+    total_notes      = notes_col.count_documents({})
+    total_assignments = assignments.count_documents({})
+    total_papers     = papers_col.count_documents({})
+    total_ann        = announcements.count_documents({})
+    total_timetables = timetables.count_documents({})
+    total_syllabi    = syllabi.count_documents({})
+    total_categories = categories.count_documents({})
+
+    # Student growth per month (last 6 months)
+    six_months_ago = datetime.datetime.utcnow() - datetime.timedelta(days=180)
+    pipeline = [
+        {"$match": {"createdAt": {"$gte": six_months_ago}, "role": {"$ne": "admin"}}},
+        {"$group": {"_id": {"year": {"$year": "$createdAt"}, "month": {"$month": "$createdAt"}}, "count": {"$sum": 1}}},
+        {"$sort": {"_id": 1}}
+    ]
+    growth = list(users.aggregate(pipeline))
+    growth_data = [{"month": f"{g['_id']['year']}-{g['_id']['month']:02d}", "count": g["count"]} for g in growth]
+
+    # Storage
+    total_size = sum(os.path.getsize(os.path.join(UPLOAD_DIR, f))
+                     for f in os.listdir(UPLOAD_DIR) if os.path.isfile(os.path.join(UPLOAD_DIR, f))) if os.path.exists(UPLOAD_DIR) else 0
+    file_count = len([f for f in os.listdir(UPLOAD_DIR) if os.path.isfile(os.path.join(UPLOAD_DIR, f))]) if os.path.exists(UPLOAD_DIR) else 0
+
+    return jsonify({
+        "totalStudents":    total_students,
+        "totalNotes":       total_notes,
+        "totalAssignments": total_assignments,
+        "totalPapers":      total_papers,
+        "totalAnnouncements": total_ann,
+        "totalTimetables":  total_timetables,
+        "totalSyllabi":     total_syllabi,
+        "totalCategories":  total_categories,
+        "storageUsed":      total_size,
+        "fileCount":        file_count,
+        "maxStorage":       100 * 1024 * 1024,
+        "studentGrowth":    growth_data,
+    })
+
+@app.get("/api/admin/analytics")
+@auth_required
+def get_admin_analytics():
+    if not is_admin(request.user_id):
+        return jsonify({"msg": "Admin required"}), 403
+    total_students   = users.count_documents({"role": {"$ne": "admin"}})
+    total_notes      = notes_col.count_documents({})
+    total_assignments = assignments.count_documents({})
+    total_papers     = papers_col.count_documents({})
+
+    top_clicked = list(clicks_col.find().sort("clicks", DESCENDING).limit(10))
+    popular_list = []
+    for click in top_clicked:
+        rid   = click["resourceId"]
+        ctype = click["type"]
+        clicks = click["clicks"]
+        name  = "Unknown"
+        try:
+            if ctype == "note":
+                doc = notes_col.find_one({"_id": ObjectId(rid)})
+                if doc: name = doc.get("title", "")
+            elif ctype == "paper":
+                doc = papers_col.find_one({"_id": ObjectId(rid)})
+                if doc: name = f"{doc.get('title')} ({doc.get('subject','')})"
+            elif ctype == "assignment":
+                doc = assignments.find_one({"_id": ObjectId(rid)})
+                if doc: name = doc.get("title", "")
+        except Exception:
+            pass
+        popular_list.append({"resourceId": rid, "type": ctype, "clicks": clicks, "title": name})
+
+    # Most downloaded notes
+    top_notes = list(notes_col.find({}, {"title": 1, "downloads": 1, "category": 1}).sort("downloads", DESCENDING).limit(10))
+
+    return jsonify({
+        "totalStudents":    total_students,
+        "totalNotes":       total_notes,
+        "totalAssignments": total_assignments,
+        "totalPapers":      total_papers,
+        "popular":          popular_list,
+        "topNotes":         [serialize(n) for n in top_notes],
+    })
+
+@app.get("/api/admin/storage")
+@auth_required
+def get_storage():
+    if not is_admin(request.user_id):
+        return jsonify({"msg": "Admin required"}), 403
+    total_size = 0
+    file_count = 0
+    if os.path.exists(UPLOAD_DIR):
+        for f in os.listdir(UPLOAD_DIR):
+            fp = os.path.join(UPLOAD_DIR, f)
+            if os.path.isfile(fp):
+                total_size += os.path.getsize(fp)
+                file_count += 1
+    return jsonify({"totalSize": total_size, "fileCount": file_count, "maxStorage": 100 * 1024 * 1024})
+
+@app.get("/api/admin/logs")
+@auth_required
+def get_logs():
+    if not is_admin(request.user_id):
+        return jsonify({"msg": "Admin required"}), 403
+    activities = [serialize(log) for log in activity_logs.find().sort("timestamp", DESCENDING).limit(50)]
+    admin_ids  = list(set([log["adminId"] for log in activities if log.get("adminId")]))
+    admins = {}
+    if admin_ids:
+        admins = {str(u["_id"]): u["name"] for u in users.find({"_id": {"$in": [ObjectId(aid) for aid in admin_ids]}})}
+    for log in activities:
+        log["adminName"] = admins.get(log.get("adminId"), "Admin")
+    errors = [serialize(log) for log in error_logs.find().sort("timestamp", DESCENDING).limit(50)]
+    return jsonify({"activities": activities, "errors": errors})
+
+@app.get("/api/admin/feedback")
+@auth_required
+def get_feedback():
+    if not is_admin(request.user_id):
+        return jsonify({"msg": "Admin required"}), 403
+    items = [serialize(f) for f in feedback_col.find().sort("timestamp", DESCENDING).limit(100)]
+    return jsonify(items)
+
+@app.post("/api/admin/bulk-upload")
+@auth_required
+def bulk_upload():
+    if not is_admin(request.user_id):
+        return jsonify({"msg": "Admin required"}), 403
+    data  = request.get_json(force=True)
+    type_ = data.get("type")
+    items = data.get("items", [])
+    if not type_ or not items:
+        return jsonify({"msg": "Type and items required"}), 400
+    for item in items:
+        doc = {
+            "title": item.get("title", ""), "fileUrl": item.get("fileUrl"),
+            "createdBy": request.user_id, "createdAt": datetime.datetime.utcnow()
+        }
+        if type_ == "note":
+            doc["description"] = item.get("description", "")
+            doc["category"]    = item.get("category", "")
+            doc["downloads"]   = 0
+            notes_col.insert_one(doc)
+        elif type_ == "paper":
+            doc["subject"] = item.get("subject", "")
+            doc["year"]    = item.get("year", "")
+            papers_col.insert_one(doc)
+    log_admin_action("BULK_UPLOAD", f"Bulk uploaded {len(items)} {type_} items")
+    return jsonify({"msg": f"Successfully uploaded {len(items)} {type_} items."})
+
+@app.post("/api/timetable/migrate")
+@auth_required
+def migrate_timetables():
+    if not is_admin(request.user_id):
+        return jsonify({"msg": "Admin required"}), 403
+    updated = 0
+    for doc in timetables.find({"slots": {"$in": [[], None]}, "entries": {"$exists": True}}):
+        timetables.update_one(
+            {"_id": doc["_id"]},
+            {"$set": {"slots": doc.get("entries", [])}, "$unset": {"entries": ""}}
+        )
+        updated += 1
+    return jsonify({"msg": f"Migrated {updated} records"})
+
+# ─── Error Handler ─────────────────────────────────────────────────────────────
+@app.errorhandler(Exception)
+def handle_exception(e):
+    import traceback
+    error_data = {
+        "message": str(e), "traceback": traceback.format_exc(),
+        "path": request.path, "method": request.method,
+        "timestamp": datetime.datetime.utcnow()
+    }
+    try:
+        error_logs.insert_one(error_data)
+    except Exception:
+        pass
+    return jsonify({"msg": "An internal server error occurred"}), 500
 
 # ──────────────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     print("=" * 55)
-    print("  Student Hub Backend  (Python Flask)")
+    print("  Student Hub Backend v2.0  (Python Flask)")
     print(f"  http://localhost:{PORT}/api")
     print("=" * 55)
     app.run(host="0.0.0.0", port=PORT, debug=False)

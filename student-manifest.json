@@ -1,7 +1,7 @@
 {
-  "name": "Student Hub",
+  "name": "Student Hub — Learning Portal",
   "short_name": "Student Hub",
-  "description": "Your Learning Portal - Notes, Assignments, Timetable",
+  "description": "Access your notes, assignments, timetable, past papers and study tools.",
   "start_url": "./student.html",
   "scope": "./student.html",
   "display": "standalone",
