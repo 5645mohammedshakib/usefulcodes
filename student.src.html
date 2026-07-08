@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <script>
+(function() {
+      async function checkUpdate() {
+        try {
+          const res = await fetch('./version.json?t=' + new Date().getTime());
+          const data = await res.json();
+          const latestVersion = data.version;
+          const currentVersion = parseInt(localStorage.getItem('app_version') || '0');
+          if (latestVersion > currentVersion) {
+            if ('caches' in window) {
+              const keys = await caches.keys();
+              await Promise.all(keys.map(key => caches.delete(key)));
+            }
+            if ('serviceWorker' in navigator) {
+              const regs = await navigator.serviceWorker.getRegistrations();
+              await Promise.all(regs.map(r => r.unregister()));
+            }
+            localStorage.setItem('app_version', latestVersion);
+            window.location.reload(true);
+          }
+        } catch (e) {}
+      }
+      checkUpdate();
+    })();
+</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Hub — Student Portal</title>
+  <meta name="description" content="Student Hub — Access your notes, assignments, timetables, and more." />
+  <link rel="manifest" href="./student-manifest.json" />
+  <meta name="theme-color" content="#7c3aed" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Student Hub" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png" />
+  <link rel="shortcut icon" href="./icon-192.png" />
+  <script>
+if('serviceWorker' in navigator){
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js?v=6').then(reg => {
+          reg.addEventListener('updatefound', () => {
+            const nw = reg.installing;
+            if (nw) {
+              nw.addEventListener('statechange', () => {
+                if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+                  window.location.reload();
+                }
+              });
+            }
+          });
+          reg.update();
+        }).catch(err => console.error('SW registration failed:', err));
+      });
+      let refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!refreshing) { refreshing = true; window.location.reload(); }
+      });
+    }
+</script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { fontFamily: { sans: ['Inter','sans-serif'] } } }
+    };
+</script>
+  <style>
+    *{font-family:'Inter',sans-serif}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:linear-gradient(to bottom,#f43f5e,#a855f7,#3b82f6);border-radius:9px}
+    body { background: #0a0a0f; min-height: 100vh; overflow-x: hidden; }
+    .rainbow-bg { position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(135deg,rgba(239,68,68,.15) 0%,rgba(249,115,22,.1) 15%,rgba(234,179,8,.1) 30%,rgba(34,197,94,.1) 45%,rgba(6,182,212,.12) 60%,rgba(99,102,241,.15) 75%,rgba(168,85,247,.15) 90%,rgba(236,72,153,.12) 100%);animation:bgShift 12s ease-in-out infinite alternate; }
+    @keyframes bgShift { 0%{filter:hue-rotate(0deg) brightness(1)}50%{filter:hue-rotate(60deg) brightness(1.1)}100%{filter:hue-rotate(120deg) brightness(1)} }
+    .orb{position:fixed;border-radius:50%;filter:blur(80px);opacity:.35;pointer-events:none;z-index:0;animation:float 8s ease-in-out infinite}
+    .orb-1{width:350px;height:350px;background:radial-gradient(circle,#f43f5e,transparent);top:-80px;left:-80px;animation-delay:0s}
+    .orb-2{width:300px;height:300px;background:radial-gradient(circle,#8b5cf6,transparent);top:30%;right:-60px;animation-delay:2s}
+    .orb-3{width:280px;height:280px;background:radial-gradient(circle,#06b6d4,transparent);bottom:10%;left:20%;animation-delay:4s}
+    .orb-4{width:220px;height:220px;background:radial-gradient(circle,#f59e0b,transparent);bottom:20%;right:15%;animation-delay:6s}
+    .orb-5{width:200px;height:200px;background:radial-gradient(circle,#10b981,transparent);top:50%;left:40%;animation-delay:3s}
+    @keyframes float{0%,100%{transform:translateY(0px) scale(1)}50%{transform:translateY(-30px) scale(1.08)}}
+    .glass{background:rgba(255,255,255,.06);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.12);box-shadow:0 8px 32px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.1)}
+    .glass-card{background:rgba(255,255,255,.05);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);box-shadow:0 4px 24px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.08);border-radius:1rem}
+    .card{border-radius:1rem}.dark .card{background:rgba(255,255,255,.05);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);box-shadow:0 4px 24px rgba(0,0,0,.3)}
+    .rainbow-text{background:linear-gradient(90deg,#f43f5e,#f97316,#eab308,#22c55e,#06b6d4,#6366f1,#a855f7,#ec4899);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:rainbowText 4s linear infinite}
+    @keyframes rainbowText{to{background-position:200% center}}
+    .rainbow-border{position:relative;border:none!important}
+    .rainbow-border::before{content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:linear-gradient(90deg,#f43f5e,#f97316,#eab308,#22c55e,#06b6d4,#6366f1,#a855f7,#ec4899,#f43f5e);background-size:200% auto;animation:rainbowBorder 3s linear infinite;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+    @keyframes rainbowBorder{to{background-position:200% center}}
+    .btn-rainbow{background:linear-gradient(90deg,#f43f5e,#f97316,#eab308,#22c55e,#06b6d4,#6366f1,#a855f7,#ec4899);background-size:200% auto;color:white;border:none;transition:all .3s;animation:rainbowText 3s linear infinite;box-shadow:0 4px 20px rgba(139,92,246,.4)}
+    .btn-rainbow:hover{box-shadow:0 6px 30px rgba(244,63,94,.5);transform:translateY(-1px)}
+    .nav-btn{width:100%;display:flex;align-items:center;gap:.75rem;padding:.625rem 1rem;border-radius:.75rem;font-size:.875rem;font-weight:600;transition:all .2s;color:rgba(255,255,255,.5)}
+    .nav-btn:hover{background:rgba(255,255,255,.08);color:white;transform:translateX(2px)}
+    .nav-btn.active{background:linear-gradient(90deg,rgba(244,63,94,.2),rgba(168,85,247,.2));color:white;border-left:3px solid transparent;border-image:linear-gradient(to bottom,#f43f5e,#a855f7) 1}
+    .tag{display:inline-flex;align-items:center;background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);font-size:.75rem;font-weight:500;padding:.2rem .7rem;border-radius:9999px;border:1px solid rgba(255,255,255,.1)}
+    .pill-dl{display:inline-flex;align-items:center;gap:.35rem;background:linear-gradient(90deg,rgba(244,63,94,.3),rgba(168,85,247,.3));color:white;font-size:.75rem;font-weight:700;padding:.25rem .7rem;border-radius:.5rem;text-decoration:none;border:1px solid rgba(255,255,255,.2)}
+    .fade-in{animation:fi .3s ease}@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .skeleton{background:rgba(255,255,255,.06);border-radius:.5rem;animation:pulse 1.5s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    input,select,textarea{background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.15)!important;color:white!important;border-radius:.75rem}
+    input::placeholder{color:rgba(255,255,255,.35)!important}
+    input:focus{border-color:rgba(168,85,247,.6)!important;box-shadow:0 0 0 3px rgba(168,85,247,.15)!important;outline:none}
+    .glow-purple{box-shadow:0 0 20px rgba(168,85,247,.3)}
+    .glow-pink{box-shadow:0 0 20px rgba(244,63,94,.3)}
+    /* Pull to refresh */
+    #ptr-indicator{position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(-60px);background:rgba(168,85,247,.9);color:white;padding:8px 16px;border-radius:0 0 12px 12px;font-size:.8rem;font-weight:700;z-index:9999;transition:transform .3s ease;display:flex;align-items:center;gap:6px}
+    /* Notification */
+    #notif-container{position:fixed;top:16px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px;max-width:320px}
+    .notif-item{background:rgba(10,10,15,.95);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:12px 16px;display:flex;align-items:flex-start;gap:10px;backdrop-filter:blur(20px);box-shadow:0 8px 32px rgba(0,0,0,.5);animation:slideInRight .3s ease;font-size:.8rem}
+    @keyframes slideInRight{from{opacity:0;transform:translateX(100%)}to{opacity:1;transform:none}}
+    /* Streak badge */
+    .streak-badge{background:linear-gradient(135deg,#f59e0b,#ef4444);border-radius:12px;padding:4px 10px;font-size:.75rem;font-weight:700;color:white;display:inline-flex;align-items:center;gap:4px}
+    /* Focus mode */
+    #focus-overlay{position:fixed;inset:0;background:#0a0a0f;z-index:9998;display:none;flex-direction:column;align-items:center;justify-content:center}
+    /* PDF Preview */
+    #pdf-modal{position:fixed;inset:0;z-index:9997;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;padding:16px}
+    #pdf-modal-inner{background:#1a1a2e;border-radius:16px;width:100%;max-width:900px;height:85vh;display:flex;flex-direction:column;overflow:hidden}
+    /* Feedback modal */
+    #feedback-modal{position:fixed;inset:0;z-index:9997;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:16px}
+    /* Progress bar */
+    .progress-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.1);overflow:hidden}
+    .progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#7c3aed,#a855f7);transition:width .5s ease}
+  </style>
+</head>
+<body class="text-white min-h-screen">
+<!-- ── Live Broadcast Alert Banner ── -->
+<div id="broadcast-banner" class="w-full bg-gradient-to-r from-red-650 to-amber-600 text-white py-2 px-4 text-xs font-bold text-center z-50 relative hidden flex items-center justify-center gap-2 shadow">
+  <i data-lucide="alert-circle" class="w-3.5 h-3.5 animate-bounce"></i>
+  <span id="broadcast-text"></span>
+</div>
+
+<!-- ── System Maintenance Lock Screen ── -->
+<div id="maintenance-lock" class="fixed inset-0 z-[9999] bg-[#0a0a0f] flex flex-col items-center justify-center text-center p-6 hidden">
+  <div class="w-20 h-20 bg-rose-500/10 border border-rose-500/30 text-rose-500 rounded-3xl flex items-center justify-center mb-6">
+    <i data-lucide="lock" class="w-10 h-10"></i>
+  </div>
+  <h1 class="text-2xl font-bold text-white mb-2">Portal Under Maintenance</h1>
+  <p class="text-sm text-zinc-400 max-w-sm leading-relaxed" id="maintenance-msg">The system is currently undergoing scheduled maintenance by the administrator. Please try again in a few minutes.</p>
+</div>
+<div class="rainbow-bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="orb orb-4"></div>
+<div class="orb orb-5"></div>
+<div id="notif-container"></div>
+<div id="ptr-indicator"><i data-lucide="refresh-cw" class="w-4 h-4"></i><span>Release to refresh</span></div>
+<div id="pdf-modal" onclick="closePdfModal(event)">
+  <div id="pdf-modal-inner">
+    <div class="flex items-center justify-between px-4 py-3" style="border-bottom:1px solid rgba(255,255,255,.1)">
+      <span id="pdf-modal-title" class="font-bold text-sm truncate"></span>
+      <div class="flex gap-2">
+        <a id="pdf-download-btn" href="#" download class="px-3 py-1.5 bg-violet-600 hover:bg-violet-700 rounded-lg text-xs font-bold flex items-center gap-1.5"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>
+        <button onclick="closePdfModalDirect()" class="p-1.5 rounded-lg hover:bg-zinc-800 text-zinc-400"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+    </div>
+    <iframe id="pdf-iframe" class="flex-1 w-full border-0" src=""></iframe>
+  </div>
+</div>
+<div id="feedback-modal" onclick="closeFeedbackModal(event)">
+  <div class="glass-card p-6 w-full max-w-md" onclick="event.stopPropagation()">
+    <h3 class="font-bold text-base mb-4 flex items-center gap-2"><i data-lucide="message-square" class="w-5 h-5 text-violet-400"></i>Feedback & Bug Report</h3>
+    <select id="feedback-type" class="w-full mb-3 px-3 py-2 text-sm">
+      <option value="feedback">General Feedback</option>
+      <option value="bug">Bug Report</option>
+      <option value="suggestion">Suggestion</option>
+    </select>
+    <textarea id="feedback-text" rows="4" placeholder="Describe your feedback or bug..." class="w-full px-3 py-2 text-sm mb-3 resize-none"></textarea>
+    <div class="flex gap-2">
+      <button onclick="submitFeedback()" class="flex-1 btn-rainbow py-2 rounded-xl font-bold text-sm">Submit</button>
+      <button onclick="closeFeedbackModalDirect()" class="px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-sm font-semibold">Cancel</button>
+    </div>
+  </div>
+</div>
+<div id="focus-overlay">
+  <button onclick="toggleFocusMode(false)" class="absolute top-4 right-4 p-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-400"><i data-lucide="minimize-2" class="w-5 h-5"></i></button>
+  <div class="text-center space-y-6">
+    <p id="fo-mode-label" class="text-zinc-400 text-sm uppercase tracking-widest font-semibold">Focus Session</p>
+    <div class="relative w-56 h-56 flex items-center justify-center mx-auto">
+      <svg class="w-full h-full transform -rotate-90">
+        <circle cx="112" cy="112" r="104" stroke="rgba(255,255,255,.1)" stroke-width="8" fill="transparent"/>
+        <circle id="fo-circle" cx="112" cy="112" r="104" stroke="#7c3aed" stroke-width="8" fill="transparent" stroke-dasharray="653" stroke-dashoffset="0"/>
+      </svg>
+      <div class="absolute text-center">
+        <p id="fo-timer" class="text-5xl font-extrabold text-white tracking-wider">25:00</p>
+        <p class="text-xs text-zinc-500 mt-1">Stay focused</p>
+      </div>
+    </div>
+    <div class="flex gap-4 justify-center">
+      <button id="fo-play-btn" onclick="togglePomo()" class="px-8 py-3 bg-violet-600 hover:bg-violet-700 text-white rounded-2xl font-bold flex items-center gap-2"><i data-lucide="play" class="w-5 h-5"></i>Start</button>
+      <button onclick="resetPomo()" class="px-8 py-3 bg-zinc-800 hover:bg-zinc-700 rounded-2xl font-bold flex items-center gap-2"><i data-lucide="rotate-ccw" class="w-5 h-5"></i>Reset</button>
+    </div>
+    <p id="fo-sessions" class="text-zinc-500 text-sm">Sessions today: <span id="fo-count">0</span></p>
+  </div>
+</div>
+<div id="auth-view" class="min-h-screen flex items-center justify-center p-4 relative z-10">
+  <div class="w-full max-w-sm">
+    <div class="glass rainbow-border p-8" style="border-radius:1.5rem">
+      <div class="flex flex-col items-center mb-7">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 glow-purple" style="background:linear-gradient(135deg,#f43f5e,#f97316,#eab308,#22c55e,#06b6d4,#a855f7);box-shadow:0 8px 32px rgba(168,85,247,.5)">
+          <i data-lucide="graduation-cap" class="w-8 h-8 text-white"></i>
+        </div>
+        <h1 class="text-2xl font-bold rainbow-text">Student Hub</h1>
+        <p class="text-sm mt-1" style="color:rgba(255,255,255,.5)">Your Learning Portal</p>
+      </div>
+      <div class="flex rounded-xl p-1 mb-6" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)">
+        <button id="tab-login" onclick="switchTab('login')" class="flex-1 py-1.5 text-sm font-semibold rounded-lg transition-all" style="background:linear-gradient(90deg,rgba(244,63,94,.4),rgba(168,85,247,.4));color:white;box-shadow:0 2px 10px rgba(168,85,247,.3)">Sign In</button>
+        <button id="tab-register" onclick="switchTab('register')" class="flex-1 py-1.5 text-sm font-semibold rounded-lg transition-all" style="color:rgba(255,255,255,.5)">Register</button>
+      </div>
+      <div id="auth-alert" class="hidden items-center gap-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/40 text-red-600 dark:text-red-400 text-sm rounded-xl px-4 py-3 mb-4">
+        <i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i>
+        <span id="auth-alert-msg"></span>
+      </div>
+      <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+        <div>
+          <label class="text-xs font-semibold uppercase tracking-wider text-zinc-500 block mb-1.5">Username / Email</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-3 flex items-center text-zinc-400"><i data-lucide="user" class="w-4 h-4"></i></span>
+            <input id="login-email" type="text" required placeholder="your username or email" class="w-full pl-10 pr-3 py-2.5 text-sm" />
+          </div>
+        </div>
+        <div>
+          <label class="text-xs font-semibold uppercase tracking-wider text-zinc-500 block mb-1.5">Password</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-3 flex items-center text-zinc-400"><i data-lucide="lock" class="w-4 h-4"></i></span>
+            <input id="login-password" type="password" required placeholder="Password" class="w-full pl-10 pr-3 py-2.5 text-sm" />
+          </div>
+        </div>
+        <button type="submit" id="login-btn" class="btn-rainbow w-full mt-2 rounded-xl px-4 py-2.5 font-semibold text-sm flex items-center justify-center gap-2">
+          <i data-lucide="log-in" class="w-4 h-4"></i><span>Sign In</span>
+        </button>
+      </form>
+      <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4 hidden">
+        <div>
+          <label class="text-xs font-semibold uppercase tracking-wider text-zinc-500 block mb-1.5">Full Name</label>
+          <div class="relative"><span class="absolute inset-y-0 left-3 flex items-center text-zinc-400"><i data-lucide="user" class="w-4 h-4"></i></span>
+            <input id="reg-name" type="text" required placeholder="Your full name" class="w-full pl-10 pr-3 py-2.5 text-sm" />
+          </div>
+        </div>
+        <div>
+          <label class="text-xs font-semibold uppercase tracking-wider text-zinc-500 block mb-1.5">Email</label>
+          <div class="relative"><span class="absolute inset-y-0 left-3 flex items-center text-zinc-400"><i data-lucide="mail" class="w-4 h-4"></i></span>
+            <input id="reg-email" type="email" required placeholder="student@example.com" class="w-full pl-10 pr-3 py-2.5 text-sm" />
+          </div>
+        </div>
+        <div>
+          <label class="text-xs font-semibold uppercase tracking-wider text-zinc-500 block mb-1.5">Username</label>
+          <div class="relative"><span class="absolute inset-y-0 left-3 flex items-center text-zinc-400"><i data-lucide="at-sign" class="w-4 h-4"></i></span>
+            <input id="reg-username" type="text" required placeholder="student123" class="w-full pl-10 pr-3 py-2.5 text-sm" />
+          </div>
+        </div>
+        <div>
+          <label class="text-xs font-semibold uppercase tracking-wider text-zinc-500 block mb-1.5">Password</label>
+          <div class="relative"><span class="absolute inset-y-0 left-3 flex items-center text-zinc-400"><i data-lucide="lock" class="w-4 h-4"></i></span>
+            <input id="reg-password" type="password" required placeholder="Min. 6 characters" class="w-full pl-10 pr-3 py-2.5 text-sm" />
+          </div>
+        </div>
+        <button type="submit" id="reg-btn" class="btn-rainbow w-full mt-2 rounded-xl px-4 py-2.5 font-semibold text-sm flex items-center justify-center gap-2">
+          <i data-lucide="user-plus" class="w-4 h-4"></i><span>Create Account</span>
+        </button>
+      </form>
+    </div>
+    <p class="text-center text-xs text-zinc-400 mt-5">Student Hub &copy; 2026 &mdash; For Students | <a href="#" onclick="forceReset(event)" class="underline hover:text-white transition-colors">Reset Cache</a></p>
+  </div>
+</div>
+<div id="app-view" class="hidden min-h-screen flex flex-col md:flex-row relative z-10">
+  <header class="md:hidden sticky top-0 z-40 flex items-center justify-between px-4 py-3" style="background:rgba(10,10,15,.8);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.1)">
+    <button onclick="toggleSidebar(true)" class="p-2 rounded-xl hover:bg-zinc-800 transition-all">
+      <i data-lucide="menu" class="w-5 h-5"></i>
+    </button>
+    <span class="font-bold text-base rainbow-text">Student Hub</span>
+    <div class="flex items-center gap-1">
+      <span id="streak-display-mobile" class="streak-badge hidden"><span>&#128293;</span><span id="streak-count-mobile">0</span></span>
+      <button onclick="handleLogout()" class="p-2 rounded-xl hover:bg-red-900/20 text-zinc-500 hover:text-red-500 transition-all">
+        <i data-lucide="log-out" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </header>
+  <div id="sidebar-overlay" onclick="toggleSidebar(false)" class="hidden fixed inset-0 bg-black/50 z-40 md:hidden"></div>
+  <aside id="sidebar" class="fixed md:sticky top-0 left-0 h-screen w-64 z-50 -translate-x-full md:translate-x-0 transition-transform duration-300 flex flex-col" style="background:rgba(10,10,15,.85);backdrop-filter:blur(24px);border-right:1px solid rgba(255,255,255,.08)">
+    <div class="px-5 py-5 flex items-center gap-3" style="border-bottom:1px solid rgba(255,255,255,.08)">
+      <div class="w-10 h-10 rounded-2xl flex items-center justify-center shadow" style="background:linear-gradient(135deg,#f43f5e,#f97316,#eab308,#22c55e,#06b6d4,#a855f7)">
+        <i data-lucide="graduation-cap" class="w-5 h-5 text-white"></i>
+      </div>
+      <div>
+        <p class="font-bold text-sm leading-tight rainbow-text">Student Hub</p>
+        <p class="text-xs text-zinc-400">Learning Portal</p>
+      </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
+      <button id="nav-home"          onclick="goto('home')"          class="nav-btn active"><i data-lucide="layout-dashboard" class="w-4 h-4 shrink-0"></i>Home</button>
+      <button id="nav-announcements" onclick="goto('announcements')" class="nav-btn"><i data-lucide="megaphone"       class="w-4 h-4 shrink-0"></i>Announcements</button>
+      <button id="nav-notes"         onclick="goto('notes')"         class="nav-btn"><i data-lucide="notebook-text"  class="w-4 h-4 shrink-0"></i>Study Notes</button>
+      <button id="nav-assignments"   onclick="goto('assignments')"   class="nav-btn"><i data-lucide="clipboard-list" class="w-4 h-4 shrink-0"></i>Assignments</button>
+      <button id="nav-timetable"     onclick="goto('timetable')"     class="nav-btn"><i data-lucide="calendar-days"  class="w-4 h-4 shrink-0"></i>Timetable</button>
+      <button id="nav-syllabus"      onclick="goto('syllabus')"      class="nav-btn"><i data-lucide="book-open"      class="w-4 h-4 shrink-0"></i>Syllabus</button>
+      <button id="nav-papers"        onclick="goto('papers')"        class="nav-btn"><i data-lucide="file-text"      class="w-4 h-4 shrink-0"></i>Previous Papers</button>
+      <button id="nav-planner"       onclick="goto('planner')"       class="nav-btn"><i data-lucide="calendar"       class="w-4 h-4 shrink-0"></i>Study Planner</button>
+      <button id="nav-focus"         onclick="goto('focus')"         class="nav-btn"><i data-lucide="timer"          class="w-4 h-4 shrink-0"></i>Focus Zone</button>
+    </nav>
+    <div class="px-4 py-4 space-y-2" style="border-top:1px solid rgba(255,255,255,.08)">
+      <div class="flex items-center gap-3 mb-1">
+        <div id="s-avatar" class="w-9 h-9 rounded-full bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center text-white font-bold text-sm shrink-0">S</div>
+        <div class="min-w-0 flex-1">
+          <p id="s-name"  class="text-sm font-semibold text-white truncate">Student</p>
+          <p id="s-email" class="text-xs text-zinc-400 truncate">-</p>
+        </div>
+        <span id="streak-display" class="streak-badge"><span>&#128293;</span><span id="streak-count">0</span></span>
+      </div>
+      <button onclick="toggleTheme()" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-zinc-400 hover:bg-zinc-800 transition-all font-medium">
+        <i id="icon-sun"  data-lucide="sun"  class="w-4 h-4 hidden"></i>
+        <i id="icon-moon" data-lucide="moon" class="w-4 h-4"></i>
+        <span id="theme-label">Dark Mode</span>
+      </button>
+      <button id="sidebar-feedback-btn" onclick="openFeedbackModal()" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-violet-400 hover:bg-violet-900/20 transition-all font-medium">
+        <i data-lucide="message-square" class="w-4 h-4"></i>Feedback
+      </button>
+      <button onclick="handleLogout()" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-red-400 hover:bg-red-900/20 transition-all font-medium">
+        <i data-lucide="log-out" class="w-4 h-4"></i>Sign Out
+      </button>
+    </div>
+  </aside>
+  <main class="flex-1 overflow-y-auto bg-zinc-50 dark:bg-[#09090b]">
+    <div class="max-w-5xl mx-auto px-4 py-6 space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 id="page-title" class="text-xl font-bold text-zinc-900 dark:text-white">Welcome &#128075;</h2>
+          <p  id="page-sub"   class="text-sm text-zinc-500 mt-0.5">Here's what's new today</p>
+        </div>
+        <button onclick="handleManualRefresh()" id="refresh-btn" class="p-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all shadow-sm flex items-center gap-1.5 text-xs font-bold">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+          <span>Refresh</span>
+        </button>
+      </div>
+      <section id="view-home" class="space-y-5 fade-in">
+        <div class="relative">
+          <span class="absolute inset-y-0 left-3.5 flex items-center text-zinc-400"><i data-lucide="search" class="w-4 h-4"></i></span>
+          <input id="universal-search" type="text" oninput="handleUniversalSearch()" placeholder="Search notes, papers, assignments, syllabus..." class="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl pl-11 pr-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all shadow-sm" />
+          <div id="universal-search-suggestions" class="absolute left-0 right-0 mt-1.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-xl z-50 max-h-80 overflow-y-auto hidden divide-y divide-zinc-100 dark:divide-zinc-800"></div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="card p-4 flex flex-col gap-2"><div class="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center"><i data-lucide="notebook-text" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i></div><p id="stat-notes" class="text-2xl font-bold text-zinc-900 dark:text-white">-</p><p class="text-xs text-zinc-500">Notes</p></div>
+          <div class="card p-4 flex flex-col gap-2"><div class="w-9 h-9 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center"><i data-lucide="clipboard-list" class="w-5 h-5 text-orange-500"></i></div><p id="stat-asgn" class="text-2xl font-bold text-zinc-900 dark:text-white">-</p><p class="text-xs text-zinc-500">Assignments</p></div>
+          <div class="card p-4 flex flex-col gap-2"><div class="w-9 h-9 rounded-xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center"><i data-lucide="megaphone" class="w-5 h-5 text-violet-600 dark:text-violet-400"></i></div><p id="stat-ann" class="text-2xl font-bold text-zinc-900 dark:text-white">-</p><p class="text-xs text-zinc-500">Announcements</p></div>
+          <div class="card p-4 flex flex-col gap-2"><div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center"><i data-lucide="file-text" class="w-5 h-5 text-emerald-600 dark:text-emerald-400"></i></div><p id="stat-papers" class="text-2xl font-bold text-zinc-900 dark:text-white">-</p><p class="text-xs text-zinc-500">Papers</p></div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-5">
+          <div class="card p-5 space-y-3">
+            <div class="flex items-center gap-2 font-bold text-base text-zinc-900 dark:text-white"><i data-lucide="play-circle" class="w-5 h-5 text-violet-500"></i>Continue Learning</div>
+            <div id="list-continue-learning" class="space-y-2.5"><p class="text-xs text-zinc-400">No recent topics. Start studying!</p></div>
+          </div>
+          <div class="card p-5 space-y-3">
+            <div class="flex items-center gap-2 font-bold text-base text-zinc-900 dark:text-white"><i data-lucide="file-text" class="w-5 h-5 text-emerald-500"></i>Recently Opened PDFs</div>
+            <div id="list-recent-pdfs" class="space-y-2.5"><p class="text-xs text-zinc-400">No PDFs opened recently.</p></div>
+          </div>
+        </div>
+        <div class="card p-5">
+          <div class="flex items-center gap-2 mb-4"><i data-lucide="trending-up" class="w-5 h-5 text-amber-500"></i><h3 class="font-bold text-zinc-900 dark:text-white text-base">Popular Notes</h3></div>
+          <div id="home-popular" class="space-y-2"><div class="skeleton h-10 w-full"></div><div class="skeleton h-10 w-full mt-2"></div></div>
+        </div>
+        <div class="card p-5">
+          <div class="flex items-center gap-2 mb-4"><i data-lucide="megaphone" class="w-5 h-5 text-violet-500"></i><h3 class="font-bold text-zinc-900 dark:text-white text-base">Latest Announcements</h3></div>
+          <div id="home-ann" class="space-y-3"><div class="skeleton h-16 w-full"></div><div class="skeleton h-16 w-full mt-3"></div></div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <button onclick="goto('notes')"         class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="notebook-text" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Study Notes</p><p class="text-xs text-zinc-500">View all</p></div></button>
+          <button onclick="goto('assignments')"   class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="clipboard-list" class="w-5 h-5 text-orange-500"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Assignments</p><p class="text-xs text-zinc-500">View tasks</p></div></button>
+          <button onclick="goto('timetable')"     class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="calendar-days" class="w-5 h-5 text-teal-600 dark:text-teal-400"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Timetable</p><p class="text-xs text-zinc-500">Class schedule</p></div></button>
+          <button onclick="goto('syllabus')"      class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="book-open" class="w-5 h-5 text-pink-600 dark:text-pink-400"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Syllabus</p><p class="text-xs text-zinc-500">Course content</p></div></button>
+          <button onclick="goto('papers')"        class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="file-text" class="w-5 h-5 text-emerald-600 dark:text-emerald-400"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Past Papers</p><p class="text-xs text-zinc-500">Exam practice</p></div></button>
+          <button onclick="goto('planner')"       class="card p-4 flex items-center gap-3 hover:border-violet-400 dark:hover:border-violet-600 transition-all text-left group"><div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center group-hover:scale-110 transition-transform"><i data-lucide="calendar" class="w-5 h-5 text-indigo-600 dark:text-indigo-400"></i></div><div><p class="font-semibold text-sm text-zinc-900 dark:text-white">Study Planner</p><p class="text-xs text-zinc-500">Goals & countdown</p></div></button>
+        </div>
+      </section>
+      <section id="view-announcements" class="hidden fade-in"><div id="list-announcements" class="space-y-4"></div></section>
+      <section id="view-notes" class="hidden fade-in space-y-4">
+        <div class="flex flex-col md:flex-row gap-2">
+          <div class="relative flex-1">
+            <span class="absolute inset-y-0 left-3 flex items-center text-zinc-400"><i data-lucide="search" class="w-4 h-4"></i></span>
+            <input id="notes-search" type="text" oninput="filterNotes()" placeholder="Search notes..." class="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all" />
+          </div>
+          <div class="flex gap-2">
+            <select id="notes-category-select" onchange="filterNotes()" class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-violet-500/50"><option value="">All Categories</option></select>
+            <button id="btn-notes-bookmarked" onclick="toggleNotesBookmarkFilter()" class="flex items-center gap-1.5 px-3 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs font-semibold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all">
+              <i data-lucide="bookmark" class="w-3.5 h-3.5"></i><span>Bookmarks</span>
+            </button>
+          </div>
+        </div>
+        <div id="list-notes" class="grid md:grid-cols-2 gap-4"></div>
+        <div id="notes-load-more-container" class="text-center py-4 hidden">
+          <button onclick="loadMoreNotes()" class="px-6 py-2 bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 text-zinc-800 dark:text-zinc-200 rounded-xl text-xs font-bold transition-all">Load More</button>
+        </div>
+      </section>
+      <section id="view-assignments" class="hidden fade-in"><div id="list-assignments" class="space-y-4"></div></section>
+      <section id="view-timetable" class="hidden fade-in"><div id="list-timetable" class="space-y-4"></div></section>
+      <section id="view-syllabus" class="hidden fade-in"><div id="list-syllabus" class="space-y-4"></div></section>
+      <section id="view-papers" class="hidden fade-in space-y-4">
+        <div class="flex flex-col md:flex-row gap-2">
+          <div class="relative flex-1">
+            <span class="absolute inset-y-0 left-3 flex items-center text-zinc-400"><i data-lucide="search" class="w-4 h-4"></i></span>
+            <input id="papers-search" type="text" oninput="filterPapers()" placeholder="Search papers by subject or title..." class="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all" />
+          </div>
+          <div class="flex gap-2">
+            <select id="papers-subject-select" onchange="filterPapers()" class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-violet-500/50"><option value="">All Subjects</option></select>
+            <button id="btn-papers-bookmarked" onclick="togglePapersBookmarkFilter()" class="flex items-center gap-1.5 px-3 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs font-semibold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all">
+              <i data-lucide="bookmark" class="w-3.5 h-3.5"></i><span>Bookmarks</span>
+            </button>
+          </div>
+        </div>
+        <div id="list-papers" class="grid md:grid-cols-2 gap-4"></div>
+        <div id="papers-load-more-container" class="text-center py-4 hidden">
+          <button onclick="loadMorePapers()" class="px-6 py-2 bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 text-zinc-800 dark:text-zinc-200 rounded-xl text-xs font-bold transition-all">Load More</button>
+        </div>
+      </section>
+      <section id="view-planner" class="hidden fade-in space-y-6">
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="card p-5 space-y-4">
+            <div class="flex items-center gap-2 font-bold text-base text-zinc-900 dark:text-white"><i data-lucide="hourglass" class="w-5 h-5 text-indigo-500"></i><span>Exam Countdown</span></div>
+            <div id="countdown-display" class="grid grid-cols-4 gap-2 text-center">
+              <div class="bg-indigo-50 dark:bg-indigo-900/20 p-2 rounded-xl"><p id="cd-days" class="text-xl font-bold text-indigo-600 dark:text-indigo-400">00</p><p class="text-[10px] text-zinc-400 font-medium">Days</p></div>
+              <div class="bg-indigo-50 dark:bg-indigo-900/20 p-2 rounded-xl"><p id="cd-hours" class="text-xl font-bold text-indigo-600 dark:text-indigo-400">00</p><p class="text-[10px] text-zinc-400 font-medium">Hours</p></div>
+              <div class="bg-indigo-50 dark:bg-indigo-900/20 p-2 rounded-xl"><p id="cd-mins" class="text-xl font-bold text-indigo-600 dark:text-indigo-400">00</p><p class="text-[10px] text-zinc-400 font-medium">Mins</p></div>
+              <div class="bg-indigo-50 dark:bg-indigo-900/20 p-2 rounded-xl"><p id="cd-secs" class="text-xl font-bold text-indigo-600 dark:text-indigo-400">00</p><p class="text-[10px] text-zinc-400 font-medium">Secs</p></div>
+            </div>
+            <div class="flex gap-2">
+              <input id="cd-title-input" type="text" placeholder="Exam Title (e.g. Finals)" class="flex-1 px-3 py-1.5 text-xs" />
+              <input id="cd-date-input" type="date" class="px-3 py-1.5 text-xs" />
+              <button onclick="saveCountdown()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold">Set</button>
+            </div>
+            <p id="cd-target-label" class="text-xs text-zinc-400 text-center"></p>
+          </div>
+          <div class="card p-5 space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 font-bold text-base text-zinc-900 dark:text-white"><i data-lucide="check-square" class="w-5 h-5 text-emerald-500"></i><span>Daily Goals</span></div>
+              <span id="goals-progress" class="text-xs text-zinc-400">0/0 done</span>
+            </div>
+            <div>
+              <div class="progress-bar mb-3"><div id="goals-fill" class="progress-fill" style="width:0%"></div></div>
+              <div class="flex gap-2">
+                <input id="goal-input" type="text" placeholder="Add a new goal..." class="flex-1 px-3 py-1.5 text-xs" />
+                <button onclick="addGoal()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold">Add</button>
+              </div>
+            </div>
+            <div id="goals-list" class="space-y-2 max-h-40 overflow-y-auto pr-1"></div>
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="card p-5 space-y-4">
+            <div class="flex items-center gap-2 font-bold text-base text-zinc-900 dark:text-white"><i data-lucide="bar-chart-2" class="w-5 h-5 text-amber-500"></i><span>Study Statistics</span></div>
+            <div class="grid grid-cols-3 gap-3">
+              <div class="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-900/30 text-center">
+                <p id="stats-pomos" class="text-2xl font-bold text-amber-600 dark:text-amber-400">0</p>
+                <p class="text-xs text-zinc-500 mt-1">Pomodoros</p>
+              </div>
+              <div class="p-4 rounded-xl bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 text-center">
+                <p id="stats-time" class="text-2xl font-bold text-blue-600 dark:text-blue-400">0m</p>
+                <p class="text-xs text-zinc-500 mt-1">Focus Time</p>
+              </div>
+              <div class="p-4 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/30 text-center">
+                <p id="stats-streak" class="text-2xl font-bold text-red-500">0</p>
+                <p class="text-xs text-zinc-500 mt-1">&#128293; Streak</p>
+              </div>
+            </div>
+          </div>
+          <div class="card p-5 space-y-4">
+            <div class="flex items-center gap-2 font-bold text-base text-zinc-900 dark:text-white"><i data-lucide="book-marked" class="w-5 h-5 text-pink-500"></i><span>Revision Planner</span></div>
+            <div class="flex gap-2">
+              <input id="rev-subject" type="text" placeholder="Subject/Topic" class="flex-1 px-3 py-1.5 text-xs" />
+              <button onclick="addRevision()" class="px-3 py-1.5 bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-xs font-semibold">Track</button>
+            </div>
+            <div id="rev-list" class="space-y-2 max-h-40 overflow-y-auto pr-1"></div>
+          </div>
+        </div>
+      </section>
+      <section id="view-focus" class="hidden fade-in space-y-6">
+        <div class="card p-8 flex flex-col items-center justify-center text-center space-y-6 max-w-xl mx-auto">
+          <div class="flex gap-2 bg-zinc-100 dark:bg-zinc-800 p-1.5 rounded-xl text-xs font-semibold">
+            <button id="pomo-work"  onclick="setPomoMode('work')"  class="px-4 py-1.5 rounded-lg text-zinc-900 dark:text-white bg-white dark:bg-zinc-700 shadow-sm transition-all">Focus (25m)</button>
+            <button id="pomo-short" onclick="setPomoMode('short')" class="px-4 py-1.5 rounded-lg text-zinc-500 dark:text-zinc-400 transition-all">Short Break (5m)</button>
+            <button id="pomo-long"  onclick="setPomoMode('long')"  class="px-4 py-1.5 rounded-lg text-zinc-500 dark:text-zinc-400 transition-all">Long Break (15m)</button>
+          </div>
+          <div class="relative w-48 h-48 flex items-center justify-center">
+            <svg class="w-full h-full transform -rotate-90">
+              <circle cx="96" cy="96" r="88" stroke="currentColor" stroke-width="8" class="text-zinc-200 dark:text-zinc-800" fill="transparent" />
+              <circle id="pomo-circle" cx="96" cy="96" r="88" stroke="currentColor" stroke-width="8" class="text-violet-600 dark:text-violet-500" fill="transparent" stroke-dasharray="552" stroke-dashoffset="0" />
+            </svg>
+            <div class="absolute text-center">
+              <p id="pomo-timer-display" class="text-4xl font-extrabold text-zinc-900 dark:text-white tracking-wider">25:00</p>
+              <p id="pomo-status-label" class="text-[10px] text-zinc-400 uppercase tracking-widest font-semibold mt-1">Get to Work</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <button id="pomo-play-btn" onclick="togglePomo()" class="px-6 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl font-bold text-sm shadow-lg shadow-violet-600/20 transition-all flex items-center gap-2">
+              <i data-lucide="play" class="w-4 h-4"></i><span>Start</span>
+            </button>
+            <button onclick="resetPomo()" class="px-6 py-2.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl font-bold text-sm transition-all flex items-center gap-2">
+              <i data-lucide="rotate-ccw" class="w-4 h-4"></i><span>Reset</span>
+            </button>
+          </div>
+          <button onclick="toggleFocusMode(true)" class="text-xs text-violet-500 hover:text-violet-600 font-semibold flex items-center gap-1.5 mt-2">
+            <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> Enter Focus Mode (Fullscreen)
+          </button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+<div id="pwa-banner" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;width:calc(100% - 48px);max-width:420px;background:linear-gradient(135deg,#1e1b4b,#312e81);border:1px solid rgba(139,92,246,.4);border-radius:1.25rem;padding:16px 20px;box-shadow:0 20px 60px rgba(0,0,0,.5);backdrop-filter:blur(20px);animation:slideUp .4s ease">
+  <style>@keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(30px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}#pwa-banner button.install-btn{background:linear-gradient(90deg,#7c3aed,#a855f7);color:white;border:none;border-radius:.75rem;padding:10px 20px;font-weight:700;font-size:.875rem;cursor:pointer}#pwa-banner button.dismiss-btn{background:transparent;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.15);border-radius:.75rem;padding:10px 16px;font-weight:600;font-size:.875rem;cursor:pointer}</style>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px">&#127891;</div>
+    <div style="flex:1"><p style="color:white;font-weight:700;font-size:.95rem;margin:0 0 2px">Install Student Hub</p><p style="color:rgba(255,255,255,.55);font-size:.78rem;margin:0">App install karo &mdash; offline bhi kaam karega!</p></div>
+    <button class="dismiss-btn" onclick="document.getElementById('pwa-banner').style.display='none'">&#10005;</button>
+  </div>
+  <div style="display:flex;gap:10px;margin-top:14px">
+    <button class="install-btn" onclick="installPWA()" style="flex:1">&#128242; Install App</button>
+  </div>
+</div>
+<script>
+const API = 'https://hub-6yrl.onrender.com/api';
+  let token = localStorage.getItem('s_token') || '';
+  let currentUser = null, allNotes = [], allPapers = [];
+  let currentTab = 'home';
+
+  // Pagination
+  let notesLimit = 10, notesSkip = 0, notesHasMore = true, notesSelectedCategory = '', notesBookmarkedOnly = false;
+  let papersLimit = 10, papersSkip = 0, papersHasMore = true, papersSelectedSubject = '', papersBookmarkedOnly = false;
+
+  // ─── INIT ──────────────────────────────────────────────────────────────────
+  window.addEventListener('DOMContentLoaded', () => {
+    const dark = localStorage.getItem('s_dark') !== null ? JSON.parse(localStorage.getItem('s_dark')) : true;
+    applyTheme(dark);
+    token ? checkAuth() : showAuth();
+    lucide.createIcons();
+    initPomo();
+    initPullToRefresh();
+    initStreak();
+  });
+
+  function applyTheme(dark) {
+    document.documentElement.classList.toggle('dark', dark);
+    localStorage.setItem('s_dark', dark);
+    document.getElementById('icon-sun').classList.toggle('hidden', !dark);
+    document.getElementById('icon-moon').classList.toggle('hidden', dark);
+    const lbl = document.getElementById('theme-label');
+    if (lbl) lbl.innerText = dark ? 'Light Mode' : 'Dark Mode';
+  }
+  function toggleTheme() { applyTheme(!document.documentElement.classList.contains('dark')); }
+  function toggleSidebar(open) {
+    document.getElementById('sidebar').classList.toggle('-translate-x-full', !open);
+    document.getElementById('sidebar-overlay').classList.toggle('hidden', !open);
+  }
+  function switchTab(tab) {
+    const isLogin = tab === 'login';
+    document.getElementById('login-form').classList.toggle('hidden', !isLogin);
+    document.getElementById('register-form').classList.toggle('hidden', isLogin);
+    const on = 'flex-1 py-1.5 text-sm font-semibold rounded-lg transition-all' + ' bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm';
+    const off = 'flex-1 py-1.5 text-sm font-semibold rounded-lg transition-all text-zinc-500 dark:text-zinc-400';
+    document.getElementById('tab-login').className = isLogin ? on : off;
+    document.getElementById('tab-register').className = !isLogin ? on : off;
+    hideAlert();
+  }
+  function showAuth() { document.getElementById('auth-view').classList.remove('hidden'); document.getElementById('app-view').classList.add('hidden'); lucide.createIcons(); }
+  function showApp()  { document.getElementById('auth-view').classList.add('hidden');    document.getElementById('app-view').classList.remove('hidden'); goto('home'); lucide.createIcons(); }
+  function showAlert(msg) { const el = document.getElementById('auth-alert'); el.classList.remove('hidden'); el.classList.add('flex'); document.getElementById('auth-alert-msg').innerText = msg; lucide.createIcons(); }
+  function hideAlert()    { const el = document.getElementById('auth-alert'); el.classList.add('hidden'); el.classList.remove('flex'); }
+  function forceReset(e)  { e.preventDefault(); localStorage.clear(); location.reload(); }
+
+  // ─── AUTH ──────────────────────────────────────────────────────────────────
+  async function checkAuth() {
+    try {
+      const r = await fetch(API + '/auth/me', { headers: { Authorization: 'Bearer ' + token } });
+      if (!r.ok) throw new Error();
+      currentUser = await r.json();
+      document.getElementById('s-name').innerText  = currentUser.name || currentUser.username || 'Student';
+      document.getElementById('s-email').innerText = currentUser.email || '';
+      document.getElementById('s-avatar').innerText = (currentUser.name || 'S')[0].toUpperCase();
+      showApp();
+    } catch { token = ''; localStorage.removeItem('s_token'); showAuth(); }
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault(); hideAlert();
+    const btn = document.getElementById('login-btn');
+    btn.disabled = true;
+    const maxRetries = 3;
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        btn.innerHTML = attempt === 1 ? '<span>Signing in...</span>' : '<span>Server waking up... (' + attempt + '/' + maxRetries + ')</span>';
+        const r = await fetch(API + '/auth/login', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: document.getElementById('login-email').value, password: document.getElementById('login-password').value })
+        });
+        const data = await r.json();
+        if (!r.ok) throw new Error(data.errors?.[0]?.msg || 'Login failed');
+        token = data.token; localStorage.setItem('s_token', token); await checkAuth(); return;
+      } catch (err) {
+        const isNet = err.message === 'Failed to fetch' || err.name === 'TypeError';
+        if (isNet && attempt < maxRetries) { showAlert('Server waking up... please wait (' + attempt + '/' + maxRetries + ')'); await new Promise(r => setTimeout(r, attempt * 8000)); }
+        else { showAlert(isNet ? 'Server offline. Please try again in 30 seconds.' : err.message); break; }
+      }
+    }
+    btn.disabled = false; btn.innerHTML = '<i data-lucide="log-in" class="w-4 h-4"></i><span>Sign In</span>'; lucide.createIcons();
+  }
+
+  async function handleRegister(e) {
+    e.preventDefault(); hideAlert();
+    const btn = document.getElementById('reg-btn');
+    btn.disabled = true; btn.innerHTML = '<span>Creating...</span>';
+    try {
+      const r = await fetch(API + '/auth/register', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: document.getElementById('reg-name').value, email: document.getElementById('reg-email').value, username: document.getElementById('reg-username').value, password: document.getElementById('reg-password').value })
+      });
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.errors?.[0]?.msg || 'Registration failed');
+      token = data.token; localStorage.setItem('s_token', token); await checkAuth();
+    } catch (err) { showAlert(err.message); }
+    finally { btn.disabled = false; btn.innerHTML = '<i data-lucide="user-plus" class="w-4 h-4"></i><span>Create Account</span>'; lucide.createIcons(); }
+  }
+
+  function handleLogout() { token = ''; currentUser = null; localStorage.removeItem('s_token'); showAuth(); }
+
+  // ─── NAVIGATION ───────────────────────────────────────────────────────────
+  const titles = {
+    home:          ['Welcome &#128075;', "Here's what's new today"],
+    announcements: ['Announcements &#128226;', 'Latest updates from institution'],
+    notes:         ['Study Notes &#128221;', 'Download and read study materials'],
+    assignments:   ['Assignments &#128203;', 'Your tasks and deadlines'],
+    timetable:     ['Timetable &#128197;', 'Your weekly class schedule'],
+    syllabus:      ['Syllabus &#128218;', 'Course topics and content'],
+    papers:        ['Previous Papers &#128196;', 'Past exam papers for practice'],
+    planner:       ['Study Planner &#128197;', 'Track your exams, goals and revision tasks'],
+    focus:         ['Focus Zone &#9201;', 'Pomodoro timer for distraction-free study']
+  };
+
+  function goto(view) {
+    currentTab = view;
+    document.querySelectorAll('[id^="view-"]').forEach(s => s.classList.add('hidden'));
+    document.querySelectorAll('[id^="nav-"]').forEach(b => b.classList.remove('active'));
+    const sec = document.getElementById('view-' + view); if (sec) sec.classList.remove('hidden');
+    const nav = document.getElementById('nav-' + view);   if (nav) nav.classList.add('active');
+    toggleSidebar(false);
+    const t = titles[view] || ['', ''];
+    document.getElementById('page-title').innerHTML = t[0];
+    document.getElementById('page-sub').innerText   = t[1];
+    loadView(view);
+  }
+
+  const loaded = {};
+  async function loadView(v) {
+    if (v === 'home')    { loadHome(); return; }
+    if (v === 'planner') { initPlanner(); return; }
+    if (v === 'focus')   { initPomo(); return; }
+    if (loaded[v]) return;
+    const map = {
+      announcements: loadAnnouncements,
+      notes:         () => loadNotesPaginated(true),
+      assignments:   loadAssignments,
+      timetable:     loadTimetable,
+      syllabus:      loadSyllabus,
+      papers:        () => loadPapersPaginated(true)
+    };
+    if (map[v]) { await map[v](); loaded[v] = true; }
+  }
+
+  async function apiFetch(ep) {
+    const r = await fetch(API + ep, { headers: token ? { Authorization: 'Bearer ' + token } : {} });
+    if (!r.ok) throw new Error('Failed');
+    return r.json();
+  }
+
+  // ─── MANUAL REFRESH ───────────────────────────────────────────────────────
+  async function handleManualRefresh() {
+    const btn = document.getElementById('refresh-btn');
+    if (btn) btn.querySelector('i').classList.add('animate-spin');
+    for (let k in loaded) delete loaded[k];
+    try { await loadView(currentTab); } catch {}
+    setTimeout(() => { if (btn) btn.querySelector('i').classList.remove('animate-spin'); }, 600);
+    pushNotif('&#10003; Content refreshed!', 'success');
+  }
+
+  // ─── PULL TO REFRESH ──────────────────────────────────────────────────────
+  function initPullToRefresh() {
+    let startY = 0, pulling = false;
+    const ptr = document.getElementById('ptr-indicator');
+    document.addEventListener('touchstart', e => { startY = e.touches[0].clientY; }, { passive: true });
+    document.addEventListener('touchmove', e => {
+      const dy = e.touches[0].clientY - startY;
+      if (dy > 60 && window.scrollY === 0) { pulling = true; ptr.style.transform = 'translateX(-50%) translateY(0)'; }
+    }, { passive: true });
+    document.addEventListener('touchend', () => {
+      ptr.style.transform = 'translateX(-50%) translateY(-60px)';
+      if (pulling) { pulling = false; handleManualRefresh(); }
+    });
+  }
+
+  // ─── NOTIFICATIONS ────────────────────────────────────────────────────────
+  function pushNotif(msg, type = 'info') {
+    const c = document.getElementById('notif-container');
+    const colors = { success: '#10b981', error: '#ef4444', info: '#7c3aed', warning: '#f59e0b' };
+    const div = document.createElement('div');
+    div.className = 'notif-item';
+    div.innerHTML = '<div style="width:6px;height:6px;border-radius:50%;background:' + (colors[type]||colors.info) + ';margin-top:5px;flex-shrink:0"></div><span style="flex:1;color:rgba(255,255,255,.85)">' + msg + '</span><button onclick="this.parentElement.remove()" style="color:rgba(255,255,255,.4);background:none;border:none;cursor:pointer;padding:0;font-size:14px">&#10005;</button>';
+    c.appendChild(div);
+    setTimeout(() => { if (div.parentElement) div.remove(); }, 4000);
+  }
+
+  // ─── STUDY ACTIVITY TRACKING ──────────────────────────────────────────────
+  function getStudyActivity() { return JSON.parse(localStorage.getItem('s_study_activity') || '[]'); }
+  function trackStudyActivity(id, title, type, fileUrl) {
+    let a = getStudyActivity().filter(x => x.id !== id);
+    a.unshift({ id, title, type, fileUrl, timestamp: Date.now() });
+    if (a.length > 10) a.pop();
+    localStorage.setItem('s_study_activity', JSON.stringify(a));
+    renderStudyActivity();
+  }
+  function renderStudyActivity() {
+    const a = getStudyActivity();
+    const cl = document.getElementById('list-continue-learning');
+    const rl = document.getElementById('list-recent-pdfs');
+    if (!cl || !rl) return;
+    const topics = a.filter(x => x.type === 'note');
+    const pdfs   = a.filter(x => x.type === 'pdf');
+    cl.innerHTML = topics.length === 0
+      ? '<p class="text-xs text-zinc-400">No recent topics. Start studying!</p>'
+      : topics.slice(0,4).map(x => '<div class="flex items-center gap-2 py-1.5 group cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg px-2 transition-all" onclick="goto(\'notes\')"><i data-lucide="book-open" class="w-4 h-4 text-violet-500 shrink-0"></i><span class="text-sm text-zinc-800 dark:text-zinc-200 truncate flex-1">' + x.title + '</span><span class="text-[10px] text-zinc-400">' + timeAgo(x.timestamp) + '</span></div>').join('');
+    rl.innerHTML = pdfs.length === 0
+      ? '<p class="text-xs text-zinc-400">No PDFs opened recently.</p>'
+      : pdfs.slice(0,4).map(x => '<div class="flex items-center gap-2 py-1.5 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg px-2 transition-all" onclick="openPdfPreview(\'' + (x.fileUrl||'') + '\',\'' + x.title.replace(/'/g,"\\'") + '\')"><i data-lucide="file-text" class="w-4 h-4 text-emerald-500 shrink-0"></i><span class="text-sm text-zinc-800 dark:text-zinc-200 truncate flex-1">' + x.title + '</span><span class="text-[10px] text-zinc-400">' + timeAgo(x.timestamp) + '</span></div>').join('');
+    lucide.createIcons();
+  }
+
+  function timeAgo(ts) {
+    const m = Math.floor((Date.now() - ts) / 60000);
+    if (m < 1) return 'just now';
+    if (m < 60) return m + 'm ago';
+    const h = Math.floor(m/60);
+    if (h < 24) return h + 'h ago';
+    return Math.floor(h/24) + 'd ago';
+  }
+
+  // ─── BOOKMARKS ────────────────────────────────────────────────────────────
+  function getBookmarks() { return JSON.parse(localStorage.getItem('s_bookmarks') || '{}'); }
+  function isBookmarked(id) { return !!getBookmarks()[id]; }
+  function toggleBookmark(id, title, type) {
+    const bm = getBookmarks();
+    if (bm[id]) { delete bm[id]; pushNotif('Bookmark removed', 'info'); }
+    else { bm[id] = { id, title, type, savedAt: Date.now() }; pushNotif('Bookmarked: ' + title, 'success'); }
+    localStorage.setItem('s_bookmarks', JSON.stringify(bm));
+    return !!bm[id];
+  }
+
+  // ─── STREAK ───────────────────────────────────────────────────────────────
+  function initStreak() {
+    const today = new Date().toDateString();
+    const last  = localStorage.getItem('s_last_active');
+    let streak  = parseInt(localStorage.getItem('s_streak') || '0');
+    if (last !== today) {
+      const yesterday = new Date(Date.now() - 86400000).toDateString();
+      streak = last === yesterday ? streak + 1 : 1;
+      localStorage.setItem('s_streak', streak);
+      localStorage.setItem('s_last_active', today);
+    }
+    document.getElementById('streak-count').innerText = streak;
+    const mob = document.getElementById('streak-count-mobile');
+    if (mob) mob.innerText = streak;
+    if (streak > 0) {
+      document.getElementById('streak-display').classList.remove('hidden');
+      const mobBadge = document.getElementById('streak-display-mobile');
+      if (mobBadge) mobBadge.classList.remove('hidden');
+    }
+    const sp = document.getElementById('stats-streak');
+    if (sp) sp.innerText = streak;
+  }
+
+  // ─── HOME ─────────────────────────────────────────────────────────────────
+  async function loadHome() {
+    renderStudyActivity();
+    loadHomeStats();
+    loadHomeAnnouncements();
+    loadPopularNotes();
+  }
+
+  async function loadHomeStats() {
+    try {
+      const [notes, asgn, ann, papers] = await Promise.all([
+        apiFetch('/notes?limit=1'), apiFetch('/assignments?limit=1'), apiFetch('/announcements?limit=1'), apiFetch('/papers?limit=1')
+      ]);
+      // Get total counts
+      const [nc, ac, anc, pc] = await Promise.all([
+        apiFetch('/notes'), apiFetch('/assignments'), apiFetch('/announcements'), apiFetch('/papers')
+      ]);
+      document.getElementById('stat-notes').innerText   = nc.length || '0';
+      document.getElementById('stat-asgn').innerText    = ac.length || '0';
+      document.getElementById('stat-ann').innerText     = anc.length || '0';
+      document.getElementById('stat-papers').innerText  = pc.length || '0';
+    } catch {}
+  }
+
+  async function loadHomeAnnouncements() {
+    const el = document.getElementById('home-ann');
+    try {
+      const data = await apiFetch('/announcements?limit=3');
+      if (!data.length) { el.innerHTML = emptyState('megaphone', 'No announcements yet.'); return; }
+      el.innerHTML = data.map(a => announcementCard(a)).join('');
+      lucide.createIcons();
+    } catch { el.innerHTML = '<p class="text-xs text-red-400">Could not load announcements.</p>'; }
+  }
+
+  async function loadPopularNotes() {
+    const el = document.getElementById('home-popular');
+    try {
+      const data = await apiFetch('/notes?limit=5');
+      if (!data.length) { el.innerHTML = emptyState('notebook-text', 'No notes yet.'); return; }
+      el.innerHTML = data.map((n, i) => '<div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all cursor-pointer group" onclick="trackStudyActivity(\'' + n._id + '\',\'' + n.title.replace(/'/g,"\\'") + '\',\'note\',\'' + (n.fileUrl||'') + '\');goto(\'notes\')"><span class="w-6 h-6 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xs font-bold shrink-0">' + (i+1) + '</span><span class="flex-1 text-sm font-medium text-zinc-800 dark:text-zinc-200 truncate">' + n.title + '</span>' + (n.fileUrl ? '<a href="' + n.fileUrl + '" target="_blank" class="pill-dl opacity-0 group-hover:opacity-100 transition-opacity"><i data-lucide="download" class="w-3 h-3"></i>PDF</a>' : '') + '</div>').join('');
+      lucide.createIcons();
+    } catch { el.innerHTML = '<p class="text-xs text-red-400">Could not load popular notes.</p>'; }
+  }
+
+  // ─── UNIVERSAL SEARCH ─────────────────────────────────────────────────────
+  let searchTimer;
+  function handleUniversalSearch() {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(async () => {
+      const q = document.getElementById('universal-search').value.trim();
+      const box = document.getElementById('universal-search-suggestions');
+      if (q.length < 2) { box.classList.add('hidden'); return; }
+      try {
+        const data = await apiFetch('/search?q=' + encodeURIComponent(q));
+        const results = [
+          ...(data.notes||[]).map(x => ({ ...x, _type: 'Note', _icon: 'notebook-text', _color: 'text-blue-500' })),
+          ...(data.assignments||[]).map(x => ({ ...x, _type: 'Assignment', _icon: 'clipboard-list', _color: 'text-orange-500' })),
+          ...(data.papers||[]).map(x => ({ ...x, _type: 'Paper', _icon: 'file-text', _color: 'text-emerald-500' }))
+        ];
+        if (!results.length) { box.innerHTML = '<div class="p-4 text-sm text-zinc-400 text-center">No results found</div>'; box.classList.remove('hidden'); return; }
+        box.innerHTML = results.slice(0,10).map(r => '<div class="flex items-center gap-3 px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800 cursor-pointer transition-all" onclick="onSearchResultClick(\'' + r._type.toLowerCase() + 's\',\'' + r._id + '\',\'' + r.title.replace(/'/g,"\\'") + '\',\'' + (r.fileUrl||'') + '\')">' +
+          '<i data-lucide="' + r._icon + '" class="w-4 h-4 ' + r._color + ' shrink-0"></i>' +
+          '<div class="flex-1 min-w-0"><p class="text-sm font-medium text-zinc-900 dark:text-zinc-100 truncate">' + r.title + '</p><p class="text-xs text-zinc-400">' + r._type + (r.subject ? ' &middot; ' + r.subject : '') + '</p></div>' +
+          (r.fileUrl ? '<span class="text-xs text-violet-500 font-semibold">PDF</span>' : '') +
+          '</div>').join('');
+        box.classList.remove('hidden');
+        lucide.createIcons();
+      } catch { box.classList.add('hidden'); }
+    }, 300);
+  }
+  function onSearchResultClick(type, id, title, fileUrl) {
+    document.getElementById('universal-search').value = '';
+    document.getElementById('universal-search-suggestions').classList.add('hidden');
+    trackStudyActivity(id, title, 'note', fileUrl);
+    goto(type === 'papers' ? 'papers' : type === 'assignments' ? 'assignments' : 'notes');
+  }
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#universal-search') && !e.target.closest('#universal-search-suggestions')) {
+      const el = document.getElementById('universal-search-suggestions');
+      if (el) el.classList.add('hidden');
+    }
+  });
+
+  // ─── ANNOUNCEMENTS ────────────────────────────────────────────────────────
+  async function loadAnnouncements() {
+    const el = document.getElementById('list-announcements');
+    el.innerHTML = '<div class="skeleton h-20 w-full"></div><div class="skeleton h-20 w-full mt-4"></div>';
+    try {
+      const data = await apiFetch('/announcements');
+      if (!data.length) { el.innerHTML = emptyState('megaphone', 'No announcements yet.'); return; }
+      el.innerHTML = data.map(a => announcementCard(a)).join('');
+      lucide.createIcons();
+    } catch { el.innerHTML = errorState('announcements'); }
+  }
+
+  function announcementCard(a) {
+    return '<div class="card p-5 space-y-2 fade-in">' +
+      '<div class="flex items-start justify-between gap-3">' +
+      '<div class="flex items-center gap-2"><div class="w-9 h-9 rounded-xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center shrink-0"><i data-lucide="megaphone" class="w-4 h-4 text-violet-600 dark:text-violet-400"></i></div>' +
+      '<div><p class="font-semibold text-sm text-zinc-900 dark:text-white">' + a.title + '</p><p class="text-xs text-zinc-400">' + formatDate(a.createdAt) + '</p></div></div>' +
+      '<span class="tag text-violet-400 border-violet-400/20 shrink-0 text-[10px]">NEW</span></div>' +
+      '<p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">' + (a.message || '') + '</p></div>';
+  }
+
+  // ─── NOTES ────────────────────────────────────────────────────────────────
+  async function loadNotesPaginated(reset = false) {
+    if (reset) { notesSkip = 0; notesHasMore = true; allNotes = []; }
+    const el = document.getElementById('list-notes');
+    if (reset) el.innerHTML = '<div class="skeleton h-24 w-full col-span-2"></div><div class="skeleton h-24 w-full col-span-2 mt-2"></div>';
+    try {
+      const cat = notesSelectedCategory ? '&category=' + encodeURIComponent(notesSelectedCategory) : '';
+      const data = await apiFetch('/notes?limit=' + notesLimit + '&skip=' + notesSkip + cat);
+      allNotes = reset ? data : [...allNotes, ...data];
+      notesHasMore = data.length === notesLimit;
+      notesSkip += data.length;
+      // Populate category filter
+      if (reset) {
+        const all = await apiFetch('/notes');
+        const cats = [...new Set(all.filter(n => n.category).map(n => n.category))];
+        const sel = document.getElementById('notes-category-select');
+        sel.innerHTML = '<option value="">All Categories</option>' + cats.map(c => '<option value="' + c + '">' + c + '</option>').join('');
+      }
+      renderNotes();
+    } catch { el.innerHTML = errorState('notes'); }
+  }
+
+  function filterNotes() {
+    notesSelectedCategory = document.getElementById('notes-category-select').value;
+    loadNotesPaginated(true);
+  }
+  function toggleNotesBookmarkFilter() {
+    notesBookmarkedOnly = !notesBookmarkedOnly;
+    const btn = document.getElementById('btn-notes-bookmarked');
+    btn.classList.toggle('bg-violet-100', notesBookmarkedOnly);
+    btn.classList.toggle('text-violet-700', notesBookmarkedOnly);
+    renderNotes();
+  }
+  function loadMoreNotes() { loadNotesPaginated(false); }
+
+  function renderNotes() {
+    const el = document.getElementById('list-notes');
+    const q = (document.getElementById('notes-search').value || '').toLowerCase();
+    const bm = getBookmarks();
+    let items = allNotes;
+    if (q) items = items.filter(n => (n.title + ' ' + (n.description||'')).toLowerCase().includes(q));
+    if (notesBookmarkedOnly) items = items.filter(n => bm[n._id]);
+    if (!items.length) { el.innerHTML = '<div class="col-span-2">' + emptyState('notebook-text', notesBookmarkedOnly ? 'No bookmarked notes.' : 'No notes found.') + '</div>'; return; }
+    el.innerHTML = items.map(n => noteCard(n)).join('');
+    document.getElementById('notes-load-more-container').classList.toggle('hidden', !notesHasMore);
+    lucide.createIcons();
+  }
+
+  function noteCard(n) {
+    const bm = isBookmarked(n._id);
+    return '<div class="card p-5 space-y-3 fade-in">' +
+      '<div class="flex items-start justify-between gap-2">' +
+      '<div class="flex items-center gap-2"><div class="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center shrink-0"><i data-lucide="notebook-text" class="w-4 h-4 text-blue-600 dark:text-blue-400"></i></div>' +
+      '<div><p class="font-semibold text-sm text-zinc-900 dark:text-white leading-tight">' + n.title + '</p><p class="text-xs text-zinc-400 mt-0.5">' + formatDate(n.createdAt) + '</p></div></div>' +
+      '<button onclick="toggleNoteBookmark(\'' + n._id + '\',\'' + n.title.replace(/'/g,"\\'") + '\')" class="p-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 transition-all shrink-0" id="bm-btn-' + n._id + '">' +
+      '<i data-lucide="bookmark' + (bm ? '' : '') + '" class="w-4 h-4 ' + (bm ? 'text-violet-500 fill-violet-500' : '') + '"></i></button></div>' +
+      (n.description ? '<p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed line-clamp-2">' + n.description + '</p>' : '') +
+      (n.category ? '<span class="tag">' + n.category + '</span>' : '') +
+      '<div class="flex gap-2 pt-1">' +
+      (n.fileUrl ? '<button onclick="openPdfPreview(\'' + n.fileUrl + '\',\'' + n.title.replace(/'/g,"\\'") + '\')" class="flex items-center gap-1.5 px-3 py-1.5 bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 rounded-lg text-xs font-semibold hover:bg-violet-200 transition-all"><i data-lucide="eye" class="w-3.5 h-3.5"></i>Preview</button>' : '') +
+      (n.fileUrl ? '<a href="' + n.fileUrl + '" download onclick="trackStudyActivity(\'' + n._id + '\',\'' + n.title.replace(/'/g,"\\'") + '\',\'pdf\',\'' + n.fileUrl + '\')" class="pill-dl flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>' : '') +
+      '<button onclick="trackStudyActivity(\'' + n._id + '\',\'' + n.title.replace(/'/g,"\\'") + '\',\'note\',\'' + (n.fileUrl||'') + '\')" class="px-3 py-1.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 rounded-lg text-xs font-semibold hover:bg-zinc-200 transition-all">Track</button>' +
+      '</div></div>';
+  }
+
+  function toggleNoteBookmark(id, title) {
+    const bm = toggleBookmark(id, title, 'note');
+    const btn = document.getElementById('bm-btn-' + id);
+    if (btn) btn.innerHTML = '<i data-lucide="bookmark" class="w-4 h-4 ' + (bm ? 'text-violet-500 fill-violet-500' : '') + '"></i>';
+    lucide.createIcons();
+  }
+
+  // ─── ASSIGNMENTS ──────────────────────────────────────────────────────────
+  async function loadAssignments() {
+    const el = document.getElementById('list-assignments');
+    el.innerHTML = '<div class="skeleton h-20 w-full"></div><div class="skeleton h-20 w-full mt-4"></div>';
+    try {
+      const data = await apiFetch('/assignments');
+      if (!data.length) { el.innerHTML = emptyState('clipboard-list', 'No assignments yet.'); return; }
+      el.innerHTML = data.map(a => assignmentCard(a)).join('');
+      lucide.createIcons();
+    } catch { el.innerHTML = errorState('assignments'); }
+  }
+
+  function assignmentCard(a) {
+    const due = a.dueDate ? new Date(a.dueDate) : null;
+    const overdue = due && due < new Date();
+    return '<div class="card p-5 space-y-3 fade-in">' +
+      '<div class="flex items-start justify-between gap-2">' +
+      '<div class="flex items-center gap-2"><div class="w-9 h-9 rounded-xl ' + (overdue ? 'bg-red-100 dark:bg-red-900/30' : 'bg-orange-100 dark:bg-orange-900/30') + ' flex items-center justify-center shrink-0"><i data-lucide="clipboard-list" class="w-4 h-4 ' + (overdue ? 'text-red-600 dark:text-red-400' : 'text-orange-500') + '"></i></div>' +
+      '<div><p class="font-semibold text-sm text-zinc-900 dark:text-white">' + a.title + '</p><p class="text-xs text-zinc-400">' + formatDate(a.createdAt) + '</p></div></div>' +
+      (due ? '<span class="tag ' + (overdue ? 'border-red-400/30 text-red-400' : '') + ' text-[10px] shrink-0">Due: ' + due.toLocaleDateString() + '</span>' : '') +
+      '</div>' +
+      (a.description ? '<p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">' + a.description + '</p>' : '') +
+      (a.fileUrl ? '<a href="' + a.fileUrl + '" download class="pill-dl inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>' : '') +
+      '</div>';
+  }
+
+  // ─── TIMETABLE (Time Glitch Fix: uses slot.start + " - " + slot.end) ──────
+  async function loadTimetable() {
+    const el = document.getElementById('list-timetable');
+    el.innerHTML = '<div class="skeleton h-32 w-full"></div>';
+    try {
+      const data = await apiFetch('/timetable');
+      if (!data.length) { el.innerHTML = emptyState('calendar-days', 'No timetable added yet.'); return; }
+      el.innerHTML = data.map(tt => timetableCard(tt)).join('');
+      lucide.createIcons();
+    } catch { el.innerHTML = errorState('timetable'); }
+  }
+
+  function timetableCard(tt) {
+    const dayOrder = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+    const slots = (tt.slots || []).sort((a, b) => dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day));
+    return '<div class="card p-5 fade-in">' +
+      '<div class="flex items-center gap-3 mb-4">' +
+      '<div class="w-9 h-9 rounded-xl bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center shrink-0"><i data-lucide="calendar-days" class="w-4 h-4 text-teal-600 dark:text-teal-400"></i></div>' +
+      '<div><p class="font-bold text-sm text-zinc-900 dark:text-white">' + tt.title + '</p><p class="text-xs text-zinc-400">' + formatDate(tt.createdAt) + '</p></div></div>' +
+      (slots.length === 0 ? '<p class="text-xs text-zinc-400">No schedule entries.</p>' :
+      '<div class="overflow-x-auto"><table class="w-full text-xs"><thead><tr class="border-b border-zinc-200 dark:border-zinc-800">' +
+      '<th class="text-left py-2 pr-4 text-zinc-500 font-semibold">Day</th>' +
+      '<th class="text-left py-2 pr-4 text-zinc-500 font-semibold">Subject</th>' +
+      '<th class="text-left py-2 pr-4 text-zinc-500 font-semibold">Time</th>' +
+      '<th class="text-left py-2 text-zinc-500 font-semibold">Room</th>' +
+      '</tr></thead><tbody>' +
+      slots.map(s => '<tr class="border-b border-zinc-100 dark:border-zinc-800/50 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-all">' +
+        '<td class="py-2.5 pr-4 font-semibold text-zinc-900 dark:text-white">' + (s.day || '-') + '</td>' +
+        '<td class="py-2.5 pr-4 text-zinc-700 dark:text-zinc-300">' + (s.subject || '-') + '</td>' +
+        '<td class="py-2.5 pr-4 text-zinc-600 dark:text-zinc-400">' + formatTime(s) + '</td>' +
+        '<td class="py-2.5 text-zinc-600 dark:text-zinc-400">' + (s.location || s.room || '-') + '</td>' +
+        '</tr>').join('') +
+      '</tbody></table></div>') + '</div>';
+  }
+
+  // Fixed time display - uses ASCII hyphen to avoid encoding issues
+  function formatTime(s) {
+    if (s.time) return s.time;
+    if (s.start && s.end) return s.start + ' - ' + s.end;
+    if (s.start) return s.start;
+    return '-';
+  }
+
+  // ─── SYLLABUS ─────────────────────────────────────────────────────────────
+  async function loadSyllabus() {
+    const el = document.getElementById('list-syllabus');
+    el.innerHTML = '<div class="skeleton h-20 w-full"></div>';
+    try {
+      const data = await apiFetch('/syllabus');
+      if (!data.length) { el.innerHTML = emptyState('book-open', 'No syllabus uploaded yet.'); return; }
+      el.innerHTML = data.map(s => syllabusCard(s)).join('');
+      lucide.createIcons();
+    } catch { el.innerHTML = errorState('syllabus'); }
+  }
+
+  function syllabusCard(s) {
+    const topics = s.topics || [];
+    return '<div class="card p-5 space-y-3 fade-in">' +
+      '<div class="flex items-center gap-3">' +
+      '<div class="w-9 h-9 rounded-xl bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center shrink-0"><i data-lucide="book-open" class="w-4 h-4 text-pink-600 dark:text-pink-400"></i></div>' +
+      '<div><p class="font-semibold text-sm text-zinc-900 dark:text-white">' + s.title + '</p>' +
+      (s.subject ? '<p class="text-xs text-zinc-400">' + s.subject + '</p>' : '') + '</div></div>' +
+      (s.description ? '<p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">' + s.description + '</p>' : '') +
+      (topics.length ? '<div class="flex flex-wrap gap-1.5 mt-1">' + topics.map(t => '<span class="tag">' + t + '</span>').join('') + '</div>' : '') +
+      (s.fileUrl ? '<a href="' + s.fileUrl + '" download class="pill-dl inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>' : '') +
+      '</div>';
+  }
+
+  // ─── PAPERS ───────────────────────────────────────────────────────────────
+  async function loadPapersPaginated(reset = false) {
+    if (reset) { papersSkip = 0; papersHasMore = true; allPapers = []; }
+    const el = document.getElementById('list-papers');
+    if (reset) el.innerHTML = '<div class="skeleton h-20 w-full col-span-2"></div>';
+    try {
+      const subj = papersSelectedSubject ? '&subject=' + encodeURIComponent(papersSelectedSubject) : '';
+      const data = await apiFetch('/papers?limit=' + papersLimit + '&skip=' + papersSkip + subj);
+      allPapers = reset ? data : [...allPapers, ...data];
+      papersHasMore = data.length === papersLimit;
+      papersSkip += data.length;
+      if (reset) {
+        const all = await apiFetch('/papers');
+        const subjs = [...new Set(all.filter(p => p.subject).map(p => p.subject))];
+        const sel = document.getElementById('papers-subject-select');
+        sel.innerHTML = '<option value="">All Subjects</option>' + subjs.map(s => '<option value="' + s + '">' + s + '</option>').join('');
+      }
+      renderPapers();
+    } catch { el.innerHTML = errorState('papers'); }
+  }
+
+  function filterPapers() { papersSelectedSubject = document.getElementById('papers-subject-select').value; loadPapersPaginated(true); }
+  function togglePapersBookmarkFilter() {
+    papersBookmarkedOnly = !papersBookmarkedOnly;
+    const btn = document.getElementById('btn-papers-bookmarked');
+    btn.classList.toggle('bg-violet-100', papersBookmarkedOnly);
+    btn.classList.toggle('text-violet-700', papersBookmarkedOnly);
+    renderPapers();
+  }
+  function loadMorePapers() { loadPapersPaginated(false); }
+
+  function renderPapers() {
+    const el = document.getElementById('list-papers');
+    const q = (document.getElementById('papers-search').value || '').toLowerCase();
+    const bm = getBookmarks();
+    let items = allPapers;
+    if (q) items = items.filter(p => (p.title + ' ' + (p.subject||'')).toLowerCase().includes(q));
+    if (papersBookmarkedOnly) items = items.filter(p => bm[p._id]);
+    if (!items.length) { el.innerHTML = '<div class="col-span-2">' + emptyState('file-text', papersBookmarkedOnly ? 'No bookmarked papers.' : 'No papers found.') + '</div>'; return; }
+    el.innerHTML = items.map(p => paperCard(p)).join('');
+    document.getElementById('papers-load-more-container').classList.toggle('hidden', !papersHasMore);
+    lucide.createIcons();
+  }
+
+  function paperCard(p) {
+    const bm = isBookmarked(p._id);
+    return '<div class="card p-5 space-y-3 fade-in">' +
+      '<div class="flex items-start justify-between gap-2">' +
+      '<div class="flex items-center gap-2"><div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center shrink-0"><i data-lucide="file-text" class="w-4 h-4 text-emerald-600 dark:text-emerald-400"></i></div>' +
+      '<div><p class="font-semibold text-sm text-zinc-900 dark:text-white">' + p.title + '</p>' +
+      '<div class="flex gap-1.5 mt-0.5">' + (p.subject ? '<span class="tag text-[10px]">' + p.subject + '</span>' : '') + (p.year ? '<span class="tag text-[10px]">' + p.year + '</span>' : '') + '</div></div></div>' +
+      '<button onclick="togglePaperBookmark(\'' + p._id + '\',\'' + p.title.replace(/'/g,"\\'") + '\')" class="p-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 transition-all shrink-0" id="bm-btn-' + p._id + '">' +
+      '<i data-lucide="bookmark" class="w-4 h-4 ' + (bm ? 'text-violet-500 fill-violet-500' : '') + '"></i></button></div>' +
+      '<div class="flex gap-2 pt-1">' +
+      (p.fileUrl ? '<button onclick="openPdfPreview(\'' + p.fileUrl + '\',\'' + p.title.replace(/'/g,"\\'") + '\')" class="flex items-center gap-1.5 px-3 py-1.5 bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 rounded-lg text-xs font-semibold hover:bg-violet-200 transition-all"><i data-lucide="eye" class="w-3.5 h-3.5"></i>Preview</button>' : '') +
+      (p.fileUrl ? '<a href="' + p.fileUrl + '" download onclick="trackStudyActivity(\'' + p._id + '\',\'' + p.title.replace(/'/g,"\\'") + '\',\'pdf\',\'' + p.fileUrl + '\')" class="pill-dl flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>' : '') +
+      '</div></div>';
+  }
+
+  function togglePaperBookmark(id, title) {
+    const bm = toggleBookmark(id, title, 'paper');
+    const btn = document.getElementById('bm-btn-' + id);
+    if (btn) btn.innerHTML = '<i data-lucide="bookmark" class="w-4 h-4 ' + (bm ? 'text-violet-500 fill-violet-500' : '') + '"></i>';
+    lucide.createIcons();
+  }
+
+  // ─── PDF PREVIEW ──────────────────────────────────────────────────────────
+  function openPdfPreview(url, title) {
+    if (!url) return;
+    trackStudyActivity(url, title, 'pdf', url);
+    document.getElementById('pdf-modal-title').innerText = title;
+    document.getElementById('pdf-iframe').src = url;
+    document.getElementById('pdf-download-btn').href = url;
+    document.getElementById('pdf-download-btn').download = title + '.pdf';
+    document.getElementById('pdf-modal').style.display = 'flex';
+    lucide.createIcons();
+  }
+  function closePdfModal(e) { if (e.target === document.getElementById('pdf-modal')) closePdfModalDirect(); }
+  function closePdfModalDirect() { document.getElementById('pdf-modal').style.display = 'none'; document.getElementById('pdf-iframe').src = ''; }
+
+  // ─── STUDY PLANNER ────────────────────────────────────────────────────────
+  let countdownInterval;
+  function initPlanner() {
+    loadGoals(); loadRevision(); startCountdown();
+    const pomos = parseInt(localStorage.getItem('s_pomos') || '0');
+    const time  = parseInt(localStorage.getItem('s_focus_time') || '0');
+    const streak = parseInt(localStorage.getItem('s_streak') || '0');
+    document.getElementById('stats-pomos').innerText = pomos;
+    document.getElementById('stats-time').innerText  = time + 'm';
+    document.getElementById('stats-streak').innerText = streak;
+    const saved = localStorage.getItem('s_countdown');
+    if (saved) {
+      const { title, date } = JSON.parse(saved);
+      document.getElementById('cd-title-input').value = title || '';
+      document.getElementById('cd-date-input').value  = date  || '';
+      document.getElementById('cd-target-label').innerText = title ? 'Counting down to: ' + title : '';
+    }
+  }
+
+  function saveCountdown() {
+    const title = document.getElementById('cd-title-input').value;
+    const date  = document.getElementById('cd-date-input').value;
+    if (!date) { pushNotif('Please select a date', 'error'); return; }
+    localStorage.setItem('s_countdown', JSON.stringify({ title, date }));
+    document.getElementById('cd-target-label').innerText = title ? 'Counting down to: ' + title : '';
+    startCountdown();
+    pushNotif('Countdown set!', 'success');
+  }
+
+  function startCountdown() {
+    clearInterval(countdownInterval);
+    const saved = localStorage.getItem('s_countdown');
+    if (!saved) return;
+    const { date } = JSON.parse(saved);
+    if (!date) return;
+    const target = new Date(date).getTime();
+    function tick() {
+      const diff = target - Date.now();
+      if (diff <= 0) { document.getElementById('cd-target-label').innerText = 'Exam day is here!'; return; }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      document.getElementById('cd-days').innerText  = String(d).padStart(2,'0');
+      document.getElementById('cd-hours').innerText = String(h).padStart(2,'0');
+      document.getElementById('cd-mins').innerText  = String(m).padStart(2,'0');
+      document.getElementById('cd-secs').innerText  = String(s).padStart(2,'0');
+    }
+    tick();
+    countdownInterval = setInterval(tick, 1000);
+  }
+
+  function loadGoals() {
+    const goals = JSON.parse(localStorage.getItem('s_goals') || '[]');
+    renderGoals(goals);
+  }
+  function addGoal() {
+    const inp = document.getElementById('goal-input');
+    const val = inp.value.trim();
+    if (!val) return;
+    const goals = JSON.parse(localStorage.getItem('s_goals') || '[]');
+    goals.unshift({ id: Date.now(), text: val, done: false });
+    localStorage.setItem('s_goals', JSON.stringify(goals));
+    inp.value = '';
+    renderGoals(goals);
+  }
+  function toggleGoal(id) {
+    const goals = JSON.parse(localStorage.getItem('s_goals') || '[]');
+    const g = goals.find(x => x.id === id); if (g) g.done = !g.done;
+    localStorage.setItem('s_goals', JSON.stringify(goals));
+    renderGoals(goals);
+  }
+  function deleteGoal(id) {
+    const goals = JSON.parse(localStorage.getItem('s_goals') || '[]').filter(x => x.id !== id);
+    localStorage.setItem('s_goals', JSON.stringify(goals));
+    renderGoals(goals);
+  }
+  function renderGoals(goals) {
+    const el = document.getElementById('goals-list');
+    if (!el) return;
+    const done = goals.filter(g => g.done).length;
+    const prog = document.getElementById('goals-progress');
+    const fill = document.getElementById('goals-fill');
+    if (prog) prog.innerText = done + '/' + goals.length + ' done';
+    if (fill) fill.style.width = (goals.length ? Math.round(done/goals.length*100) : 0) + '%';
+    if (!goals.length) { el.innerHTML = '<p class="text-xs text-zinc-400">No goals yet. Add one!</p>'; return; }
+    el.innerHTML = goals.map(g => '<div class="flex items-center gap-2 group">' +
+      '<button onclick="toggleGoal(' + g.id + ')" class="w-4 h-4 rounded border-2 ' + (g.done ? 'bg-emerald-500 border-emerald-500' : 'border-zinc-300 dark:border-zinc-600') + ' flex items-center justify-center shrink-0 transition-all">' + (g.done ? '<i data-lucide="check" class="w-2.5 h-2.5 text-white"></i>' : '') + '</button>' +
+      '<span class="flex-1 text-xs ' + (g.done ? 'line-through text-zinc-400' : 'text-zinc-700 dark:text-zinc-300') + '">' + g.text + '</span>' +
+      '<button onclick="deleteGoal(' + g.id + ')" class="opacity-0 group-hover:opacity-100 p-0.5 text-zinc-400 hover:text-red-400 transition-all"><i data-lucide="x" class="w-3 h-3"></i></button>' +
+      '</div>').join('');
+    lucide.createIcons();
+  }
+
+  function loadRevision() {
+    const rev = JSON.parse(localStorage.getItem('s_revision') || '[]');
+    renderRevision(rev);
+  }
+  function addRevision() {
+    const inp = document.getElementById('rev-subject');
+    const val = inp.value.trim();
+    if (!val) return;
+    const rev = JSON.parse(localStorage.getItem('s_revision') || '[]');
+    rev.unshift({ id: Date.now(), text: val, done: false });
+    localStorage.setItem('s_revision', JSON.stringify(rev));
+    inp.value = '';
+    renderRevision(rev);
+  }
+  function toggleRevision(id) {
+    const rev = JSON.parse(localStorage.getItem('s_revision') || '[]');
+    const r = rev.find(x => x.id === id); if (r) r.done = !r.done;
+    localStorage.setItem('s_revision', JSON.stringify(rev));
+    renderRevision(rev);
+  }
+  function deleteRevision(id) {
+    const rev = JSON.parse(localStorage.getItem('s_revision') || '[]').filter(x => x.id !== id);
+    localStorage.setItem('s_revision', JSON.stringify(rev));
+    renderRevision(rev);
+  }
+  function renderRevision(rev) {
+    const el = document.getElementById('rev-list');
+    if (!el) return;
+    if (!rev.length) { el.innerHTML = '<p class="text-xs text-zinc-400">No subjects tracked yet.</p>'; return; }
+    el.innerHTML = rev.map(r => '<div class="flex items-center gap-2 group">' +
+      '<button onclick="toggleRevision(' + r.id + ')" class="w-4 h-4 rounded border-2 ' + (r.done ? 'bg-pink-500 border-pink-500' : 'border-zinc-300 dark:border-zinc-600') + ' flex items-center justify-center shrink-0 transition-all">' + (r.done ? '<i data-lucide="check" class="w-2.5 h-2.5 text-white"></i>' : '') + '</button>' +
+      '<span class="flex-1 text-xs ' + (r.done ? 'line-through text-zinc-400' : 'text-zinc-700 dark:text-zinc-300') + '">' + r.text + '</span>' +
+      '<button onclick="deleteRevision(' + r.id + ')" class="opacity-0 group-hover:opacity-100 p-0.5 text-zinc-400 hover:text-red-400 transition-all"><i data-lucide="x" class="w-3 h-3"></i></button>' +
+      '</div>').join('');
+    lucide.createIcons();
+  }
+
+  // ─── POMODORO TIMER ───────────────────────────────────────────────────────
+  let pomoTimer, pomoRunning = false, pomoCurrent = 0, pomoTotal = 0, pomoMode = 'work';
+  const pomoDurations = { work: 25 * 60, short: 5 * 60, long: 15 * 60 };
+
+  function initPomo() {
+    if (pomoCurrent === 0) pomoCurrent = pomoDurations[pomoMode];
+    pomoTotal = pomoDurations[pomoMode];
+    updatePomoUI();
+  }
+
+  function setPomoMode(mode) {
+    if (pomoRunning) { clearInterval(pomoTimer); pomoRunning = false; }
+    pomoMode = mode;
+    pomoCurrent = pomoDurations[mode];
+    pomoTotal   = pomoDurations[mode];
+    ['work','short','long'].forEach(m => {
+      const btn = document.getElementById('pomo-' + m);
+      if (btn) btn.className = m === mode
+        ? 'px-4 py-1.5 rounded-lg text-zinc-900 dark:text-white bg-white dark:bg-zinc-700 shadow-sm transition-all'
+        : 'px-4 py-1.5 rounded-lg text-zinc-500 dark:text-zinc-400 transition-all';
+    });
+    updatePomoUI();
+  }
+
+  function togglePomo() {
+    if (pomoRunning) {
+      clearInterval(pomoTimer); pomoRunning = false;
+      ['pomo-play-btn','fo-play-btn'].forEach(id => { const b = document.getElementById(id); if (b) b.innerHTML = '<i data-lucide="play" class="w-4 h-4"></i><span>Start</span>'; });
+    } else {
+      pomoRunning = true;
+      ['pomo-play-btn','fo-play-btn'].forEach(id => { const b = document.getElementById(id); if (b) b.innerHTML = '<i data-lucide="pause" class="w-4 h-4"></i><span>Pause</span>'; });
+      pomoTimer = setInterval(() => {
+        pomoCurrent--;
+        updatePomoUI();
+        if (pomoCurrent <= 0) {
+          clearInterval(pomoTimer); pomoRunning = false;
+          ['pomo-play-btn','fo-play-btn'].forEach(id => { const b = document.getElementById(id); if (b) b.innerHTML = '<i data-lucide="play" class="w-4 h-4"></i><span>Start</span>'; });
+          if (pomoMode === 'work') {
+            const p = parseInt(localStorage.getItem('s_pomos')||'0') + 1;
+            const t = parseInt(localStorage.getItem('s_focus_time')||'0') + 25;
+            localStorage.setItem('s_pomos', p);
+            localStorage.setItem('s_focus_time', t);
+            const fc = document.getElementById('fo-count');
+            if (fc) fc.innerText = p;
+          }
+          pushNotif(pomoMode === 'work' ? '&#128293; Focus session done! Take a break.' : '&#9201; Break over! Time to focus.', 'success');
+          try { new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU').play().catch(()=>{}); } catch {}
+        }
+      }, 1000);
+    }
+    lucide.createIcons();
+  }
+
+  function resetPomo() {
+    clearInterval(pomoTimer); pomoRunning = false;
+    pomoCurrent = pomoDurations[pomoMode];
+    updatePomoUI();
+    ['pomo-play-btn','fo-play-btn'].forEach(id => { const b = document.getElementById(id); if (b) b.innerHTML = '<i data-lucide="play" class="w-4 h-4"></i><span>Start</span>'; });
+    lucide.createIcons();
+  }
+
+  function updatePomoUI() {
+    const m = String(Math.floor(pomoCurrent / 60)).padStart(2,'0');
+    const s = String(pomoCurrent % 60).padStart(2,'0');
+    const timeStr = m + ':' + s;
+    ['pomo-timer-display','fo-timer'].forEach(id => { const el = document.getElementById(id); if (el) el.innerText = timeStr; });
+    const circum = 552, pct = 1 - (pomoCurrent / pomoTotal);
+    const offset = circum * pct;
+    const c = document.getElementById('pomo-circle'); if (c) c.style.strokeDashoffset = offset;
+    const fc = document.getElementById('fo-circle');  if (fc) fc.style.strokeDashoffset = offset * (653/552);
+    const lbl = document.getElementById('pomo-status-label');
+    if (lbl) lbl.innerText = pomoMode === 'work' ? (pomoRunning ? 'Stay focused!' : 'Get to work') : (pomoRunning ? 'Enjoy your break' : 'Take a break');
+    const foLbl = document.getElementById('fo-mode-label');
+    if (foLbl) foLbl.innerText = pomoMode === 'work' ? 'Focus Session' : pomoMode === 'short' ? 'Short Break' : 'Long Break';
+  }
+
+  function toggleFocusMode(open) {
+    const ov = document.getElementById('focus-overlay');
+    ov.style.display = open ? 'flex' : 'none';
+    updatePomoUI();
+    lucide.createIcons();
+  }
+
+  // ─── FEEDBACK ─────────────────────────────────────────────────────────────
+  function openFeedbackModal()       { document.getElementById('feedback-modal').style.display = 'flex'; lucide.createIcons(); }
+  function closeFeedbackModal(e)     { if (e.target === document.getElementById('feedback-modal')) closeFeedbackModalDirect(); }
+  function closeFeedbackModalDirect(){ document.getElementById('feedback-modal').style.display = 'none'; }
+  async function submitFeedback() {
+    const type = document.getElementById('feedback-type').value;
+    const text = document.getElementById('feedback-text').value.trim();
+    if (!text) { pushNotif('Please write something', 'error'); return; }
+    // Store locally (no separate API endpoint needed)
+    const fb = JSON.parse(localStorage.getItem('s_feedback') || '[]');
+    fb.unshift({ type, text, timestamp: Date.now() });
+    localStorage.setItem('s_feedback', JSON.stringify(fb));
+    document.getElementById('feedback-text').value = '';
+    closeFeedbackModalDirect();
+    pushNotif('Thank you for your feedback!', 'success');
+  }
+
+  // ─── HELPERS ──────────────────────────────────────────────────────────────
+  function formatDate(d) {
+    if (!d) return '';
+    try { return new Date(d).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }); }
+    catch { return d; }
+  }
+
+  function emptyState(icon, msg) {
+    return '<div class="text-center py-10 fade-in">' +
+      '<div class="w-14 h-14 rounded-2xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mx-auto mb-3"><i data-lucide="' + icon + '" class="w-7 h-7 text-zinc-400"></i></div>' +
+      '<p class="text-sm font-semibold text-zinc-500">' + msg + '</p></div>';
+  }
+
+  function errorState(section) {
+    return '<div class="text-center py-8"><p class="text-sm text-red-400">Could not load ' + section + '. Please refresh.</p>' +
+      '<button onclick="handleManualRefresh()" class="mt-3 px-4 py-1.5 bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg text-xs font-semibold">Retry</button></div>';
+  }
+
+  // ─── PWA ──────────────────────────────────────────────────────────────────
+  let _pwaPrompt = null;
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault(); _pwaPrompt = e;
+    setTimeout(() => { document.getElementById('pwa-banner').style.display = 'block'; }, 1500);
+  });
+  async function installPWA() {
+    if (!_pwaPrompt) return;
+    _pwaPrompt.prompt();
+    const { outcome } = await _pwaPrompt.userChoice;
+    _pwaPrompt = null;
+    document.getElementById('pwa-banner').style.display = 'none';
+  }
+  window.addEventListener('appinstalled', () => { document.getElementById('pwa-banner').style.display = 'none'; });
+</script>
+<style>
+  /* ── Mobile Alignment Fixes ── */
+  @media(max-width:768px){
+    #app-view main .max-w-5xl{padding-left:12px;padding-right:12px}
+    .grid.grid-cols-2{grid-template-columns:repeat(2,1fr);gap:10px}
+    .card{border-radius:.875rem}
+    #view-notes .flex.flex-col.md\\:flex-row{flex-direction:column}
+    #view-papers .flex.flex-col.md\\:flex-row{flex-direction:column}
+    #view-planner .grid.md\\:grid-cols-2{grid-template-columns:1fr}
+    section#view-focus .card{padding:1.5rem}
+    #pomo-timer-display{font-size:2.25rem}
+    .grid.grid-cols-2.md\\:grid-cols-4{grid-template-columns:repeat(2,1fr)}
+    .grid.md\\:grid-cols-2{grid-template-columns:1fr}
+    .grid.grid-cols-2.md\\:grid-cols-3{grid-template-columns:repeat(2,1fr)}
+    #list-notes.grid.md\\:grid-cols-2{grid-template-columns:1fr}
+    #list-papers.grid.md\\:grid-cols-2{grid-template-columns:1fr}
+    header.md\\:hidden{position:sticky;top:0;z-index:40}
+    aside#sidebar{height:100vh;overflow-y:auto}
+    .countdown-display .grid-cols-4{gap:6px}
+<script>
+(function(){
+  const API = 'https://hub-6yrl.onrender.com/api';
+
+  const FEATURE_MAP = {
+    search:       { extras: ['universal-search', 'universal-search-suggestions'] },
+    bookmarks:    { extras: ['btn-notes-bookmarked', 'btn-papers-bookmarked'] },
+    planner:      { nav: 'nav-planner',       section: 'view-planner' },
+    focus:        { nav: 'nav-focus',         section: 'view-focus' },
+    announcements:{ nav: 'nav-announcements', section: 'view-announcements' },
+    timetable:    { nav: 'nav-timetable',     section: 'view-timetable' },
+    syllabus:     { nav: 'nav-syllabus',      section: 'view-syllabus' },
+    papers:       { nav: 'nav-papers',        section: 'view-papers' },
+    assignments:  { nav: 'nav-assignments',   section: 'view-assignments' }
+  };
+
+  function applySettings(s) {
+    // 1. Reset all elements first to make sure they show back if enabled
+    Object.keys(FEATURE_MAP).forEach(function(key) {
+      var map = FEATURE_MAP[key];
+      if (map.nav) {
+        var n = document.getElementById(map.nav);
+        if(n) n.classList.remove('feature-disabled');
+      }
+      if (map.section) {
+        var sec = document.getElementById(map.section);
+        if(sec) sec.classList.remove('feature-disabled');
+      }
+      if (map.extras) {
+        map.extras.forEach(function(id){
+          var el=document.getElementById(id);
+          if(el) el.classList.remove('feature-disabled');
+        });
+      }
+    });
+    
+    // Reset quick actions
+    const qButtons = ['planner', 'papers', 'assignments', 'timetable', 'syllabus'];
+    qButtons.forEach(btn => {
+      var b = document.querySelector('button[onclick*="' + btn + '"]');
+      if (b) b.classList.remove('feature-disabled');
+    });
+    
+    // Reset feedback, streaks, download button
+    const feedbackBtn = document.getElementById('sidebar-feedback-btn');
+    if (feedbackBtn) feedbackBtn.classList.remove('feature-disabled');
+    
+    const streakMob = document.getElementById('streak-display-mobile');
+    if (streakMob) streakMob.classList.remove('feature-disabled');
+    const streakSide = document.getElementById('streak-display');
+    if (streakSide) streakSide.classList.remove('feature-disabled');
+    
+    const dlBtn = document.getElementById('pdf-download-btn');
+    if (dlBtn) dlBtn.style.display = '';
+
+    // Hide maintenance lock and broadcast by default
+    const mLock = document.getElementById('maintenance-lock');
+    if (mLock) mLock.classList.add('hidden');
+    const bBanner = document.getElementById('broadcast-banner');
+    if (bBanner) bBanner.classList.add('hidden');
+
+    // 2. Apply disabled controls
+    Object.keys(FEATURE_MAP).forEach(function(key) {
+      if (s[key] === false) {
+        var map = FEATURE_MAP[key];
+        if (map.nav)     { var n = document.getElementById(map.nav);     if(n) n.classList.add('feature-disabled'); }
+        if (map.section) { var sec = document.getElementById(map.section); if(sec) sec.classList.add('feature-disabled'); }
+        if (map.extras)  { map.extras.forEach(function(id){ var el=document.getElementById(id); if(el) el.classList.add('feature-disabled'); }); }
+      }
+    });
+
+    if (s['planner'] === false) { var b = document.querySelector('button[onclick*="planner"]'); if(b) b.classList.add('feature-disabled'); }
+    if (s['papers'] === false)  { var b2 = document.querySelector('button[onclick*="papers"]'); if(b2) b2.classList.add('feature-disabled'); }
+    if (s['assignments'] === false) { var b3 = document.querySelector('button[onclick*="assignments"]'); if(b3) b3.classList.add('feature-disabled'); }
+    if (s['timetable'] === false)   { var b4 = document.querySelector('button[onclick*="timetable"]'); if(b4) b4.classList.add('feature-disabled'); }
+    if (s['syllabus'] === false)    { var b5 = document.querySelector('button[onclick*="syllabus"]'); if(b5) b5.classList.add('feature-disabled'); }
+
+    // 3. Apply advanced controls
+    if (s.maintenanceMode === true) {
+      if (mLock) mLock.classList.remove('hidden');
+    }
+    if (s.emergencyBanner === true && s.broadcastMessage) {
+      if (bBanner) {
+        bBanner.classList.remove('hidden');
+        document.getElementById('broadcast-text').innerText = s.broadcastMessage;
+      }
+    }
+    if (s.directDownloads === false) {
+      if (dlBtn) dlBtn.style.display = 'none';
+    }
+    if (s.feedbackEnabled === false) {
+      if (feedbackBtn) feedbackBtn.classList.add('feature-disabled');
+    }
+    if (s.streaksEnabled === false) {
+      if (streakMob) streakMob.classList.add('feature-disabled');
+      if (streakSide) streakSide.classList.add('feature-disabled');
+    }
+  }
+
+  // Fetch settings as soon as DOM is ready; retry silently on failure (default: all enabled)
+  function loadAndApply() {
+    fetch(API + '/settings')
+      .then(function(r){ return r.json(); })
+      .then(function(s){ applySettings(s); })
+      .catch(function(){ /* silently ignore — default all features visible */ });
+  }
+
+  // Run after app init
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(loadAndApply, 800); });
+  } else {
+    setTimeout(loadAndApply, 800);
+  }
+
+  // Also re-apply whenever user logs in (app-view becomes visible)
+  var observer = new MutationObserver(function(mutations){
+    mutations.forEach(function(m){
+      if (m.target.id === 'app-view' && !m.target.classList.contains('hidden')) {
+        setTimeout(loadAndApply, 500);
+      }
+    });
+  });
+  var appView = document.getElementById('app-view');
+  if (appView) observer.observe(appView, { attributes: true, attributeFilter: ['class'] });
+})();
+</script>
+</body>
+</html>

@@ -778,7 +778,10 @@ def get_student_settings():
             "key": "student_features",
             "search": True, "bookmarks": True, "planner": True,
             "focus": True, "papers": True, "syllabus": True,
-            "assignments": True, "announcements": True, "timetable": True
+            "assignments": True, "announcements": True, "timetable": True,
+            "directDownloads": True, "maintenanceMode": False,
+            "emergencyBanner": False, "feedbackEnabled": True, "streaksEnabled": True,
+            "broadcastMessage": "Welcome to Student Hub Portal!"
         }
         settings_col.insert_one(default)
         s = default
@@ -791,12 +794,23 @@ def update_student_settings():
         return jsonify({"msg": "Admin required"}), 403
     data = request.get_json(force=True)
     updates = {}
-    for k in ["search", "bookmarks", "planner", "focus", "papers", "syllabus", "assignments", "announcements", "timetable"]:
+    
+    # Boolean settings
+    bool_keys = [
+        "search", "bookmarks", "planner", "focus", "papers", "syllabus", 
+        "assignments", "announcements", "timetable", "directDownloads", 
+        "maintenanceMode", "emergencyBanner", "feedbackEnabled", "streaksEnabled"
+    ]
+    for k in bool_keys:
         if k in data:
             updates[k] = bool(data[k])
+            
+    # String settings
+    if "broadcastMessage" in data:
+        updates["broadcastMessage"] = str(data["broadcastMessage"])
     
     settings_col.update_one({"key": "student_features"}, {"$set": updates}, upsert=True)
-    log_admin_action("UPDATE_SETTINGS", "Updated student portal feature toggles")
+    log_admin_action("UPDATE_SETTINGS", "Updated student portal feature toggles and settings")
     return jsonify({"status": "ok", "msg": "Student features updated successfully!"})
 
 # ─── Error Handler ─────────────────────────────────────────────────────────────

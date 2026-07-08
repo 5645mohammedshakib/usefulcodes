@@ -802,6 +802,42 @@ tailwind.config = {
                   <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">📋 Assignments</span>
                 </label>
               </div>
+
+              <!-- ── Additional Advanced Control Toggles ── -->
+              <h5 class="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-3 mt-5 flex items-center gap-1.5">
+                <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>Security & Advanced Controls
+              </h5>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+                <label class="flex items-center gap-2.5 cursor-pointer group">
+                  <input type="checkbox" id="toggle-directDownloads" class="w-4 h-4 rounded border-zinc-300 dark:border-zinc-600 text-purple-600 focus:ring-purple-500/40 cursor-pointer" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">🔒 Allow PDF Downloads</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group">
+                  <input type="checkbox" id="toggle-maintenanceMode" class="w-4 h-4 rounded border-zinc-300 dark:border-zinc-600 text-purple-600 focus:ring-purple-500/40 cursor-pointer" />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">🚨 Maintenance Mode (Lock Portal)</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group">
+                  <input type="checkbox" id="toggle-feedbackEnabled" class="w-4 h-4 rounded border-zinc-300 dark:border-zinc-600 text-purple-600 focus:ring-purple-500/40 cursor-pointer" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">💬 Feedback Form Submissions</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group">
+                  <input type="checkbox" id="toggle-streaksEnabled" class="w-4 h-4 rounded border-zinc-300 dark:border-zinc-600 text-purple-600 focus:ring-purple-500/40 cursor-pointer" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">🔥 Study Streaks System</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group">
+                  <input type="checkbox" id="toggle-emergencyBanner" class="w-4 h-4 rounded border-zinc-300 dark:border-zinc-600 text-purple-600 focus:ring-purple-500/40 cursor-pointer" />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">📢 Live Broadcast Banner</span>
+                </label>
+              </div>
+
+              <!-- ── Emergency Broadcast Message ── -->
+              <div class="flex flex-col gap-1.5 mb-5 max-w-xl">
+                <label class="text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase">Emergency Broadcast Banner Text</label>
+                <div class="flex gap-2">
+                  <input id="broadcast-message-input" type="text" placeholder="e.g. Server under maintenance or Exam schedule updated!" class="flex-1 bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" />
+                </div>
+              </div>
+
               <button onclick="saveStudentSettings()" id="settings-save-btn"
                 class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white rounded-lg px-5 py-2.5 text-xs font-bold transition-all shadow-md shadow-purple-500/20 active:scale-95">
                 <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>Save Feature Toggles
@@ -2167,7 +2203,11 @@ tailwind.config = {
       // ==============================================
       // 10. STUDENT PORTAL FEATURE TOGGLES (ADMIN)
       // ==============================================
-      const FEATURE_KEYS = ['search','bookmarks','planner','focus','announcements','timetable','syllabus','papers','assignments'];
+      const FEATURE_KEYS = [
+        'search','bookmarks','planner','focus','announcements','timetable',
+        'syllabus','papers','assignments','directDownloads','maintenanceMode',
+        'emergencyBanner','feedbackEnabled','streaksEnabled'
+      ];
 
       async function loadStudentSettings() {
         try {
@@ -2176,6 +2216,8 @@ tailwind.config = {
             const el = document.getElementById(`toggle-${k}`);
             if (el) el.checked = s[k] !== false;
           });
+          const msgEl = document.getElementById('broadcast-message-input');
+          if (msgEl) msgEl.value = s.broadcastMessage || '';
         } catch (e) { /* silently ignore */ }
       }
 
@@ -2189,6 +2231,8 @@ tailwind.config = {
           const el = document.getElementById(`toggle-${k}`);
           if (el) payload[k] = el.checked;
         });
+        const msgEl = document.getElementById('broadcast-message-input');
+        if (msgEl) payload.broadcastMessage = msgEl.value;
         try {
           await apiRequest('/admin/settings', 'POST', payload);
           showActionAlert('success', '✅ Student portal features updated successfully!');
