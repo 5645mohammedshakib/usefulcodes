@@ -1280,7 +1280,10 @@ tailwind.config = {
     <script>
 // Global App States
       let activeView = 'dashboard';
-      let apiBaseUrl = localStorage.getItem('apiBaseUrl') || 'https://hub-6yrl.onrender.com/api';
+      let defaultApiUrl = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:')
+        ? 'http://localhost:5000/api'
+        : 'https://hub-6yrl.onrender.com/api';
+      let apiBaseUrl = localStorage.getItem('apiBaseUrl') || defaultApiUrl;
       let token = localStorage.getItem('token') || '';
       let user = null;
 

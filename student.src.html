@@ -464,7 +464,16 @@ tailwind.config = {
   </div>
 </div>
 <script>
-const API = 'https://hub-6yrl.onrender.com/api';
+const API = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') 
+    ? 'http://localhost:5000/api' 
+    : 'https://hub-6yrl.onrender.com/api';
+  const getFileUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+      return url;
+    }
+    return API.replace('/api', '') + url;
+  };
   let token = localStorage.getItem('s_token') || '';
   let currentUser = null, allNotes = [], allPapers = [];
   var currentTab = 'home';
@@ -789,7 +798,7 @@ const API = 'https://hub-6yrl.onrender.com/api';
     try {
       const data = await apiFetch('/notes?limit=5');
       if (!data.length) { el.innerHTML = emptyState('notebook-text', 'No notes yet.'); return; }
-      el.innerHTML = data.map((n, i) => '<div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all cursor-pointer group" onclick="trackStudyActivity(\'' + n._id + '\',\'' + n.title.replace(/'/g,"\\'") + '\',\'note\',\'' + (n.fileUrl||'') + '\');goto(\'notes\')"><span class="w-6 h-6 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xs font-bold shrink-0">' + (i+1) + '</span><span class="flex-1 text-sm font-medium text-zinc-800 dark:text-zinc-200 truncate">' + n.title + '</span>' + (n.fileUrl ? '<a href="' + n.fileUrl + '" target="_blank" class="pill-dl opacity-0 group-hover:opacity-100 transition-opacity"><i data-lucide="download" class="w-3 h-3"></i>PDF</a>' : '') + '</div>').join('');
+      el.innerHTML = data.map((n, i) => '<div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all cursor-pointer group" onclick="trackStudyActivity(\'' + n._id + '\',\'' + n.title.replace(/'/g,"\\'") + '\',\'note\',\'' + (n.fileUrl||'') + '\');goto(\'notes\')"><span class="w-6 h-6 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xs font-bold shrink-0">' + (i+1) + '</span><span class="flex-1 text-sm font-medium text-zinc-800 dark:text-zinc-200 truncate">' + n.title + '</span>' + (n.fileUrl ? '<a href="' + getFileUrl(n.fileUrl) + '" target="_blank" class="pill-dl opacity-0 group-hover:opacity-100 transition-opacity"><i data-lucide="download" class="w-3 h-3"></i>PDF</a>' : '') + '</div>').join('');
       lucide.createIcons();
     } catch { el.innerHTML = '<p class="text-xs text-red-400">Could not load popular notes.</p>'; }
   }
@@ -914,7 +923,7 @@ const API = 'https://hub-6yrl.onrender.com/api';
       (n.category ? '<span class="tag">' + n.category + '</span>' : '') +
       '<div class="flex gap-2 pt-1">' +
       (n.fileUrl ? '<button onclick="openPdfPreview(\'' + n.fileUrl + '\',\'' + n.title.replace(/'/g,"\\'") + '\')" class="flex items-center gap-1.5 px-3 py-1.5 bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 rounded-lg text-xs font-semibold hover:bg-violet-200 transition-all"><i data-lucide="eye" class="w-3.5 h-3.5"></i>Preview</button>' : '') +
-      (n.fileUrl ? '<a href="' + n.fileUrl + '" download onclick="trackStudyActivity(\'' + n._id + '\',\'' + n.title.replace(/'/g,"\\'") + '\',\'pdf\',\'' + n.fileUrl + '\')" class="pill-dl flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>' : '') +
+      (n.fileUrl ? '<a href="' + getFileUrl(n.fileUrl) + '" download onclick="trackStudyActivity(\'' + n._id + '\',\'' + n.title.replace(/'/g,"\\'") + '\',\'pdf\',\'' + n.fileUrl + '\')" class="pill-dl flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>' : '') +
       '<button onclick="trackStudyActivity(\'' + n._id + '\',\'' + n.title.replace(/'/g,"\\'") + '\',\'note\',\'' + (n.fileUrl||'') + '\')" class="px-3 py-1.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 rounded-lg text-xs font-semibold hover:bg-zinc-200 transition-all">Track</button>' +
       '</div></div>';
   }
@@ -948,7 +957,7 @@ const API = 'https://hub-6yrl.onrender.com/api';
       (due ? '<span class="tag ' + (overdue ? 'border-red-400/30 text-red-400' : '') + ' text-[10px] shrink-0">Due: ' + due.toLocaleDateString() + '</span>' : '') +
       '</div>' +
       (a.description ? '<p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">' + a.description + '</p>' : '') +
-      (a.fileUrl ? '<a href="' + a.fileUrl + '" download class="pill-dl inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>' : '') +
+      (a.fileUrl ? '<a href="' + getFileUrl(a.fileUrl) + '" download class="pill-dl inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>' : '') +
       '</div>';
   }
 
@@ -1016,7 +1025,7 @@ const API = 'https://hub-6yrl.onrender.com/api';
       (s.subject ? '<p class="text-xs text-zinc-400">' + s.subject + '</p>' : '') + '</div></div>' +
       (s.description ? '<p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">' + s.description + '</p>' : '') +
       (topics.length ? '<div class="flex flex-wrap gap-1.5 mt-1">' + topics.map(t => '<span class="tag">' + t + '</span>').join('') + '</div>' : '') +
-      (s.fileUrl ? '<a href="' + s.fileUrl + '" download class="pill-dl inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>' : '') +
+      (s.fileUrl ? '<a href="' + getFileUrl(s.fileUrl) + '" download class="pill-dl inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>' : '') +
       '</div>';
   }
 
@@ -1075,7 +1084,7 @@ const API = 'https://hub-6yrl.onrender.com/api';
       '<i data-lucide="bookmark" class="w-4 h-4 ' + (bm ? 'text-violet-500 fill-violet-500' : '') + '"></i></button></div>' +
       '<div class="flex gap-2 pt-1">' +
       (p.fileUrl ? '<button onclick="openPdfPreview(\'' + p.fileUrl + '\',\'' + p.title.replace(/'/g,"\\'") + '\')" class="flex items-center gap-1.5 px-3 py-1.5 bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 rounded-lg text-xs font-semibold hover:bg-violet-200 transition-all"><i data-lucide="eye" class="w-3.5 h-3.5"></i>Preview</button>' : '') +
-      (p.fileUrl ? '<a href="' + p.fileUrl + '" download onclick="trackStudyActivity(\'' + p._id + '\',\'' + p.title.replace(/'/g,"\\'") + '\',\'pdf\',\'' + p.fileUrl + '\')" class="pill-dl flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>' : '') +
+      (p.fileUrl ? '<a href="' + getFileUrl(p.fileUrl) + '" download onclick="trackStudyActivity(\'' + p._id + '\',\'' + p.title.replace(/'/g,"\\'") + '\',\'pdf\',\'' + p.fileUrl + '\')" class="pill-dl flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>' : '') +
       '</div></div>';
   }
 
@@ -1089,10 +1098,11 @@ const API = 'https://hub-6yrl.onrender.com/api';
   // ─── PDF PREVIEW ──────────────────────────────────────────────────────────
   function openPdfPreview(url, title) {
     if (!url) return;
+    const absoluteUrl = getFileUrl(url);
     trackStudyActivity(url, title, 'pdf', url);
     document.getElementById('pdf-modal-title').innerText = title;
-    document.getElementById('pdf-iframe').src = url;
-    document.getElementById('pdf-download-btn').href = url;
+    document.getElementById('pdf-iframe').src = absoluteUrl;
+    document.getElementById('pdf-download-btn').href = absoluteUrl;
     document.getElementById('pdf-download-btn').download = title + '.pdf';
     document.getElementById('pdf-modal').style.display = 'flex';
     lucide.createIcons();
@@ -1382,10 +1392,13 @@ const API = 'https://hub-6yrl.onrender.com/api';
     #list-papers.grid.md\\:grid-cols-2{grid-template-columns:1fr}
     header.md\\:hidden{position:sticky;top:0;z-index:40}
     aside#sidebar{height:100vh;overflow-y:auto}
-    .countdown-display .grid-cols-4{gap:6px}
+  }
+</style>
 <script>
 (function(){
-  const API = 'https://hub-6yrl.onrender.com/api';
+  const API = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') 
+    ? 'http://localhost:5000/api' 
+    : 'https://hub-6yrl.onrender.com/api';
   let currentFeaturesList = [];
 
   const FEATURE_MAP = {
@@ -1534,7 +1547,15 @@ const API = 'https://hub-6yrl.onrender.com/api';
     fetch(API + '/settings')
       .then(function(r){ return r.json(); })
       .then(function(s){ applySettings(s); })
-      .catch(function(){ /* silently ignore — default all features visible */ });
+      .catch(function(err){
+        console.error("Failed to load settings from server:", err);
+        applySettings({
+          announcements: true, notes: true, assignments: true, timetable: true,
+          syllabus: true, papers: true, focus: true, search: true, bookmarks: true,
+          directDownloads: true, maintenanceMode: false, emergencyBanner: false,
+          feedbackEnabled: true, streaksEnabled: true
+        });
+      });
   }
 
   // Run after app init

@@ -4,7 +4,7 @@ Run: python server.py
 API: http://localhost:5000
 """
 
-import os, uuid, datetime, gzip, json
+import os, uuid, datetime, gzip, json, requests as http_requests
 from functools import wraps
 from io import BytesIO
 
@@ -21,11 +21,17 @@ app = Flask(__name__)
 CORS(app)
 
 # ─── Config ────────────────────────────────────────────────────────────────────
-MONGO_URI   = os.getenv("MONGO_URI",  "mongodb://127.0.0.1:27017/student_hub")
-JWT_SECRET  = os.getenv("JWT_SECRET", "student_hub_admin_supersecretkey_2026!@#")
-PORT        = int(os.getenv("PORT",   5000))
-UPLOAD_DIR  = os.path.join(os.path.dirname(__file__), "uploads")
+MONGO_URI         = os.getenv("MONGO_URI",  "mongodb://127.0.0.1:27017/student_hub")
+JWT_SECRET        = os.getenv("JWT_SECRET", "student_hub_admin_supersecretkey_2026!@#")
+PORT              = int(os.getenv("PORT",   5000))
+UPLOAD_DIR        = os.path.join(os.path.dirname(__file__), "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+# Cloudinary config (set these in Render environment variables)
+CLOUDINARY_CLOUD  = os.getenv("CLOUDINARY_CLOUD_NAME", "")
+CLOUDINARY_KEY    = os.getenv("CLOUDINARY_API_KEY",    "")
+CLOUDINARY_SECRET = os.getenv("CLOUDINARY_API_SECRET", "")
+USE_CLOUDINARY    = bool(CLOUDINARY_CLOUD and CLOUDINARY_KEY and CLOUDINARY_SECRET)
 
 # ─── DB Setup ──────────────────────────────────────────────────────────────────
 client = MongoClient(
@@ -167,8 +173,31 @@ def log_admin_action(action, details):
         pass
 
 def save_file(file_obj) -> str | None:
+    """Upload file to Cloudinary (permanent) or local disk (fallback)."""
     if not file_obj or not file_obj.filename:
         return None
+
+    if USE_CLOUDINARY:
+        try:
+            import hmac, hashlib, time
+            ts        = str(int(time.time()))
+            folder    = "student_hub"
+            params    = f"folder={folder}&timestamp={ts}"
+            sig_str   = params + CLOUDINARY_SECRET
+            signature = hashlib.sha1(sig_str.encode()).hexdigest()
+            upload_url = f"https://api.cloudinary.com/v1_1/{CLOUDINARY_CLOUD}/auto/upload"
+            resp = http_requests.post(upload_url, data={
+                "api_key":   CLOUDINARY_KEY,
+                "timestamp": ts,
+                "folder":    folder,
+                "signature": signature,
+            }, files={"file": (file_obj.filename, file_obj.stream, file_obj.content_type)}, timeout=60)
+            if resp.ok:
+                return resp.json().get("secure_url", "")
+        except Exception as e:
+            print(f"Cloudinary upload failed, falling back to local: {e}")
+
+    # Fallback: local disk (works locally, ephemeral on Render free tier)
     ext      = os.path.splitext(file_obj.filename)[1]
     filename = f"{uuid.uuid4().hex}{ext}"
     file_obj.save(os.path.join(UPLOAD_DIR, filename))
