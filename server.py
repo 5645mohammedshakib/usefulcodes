@@ -49,6 +49,7 @@ clicks_col    = db["clicks"]
 activity_logs = db["activity_logs"]
 error_logs    = db["error_logs"]
 feedback_col  = db["feedback"]
+settings_col  = db["settings"]
 
 # ─── Indexes ───────────────────────────────────────────────────────────────────
 try:
@@ -768,6 +769,35 @@ def migrate_timetables():
         )
         updated += 1
     return jsonify({"msg": f"Migrated {updated} records"})
+
+@app.get("/api/settings")
+def get_student_settings():
+    s = settings_col.find_one({"key": "student_features"})
+    if not s:
+        default = {
+            "key": "student_features",
+            "search": True, "bookmarks": True, "planner": True,
+            "focus": True, "papers": True, "syllabus": True,
+            "assignments": True, "announcements": True, "timetable": True
+        }
+        settings_col.insert_one(default)
+        s = default
+    return jsonify(serialize(s))
+
+@app.post("/api/admin/settings")
+@auth_required
+def update_student_settings():
+    if not is_admin(request.user_id):
+        return jsonify({"msg": "Admin required"}), 403
+    data = request.get_json(force=True)
+    updates = {}
+    for k in ["search", "bookmarks", "planner", "focus", "papers", "syllabus", "assignments", "announcements", "timetable"]:
+        if k in data:
+            updates[k] = bool(data[k])
+    
+    settings_col.update_one({"key": "student_features"}, {"$set": updates}, upsert=True)
+    log_admin_action("UPDATE_SETTINGS", "Updated student portal feature toggles")
+    return jsonify({"status": "ok", "msg": "Student features updated successfully!"})
 
 # ─── Error Handler ─────────────────────────────────────────────────────────────
 @app.errorhandler(Exception)
