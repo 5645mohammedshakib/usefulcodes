@@ -41,7 +41,7 @@
   <script>
 if('serviceWorker' in navigator){
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=14').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=15').then(reg => {
           reg.addEventListener('updatefound', () => {
             const nw = reg.installing;
             if (nw) {
@@ -468,7 +468,7 @@ tailwind.config = {
 const API = 'https://hub-6yrl.onrender.com/api';
   let token = localStorage.getItem('s_token') || '';
   let currentUser = null, allNotes = [], allPapers = [];
-  let currentTab = 'home';
+  var currentTab = 'home';
 
   // Pagination
   let notesLimit = 10, notesSkip = 0, notesHasMore = true, notesSelectedCategory = '', notesBookmarkedOnly = false;
