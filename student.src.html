@@ -41,7 +41,7 @@
   <script>
 if('serviceWorker' in navigator){
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=15').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=16').then(reg => {
           reg.addEventListener('updatefound', () => {
             const nw = reg.installing;
             if (nw) {
@@ -293,14 +293,13 @@ tailwind.config = {
       </div>
     </div>
     <nav id="sidebar-nav" class="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
-      <button id="nav-home"          onclick="goto('home')"          class="nav-btn active"><i data-lucide="layout-dashboard" class="w-4 h-4 shrink-0"></i>Home</button>
-      <button id="nav-announcements" onclick="goto('announcements')" class="nav-btn"><i data-lucide="megaphone"       class="w-4 h-4 shrink-0"></i>Announcements</button>
-      <button id="nav-notes"         onclick="goto('notes')"         class="nav-btn"><i data-lucide="notebook-text"  class="w-4 h-4 shrink-0"></i>Study Notes</button>
-      <button id="nav-assignments"   onclick="goto('assignments')"   class="nav-btn"><i data-lucide="clipboard-list" class="w-4 h-4 shrink-0"></i>Assignments</button>
-      <button id="nav-timetable"     onclick="goto('timetable')"     class="nav-btn"><i data-lucide="calendar-days"  class="w-4 h-4 shrink-0"></i>Timetable</button>
-      <button id="nav-syllabus"      onclick="goto('syllabus')"      class="nav-btn"><i data-lucide="book-open"      class="w-4 h-4 shrink-0"></i>Syllabus</button>
-      <button id="nav-papers"        onclick="goto('papers')"        class="nav-btn"><i data-lucide="file-text"      class="w-4 h-4 shrink-0"></i>Previous Papers</button>
-      <button id="nav-focus"         onclick="goto('focus')"         class="nav-btn"><i data-lucide="timer"          class="w-4 h-4 shrink-0"></i>Focus Zone</button>
+      <!-- Dynamically rendered by renderSidebarNav() based on admin settings -->
+      <div id="nav-loading" class="space-y-1 px-1">
+        <div class="h-8 rounded-lg bg-zinc-800/60 animate-pulse"></div>
+        <div class="h-8 rounded-lg bg-zinc-800/40 animate-pulse"></div>
+        <div class="h-8 rounded-lg bg-zinc-800/40 animate-pulse"></div>
+        <div class="h-8 rounded-lg bg-zinc-800/30 animate-pulse"></div>
+      </div>
     </nav>
     <div class="px-4 py-4 space-y-2" style="border-top:1px solid rgba(255,255,255,.08)">
       <div class="flex items-center gap-3 mb-1">
@@ -358,11 +357,11 @@ tailwind.config = {
             <div id="list-recent-pdfs" class="space-y-2.5"><p class="text-xs text-zinc-400">No PDFs opened recently.</p></div>
           </div>
         </div>
-        <div class="card p-5">
+        <div id="home-popular-card" class="card p-5">
           <div class="flex items-center gap-2 mb-4"><i data-lucide="trending-up" class="w-5 h-5 text-amber-500"></i><h3 class="font-bold text-zinc-900 dark:text-white text-base">Popular Notes</h3></div>
           <div id="home-popular" class="space-y-2"><div class="skeleton h-10 w-full"></div><div class="skeleton h-10 w-full mt-2"></div></div>
         </div>
-        <div class="card p-5">
+        <div id="home-announcements-card" class="card p-5">
           <div class="flex items-center gap-2 mb-4"><i data-lucide="megaphone" class="w-5 h-5 text-violet-500"></i><h3 class="font-bold text-zinc-900 dark:text-white text-base">Latest Announcements</h3></div>
           <div id="home-ann" class="space-y-3"><div class="skeleton h-16 w-full"></div><div class="skeleton h-16 w-full mt-3"></div></div>
         </div>
@@ -1393,8 +1392,8 @@ const API = 'https://hub-6yrl.onrender.com/api';
     search:       { extras: ['universal-search', 'universal-search-suggestions'] },
     bookmarks:    { extras: ['btn-notes-bookmarked', 'btn-papers-bookmarked'] },
     focus:        { nav: 'nav-focus',         section: 'view-focus' },
-    notes:        { nav: 'nav-notes',         section: 'view-notes' },
-    announcements:{ nav: 'nav-announcements', section: 'view-announcements' },
+    notes:        { nav: 'nav-notes',         section: 'view-notes', extras: ['home-popular-card'] },
+    announcements:{ nav: 'nav-announcements', section: 'view-announcements', extras: ['home-announcements-card'] },
     timetable:    { nav: 'nav-timetable',     section: 'view-timetable' },
     syllabus:     { nav: 'nav-syllabus',      section: 'view-syllabus' },
     papers:       { nav: 'nav-papers',        section: 'view-papers' },
@@ -1427,11 +1426,23 @@ const API = 'https://hub-6yrl.onrender.com/api';
   }
 
   function applySettings(s) {
-    if (s.features) {
-      s.features.forEach(f => {
-        s[f.key] = f.enabled;
-      });
-      renderSidebarNav(s.features);
+    // Map features array to flat boolean flags for FEATURE_MAP lookup
+    var feats = s.features && s.features.length > 0 ? s.features : null;
+    if (feats) {
+      feats.forEach(f => { s[f.key] = f.enabled !== false; });
+      renderSidebarNav(feats);
+    } else {
+      // No features array from server — show default nav with all builtin features
+      var defaults = [
+        { key:'announcements', title:'Announcements',   icon:'megaphone',      type:'builtin', enabled:true },
+        { key:'notes',         title:'Study Notes',     icon:'notebook-text',  type:'builtin', enabled:true },
+        { key:'assignments',   title:'Assignments',     icon:'clipboard-list', type:'builtin', enabled:true },
+        { key:'timetable',     title:'Timetable',       icon:'calendar-days',  type:'builtin', enabled:true },
+        { key:'syllabus',      title:'Syllabus',        icon:'book-open',      type:'builtin', enabled:true },
+        { key:'papers',        title:'Previous Papers', icon:'file-text',      type:'builtin', enabled:true },
+        { key:'focus',         title:'Focus Zone',      icon:'timer',          type:'builtin', enabled:true }
+      ];
+      renderSidebarNav(defaults);
     }
 
     // 1. Reset all elements first to make sure they show back if enabled
@@ -1454,7 +1465,7 @@ const API = 'https://hub-6yrl.onrender.com/api';
     });
     
     // Reset quick actions
-    const qButtons = ['papers', 'assignments', 'timetable', 'syllabus'];
+    const qButtons = ['notes', 'papers', 'assignments', 'timetable', 'syllabus'];
     qButtons.forEach(btn => {
       var b = document.querySelector('button[onclick*="' + btn + '"]');
       if (b) b.classList.remove('feature-disabled');
@@ -1488,10 +1499,13 @@ const API = 'https://hub-6yrl.onrender.com/api';
       }
     });
 
-    if (s['papers'] === false)      { var b2 = document.querySelector('button[onclick*="papers"]');      if(b2) b2.classList.add('feature-disabled'); }
-    if (s['assignments'] === false) { var b3 = document.querySelector('button[onclick*="assignments"]'); if(b3) b3.classList.add('feature-disabled'); }
-    if (s['timetable'] === false)   { var b4 = document.querySelector('button[onclick*="timetable"]');   if(b4) b4.classList.add('feature-disabled'); }
-    if (s['syllabus'] === false)    { var b5 = document.querySelector('button[onclick*="syllabus"]');    if(b5) b5.classList.add('feature-disabled'); }
+    // Hide quick actions dynamically if the corresponding feature is disabled
+    qButtons.forEach(key => {
+      if (s[key] === false) {
+        var btn = document.querySelector('button[onclick*="' + key + '"]');
+        if (btn) btn.classList.add('feature-disabled');
+      }
+    });
 
     // 3. Apply advanced controls
     if (s.maintenanceMode === true) {
