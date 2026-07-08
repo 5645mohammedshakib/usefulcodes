@@ -37,7 +37,7 @@
   <script>
 if('serviceWorker' in navigator){
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=11').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=12').then(reg => {
           reg.update();
         }).catch(err => console.error('SW registration failed:', err));
       });
@@ -842,6 +842,22 @@ tailwind.config = {
                 <label class="flex items-center gap-2.5 cursor-pointer group">
                   <input type="checkbox" id="toggle-assignments" class="w-4 h-4 rounded border-zinc-300 dark:border-zinc-600 text-purple-600 focus:ring-purple-500/40 cursor-pointer" checked />
                   <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">📋 Assignments</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group">
+                  <input type="checkbox" id="toggle-notes" class="w-4 h-4 rounded border-zinc-300 dark:border-zinc-600 text-purple-600 focus:ring-purple-500/40 cursor-pointer" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">📝 Study Notes</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group">
+                  <input type="checkbox" id="toggle-events" class="w-4 h-4 rounded border-zinc-300 dark:border-zinc-600 text-purple-600 focus:ring-purple-500/40 cursor-pointer" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">📅 Events & Calendar</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group">
+                  <input type="checkbox" id="toggle-quickLinks" class="w-4 h-4 rounded border-zinc-300 dark:border-zinc-600 text-purple-600 focus:ring-purple-500/40 cursor-pointer" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">🔗 Quick Links</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer group">
+                  <input type="checkbox" id="toggle-banners" class="w-4 h-4 rounded border-zinc-300 dark:border-zinc-600 text-purple-600 focus:ring-purple-500/40 cursor-pointer" checked />
+                  <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">🖼️ Banners & Cards</span>
                 </label>
               </div>
 
@@ -2566,8 +2582,8 @@ tailwind.config = {
       // ==============================================
       const FEATURE_KEYS = [
         'search','bookmarks','planner','focus','announcements','timetable',
-        'syllabus','papers','assignments','directDownloads','maintenanceMode',
-        'emergencyBanner','feedbackEnabled','streaksEnabled'
+        'syllabus','papers','assignments','notes','events','quickLinks','banners',
+        'directDownloads','maintenanceMode','emergencyBanner','feedbackEnabled','streaksEnabled'
       ];
 
       async function loadStudentSettings() {

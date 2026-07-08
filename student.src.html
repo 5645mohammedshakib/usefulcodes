@@ -41,7 +41,7 @@
   <script>
 if('serviceWorker' in navigator){
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=11').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=12').then(reg => {
           reg.addEventListener('updatefound', () => {
             const nw = reg.installing;
             if (nw) {
@@ -124,6 +124,7 @@ tailwind.config = {
     /* Progress bar */
     .progress-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.1);overflow:hidden}
     .progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#7c3aed,#a855f7);transition:width .5s ease}
+    .feature-disabled { display: none !important; }
   </style>
 </head>
 <body class="text-white min-h-screen">
