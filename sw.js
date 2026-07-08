@@ -1,4 +1,4 @@
-const CACHE='student-hub-v7';
+const CACHE='student-hub-v8';
 const STATIC=['./student.html','./index.html','./icon-192.png','./icon-512.png','./student-manifest.json','./admin-manifest.json'];
 
 self.addEventListener('install',e=>{

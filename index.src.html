@@ -1,6 +1,31 @@
 <!doctype html>
 <html lang="en" class="dark">
   <head>
+  <script>
+    (function() {
+      async function checkUpdate() {
+        try {
+          const res = await fetch('./version.json?t=' + new Date().getTime());
+          const data = await res.json();
+          const latestVersion = data.version;
+          const currentVersion = parseInt(localStorage.getItem('app_version') || '0');
+          if (latestVersion > currentVersion) {
+            if ('caches' in window) {
+              const keys = await caches.keys();
+              await Promise.all(keys.map(key => caches.delete(key)));
+            }
+            if ('serviceWorker' in navigator) {
+              const regs = await navigator.serviceWorker.getRegistrations();
+              await Promise.all(regs.map(r => r.unregister()));
+            }
+            localStorage.setItem('app_version', latestVersion);
+            window.location.reload(true);
+          }
+        } catch (e) {}
+      }
+      checkUpdate();
+    })();
+  </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Hub - Admin Panel</title>
