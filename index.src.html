@@ -1344,18 +1344,48 @@ tailwind.config = {
 
           <!-- ═══════════ ATTENDANCE TRACKER ═══════════ -->
           <div id="view-attendance" class="view-section hidden space-y-6">
-            <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
-              <p class="text-sm text-zinc-500">View and manage student attendance records per subject.</p>
-              <div class="flex gap-2">
-                <div class="relative">
-                  <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-zinc-400"><i data-lucide="search" class="w-4 h-4"></i></span>
-                  <input type="text" id="att-search" oninput="filterAttendanceTable()" placeholder="Search student..." class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-zinc-950 dark:text-zinc-100" />
+            <!-- Mark Attendance Controls -->
+            <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
+              <h3 class="text-sm font-bold font-display text-zinc-950 dark:text-zinc-50 mb-4 flex items-center gap-2"><i data-lucide="clipboard-list" class="w-4 h-4 text-purple-500"></i>Mark New Attendance Session</h3>
+              <div class="flex flex-col sm:flex-row gap-3 items-end">
+                <div class="flex flex-col gap-1 flex-1">
+                  <label class="text-xs font-bold text-zinc-400 uppercase">Date</label>
+                  <input type="date" id="att-mark-date" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" />
                 </div>
-                <button onclick="exportAttendanceCSV()" class="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-4 py-2 text-sm font-semibold shadow-sm flex items-center gap-1.5">
-                  <i data-lucide="download" class="w-4 h-4"></i><span>Export CSV</span>
+                <div class="flex flex-col gap-1 flex-1">
+                  <label class="text-xs font-bold text-zinc-400 uppercase">Subject</label>
+                  <input type="text" id="att-mark-subject" placeholder="e.g. Mathematics" class="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-800 rounded px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100" />
+                </div>
+                <button onclick="openMarkAttendance()" class="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-5 py-2 text-sm font-semibold flex items-center gap-2 shrink-0">
+                  <i data-lucide="clipboard-check" class="w-4 h-4"></i> Mark Attendance
+                </button>
+                <button onclick="exportAttendanceCSV()" class="bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 text-zinc-700 dark:text-zinc-300 rounded-lg px-4 py-2 text-sm font-semibold flex items-center gap-2 shrink-0">
+                  <i data-lucide="download" class="w-4 h-4"></i> Export CSV
                 </button>
               </div>
             </div>
+
+            <!-- Mark Attendance Panel -->
+            <div id="att-mark-panel" class="hidden bg-white dark:bg-[#0c0c0f] border border-purple-300 dark:border-purple-700/50 rounded-xl p-6 shadow-sm">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-bold font-display text-zinc-950 dark:text-zinc-50 flex items-center gap-2">
+                  <i data-lucide="users" class="w-4 h-4 text-purple-500"></i>
+                  Marking: <span id="att-panel-label" class="text-purple-600 dark:text-purple-400 ml-1"></span>
+                </h3>
+                <div class="flex gap-2">
+                  <button onclick="markAllPresent()" class="text-xs px-3 py-1.5 bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 rounded-lg font-semibold">✓ All Present</button>
+                  <button onclick="markAllAbsent()" class="text-xs px-3 py-1.5 bg-rose-100 dark:bg-rose-900/20 text-rose-700 dark:text-rose-400 rounded-lg font-semibold">✗ All Absent</button>
+                </div>
+              </div>
+              <div id="att-student-checklist" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 max-h-72 overflow-y-auto mb-4"></div>
+              <div class="flex gap-3 pt-3 border-t border-zinc-100 dark:border-zinc-800">
+                <button onclick="saveAttendanceMarking()" class="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-5 py-2 text-sm font-semibold flex items-center gap-2">
+                  <i data-lucide="save" class="w-4 h-4"></i> Save Attendance
+                </button>
+                <button onclick="closeMarkPanel()" class="text-sm text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 font-semibold px-3 py-2">Cancel</button>
+              </div>
+            </div>
+
             <!-- Summary Cards -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
@@ -1375,6 +1405,18 @@ tailwind.config = {
                 <p class="text-3xl font-extrabold font-display mt-1 text-rose-500" id="att-stat-below">—</p>
               </div>
             </div>
+
+            <!-- Filter Row -->
+            <div class="flex flex-col sm:flex-row gap-3 items-center">
+              <div class="relative w-full sm:max-w-xs">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-zinc-400"><i data-lucide="search" class="w-4 h-4"></i></span>
+                <input type="text" id="att-search" oninput="filterAttendanceTable()" placeholder="Search student..." class="w-full bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-zinc-950 dark:text-zinc-100" />
+              </div>
+              <select id="att-filter-subject" onchange="filterAttendanceTable()" class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-950 dark:text-zinc-100">
+                <option value="">All Subjects</option>
+              </select>
+            </div>
+
             <!-- Attendance Table -->
             <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
               <div class="overflow-x-auto">
@@ -1401,7 +1443,7 @@ tailwind.config = {
                 <i data-lucide="bar-chart-3" class="w-5 h-5 text-purple-500"></i>Subject-wise Attendance Overview
               </h3>
               <div id="att-subject-bars" class="space-y-3">
-                <p class="text-xs text-zinc-400 text-center py-4">Loading subject data...</p>
+                <p class="text-xs text-zinc-400 text-center py-4">No data yet. Mark attendance first.</p>
               </div>
             </div>
           </div>
@@ -1801,33 +1843,96 @@ tailwind.config = {
 
       // ── ATTENDANCE TRACKER ────────────────────────────────────────────────────
       let allAttendanceData = [];
+      let attendanceSessions = [];
 
-      async function loadAttendanceData() {
+      function loadAttendanceData() {
         const tbody = document.getElementById('att-table-body');
         tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-zinc-400">Loading attendance data...</td></tr>';
+        
         try {
-          // Try to load from API; falls back gracefully if endpoint does not exist yet
-          const data = await apiRequest('/attendance');
-          allAttendanceData = Array.isArray(data) ? data : (data.records || []);
-          renderAttendanceTable(allAttendanceData);
-          renderAttendanceStats(allAttendanceData);
-          renderAttendanceSubjectBars(allAttendanceData);
+          attendanceSessions = JSON.parse(localStorage.getItem('studentHub_attendance_sessions') || '[]');
+          
+          if (attendanceSessions.length === 0 && students.length > 0) {
+            const mockStudents = students.filter(s => s.role !== 'admin').slice(0, 5);
+            if (mockStudents.length > 0) {
+              const mockSession = {
+                id: 'mock-1',
+                date: new Date().toISOString().split('T')[0],
+                subject: 'Web Development',
+                records: {}
+              };
+              mockStudents.forEach((s, idx) => {
+                mockSession.records[s._id] = idx % 3 === 0 ? 'Absent' : 'Present';
+              });
+              attendanceSessions.push(mockSession);
+              localStorage.setItem('studentHub_attendance_sessions', JSON.stringify(attendanceSessions));
+            }
+          }
+
+          calculateAndRenderAttendance();
         } catch(err) {
-          // Endpoint not yet implemented — show placeholder
-          tbody.innerHTML = '<tr><td colspan="6" class="py-10 text-center text-zinc-400 text-sm">Attendance data not available yet. Backend endpoint <code class="font-mono bg-zinc-100 dark:bg-zinc-800 px-1 rounded">GET /api/attendance</code> is not implemented.</td></tr>';
-          document.getElementById('att-stat-total').textContent = '—';
-          document.getElementById('att-stat-avg').textContent   = '—';
-          document.getElementById('att-stat-above').textContent = '—';
-          document.getElementById('att-stat-below').textContent = '—';
-          document.getElementById('att-subject-bars').innerHTML = '<p class="text-xs text-zinc-400 text-center py-4">No subject data available.</p>';
+          console.error(err);
+          tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-rose-500">Failed to load attendance records.</td></tr>';
         }
-        lucide.createIcons();
+      }
+
+      function calculateAndRenderAttendance() {
+        const nonAdmins = students.filter(u => u.role !== 'admin');
+        const subjects = [...new Set(attendanceSessions.map(s => s.subject))].filter(Boolean);
+        
+        const filterSelect = document.getElementById('att-filter-subject');
+        if (filterSelect) {
+          const currentVal = filterSelect.value;
+          filterSelect.innerHTML = '<option value="">All Subjects</option>' + 
+            subjects.map(s => `<option value="${s}">${s}</option>`).join('');
+          filterSelect.value = currentVal;
+        }
+
+        allAttendanceData = [];
+        nonAdmins.forEach(student => {
+          subjects.forEach(subject => {
+            let present = 0;
+            let total = 0;
+
+            attendanceSessions.forEach(session => {
+              if (session.subject === subject) {
+                const status = session.records[student._id];
+                if (status) {
+                  total++;
+                  if (status === 'Present') present++;
+                }
+              }
+            });
+
+            if (total > 0) {
+              allAttendanceData.push({
+                studentId: student._id,
+                studentName: student.name || 'Unknown student',
+                subject: subject,
+                present: present,
+                total: total
+              });
+            }
+          });
+        });
+
+        if (allAttendanceData.length === 0) {
+          document.getElementById('att-stat-total').textContent = nonAdmins.length;
+          document.getElementById('att-stat-avg').textContent   = '—';
+          document.getElementById('att-stat-above').textContent = '0';
+          document.getElementById('att-stat-below').textContent = '0';
+          document.getElementById('att-table-body').innerHTML = '<tr><td colspan="6" class="py-8 text-center text-zinc-400">No attendance registered yet. Use the fields above to mark attendance!</td></tr>';
+          document.getElementById('att-subject-bars').innerHTML = '<p class="text-xs text-zinc-400 text-center py-4">No data yet. Mark attendance first.</p>';
+          return;
+        }
+
+        filterAttendanceTable();
       }
 
       function renderAttendanceTable(records) {
         const tbody = document.getElementById('att-table-body');
         if (!records.length) {
-          tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-zinc-400">No attendance records found.</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-zinc-400">No attendance records match your filter criteria.</td></tr>';
           return;
         }
         tbody.innerHTML = records.map(r => {
@@ -1836,14 +1941,13 @@ tailwind.config = {
           return `<tr class="hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-colors">
             <td class="py-3 px-6 font-medium text-zinc-900 dark:text-zinc-100">${r.studentName || '—'}</td>
             <td class="py-3 px-6 text-zinc-500">${r.subject || '—'}</td>
-            <td class="py-3 px-6">${r.present ?? '—'}</td>
-            <td class="py-3 px-6">${r.total ?? '—'}</td>
+            <td class="py-3 px-6">${r.present}/${r.total}</td>
+            <td class="py-3 px-6">${pct}%</td>
             <td class="py-3 px-6">
               <div class="flex items-center gap-2">
                 <div class="w-20 h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
                   <div class="h-full rounded-full ${ok ? 'bg-emerald-500' : 'bg-rose-500'}" style="width:${pct}%"></div>
                 </div>
-                <span class="font-semibold text-xs ${ok ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-500'}">${pct}%</span>
               </div>
             </td>
             <td class="py-3 px-6 text-right"><span class="text-xs font-bold px-2.5 py-1 rounded-full ${ok ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400' : 'bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400'}">${ok ? '✓ Good' : '⚠ Low'}</span></td>
@@ -1852,13 +1956,24 @@ tailwind.config = {
       }
 
       function renderAttendanceStats(records) {
-        const students = new Set(records.map(r => r.studentName)).size;
-        const avgs    = records.map(r => r.total > 0 ? Math.round((r.present / r.total) * 100) : 0);
-        const avg     = avgs.length ? Math.round(avgs.reduce((a,b) => a+b,0) / avgs.length) : 0;
-        const above   = avgs.filter(p => p >= 75).length;
-        const below   = avgs.filter(p => p < 75).length;
-        document.getElementById('att-stat-total').textContent = students || records.length;
-        document.getElementById('att-stat-avg').textContent   = avg + '%';
+        const distinctStudents = new Set(records.map(r => r.studentId)).size;
+        const studentAverages = {};
+        
+        records.forEach(r => {
+          if (!studentAverages[r.studentId]) studentAverages[r.studentId] = { present: 0, total: 0 };
+          studentAverages[r.studentId].present += r.present;
+          studentAverages[r.studentId].total += r.total;
+        });
+
+        const avgs = Object.values(studentAverages).map(v => v.total > 0 ? Math.round((v.present / v.total) * 100) : 0);
+        const overallAvg = avgs.length ? Math.round(avgs.reduce((a,b) => a+b, 0) / avgs.length) : 0;
+        
+        const nonAdminsCount = students.filter(u => u.role !== 'admin').length;
+        const above = avgs.filter(p => p >= 75).length;
+        const below = avgs.filter(p => p < 75).length;
+        
+        document.getElementById('att-stat-total').textContent = nonAdminsCount;
+        document.getElementById('att-stat-avg').textContent   = overallAvg + '%';
         document.getElementById('att-stat-above').textContent = above;
         document.getElementById('att-stat-below').textContent = below;
       }
@@ -1873,6 +1988,7 @@ tailwind.config = {
         const container = document.getElementById('att-subject-bars');
         const subjects  = Object.entries(bySubj);
         if (!subjects.length) { container.innerHTML = '<p class="text-xs text-zinc-400 text-center py-4">No subject data.</p>'; return; }
+        
         container.innerHTML = subjects.map(([subj, d]) => {
           const pct = d.total > 0 ? Math.round((d.present / d.total) * 100) : 0;
           const ok  = pct >= 75;
@@ -1888,11 +2004,116 @@ tailwind.config = {
 
       function filterAttendanceTable() {
         const q = document.getElementById('att-search').value.toLowerCase();
-        const filtered = allAttendanceData.filter(r =>
-          (r.studentName || '').toLowerCase().includes(q) ||
-          (r.subject     || '').toLowerCase().includes(q)
-        );
+        const subFilter = document.getElementById('att-filter-subject').value;
+        
+        const filtered = allAttendanceData.filter(r => {
+          const matchesSearch = (r.studentName || '').toLowerCase().includes(q);
+          const matchesSubject = !subFilter || r.subject === subFilter;
+          return matchesSearch && matchesSubject;
+        });
+
         renderAttendanceTable(filtered);
+        renderAttendanceStats(allAttendanceData);
+        renderAttendanceSubjectBars(allAttendanceData);
+      }
+
+      function openMarkAttendance() {
+        const dateVal = document.getElementById('att-mark-date').value;
+        const subjVal = document.getElementById('att-mark-subject').value.trim();
+
+        if (!dateVal || !subjVal) {
+          showActionAlert('error', 'Select a date and type a subject name first!');
+          return;
+        }
+
+        const nonAdmins = students.filter(s => s.role !== 'admin');
+        if (nonAdmins.length === 0) {
+          showActionAlert('error', 'No students registered to mark attendance for.');
+          return;
+        }
+
+        document.getElementById('att-panel-label').innerText = `${subjVal} (${dateVal})`;
+        
+        const container = document.getElementById('att-student-checklist');
+        container.innerHTML = nonAdmins.map(student => {
+          return `
+            <div class="flex items-center justify-between p-3 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50/50 dark:bg-zinc-900/10">
+              <div class="min-w-0 pr-4">
+                <p class="text-xs font-bold text-zinc-900 dark:text-zinc-100 truncate">${student.name || 'Unknown Student'}</p>
+                <p class="text-[9px] text-zinc-500 truncate">${student.email || ''}</p>
+              </div>
+              <div class="flex items-center gap-1 shrink-0" data-student-id="${student._id}">
+                <button type="button" onclick="setAttendanceStatus('${student._id}', 'Present')" class="att-btn-p px-2 py-1 text-[10px] font-bold rounded bg-emerald-600 text-white border border-emerald-600 transition-colors">P</button>
+                <button type="button" onclick="setAttendanceStatus('${student._id}', 'Absent')" class="att-btn-a px-2 py-1 text-[10px] font-bold rounded border border-zinc-200 dark:border-zinc-700 text-zinc-500 transition-colors">A</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        document.getElementById('att-mark-panel').classList.remove('hidden');
+        lucide.createIcons();
+      }
+
+      function setAttendanceStatus(studentId, status) {
+        const cell = document.querySelector(`[data-student-id="${studentId}"]`);
+        if (!cell) return;
+        const pBtn = cell.querySelector('.att-btn-p');
+        const aBtn = cell.querySelector('.att-btn-a');
+
+        if (status === 'Present') {
+          pBtn.className = "att-btn-p px-2 py-1 text-[10px] font-bold rounded bg-emerald-600 text-white border border-emerald-600 transition-colors";
+          aBtn.className = "att-btn-a px-2 py-1 text-[10px] font-bold rounded border border-zinc-200 dark:border-zinc-700 text-zinc-500 transition-colors";
+        } else {
+          pBtn.className = "att-btn-p px-2 py-1 text-[10px] font-bold rounded border border-zinc-200 dark:border-zinc-700 text-zinc-500 transition-colors";
+          aBtn.className = "att-btn-a px-2 py-1 text-[10px] font-bold rounded bg-rose-600 text-white border border-rose-600 transition-colors";
+        }
+      }
+
+      function markAllPresent() {
+        const studentContainers = document.querySelectorAll('[data-student-id]');
+        studentContainers.forEach(container => {
+          const studentId = container.getAttribute('data-student-id');
+          setAttendanceStatus(studentId, 'Present');
+        });
+      }
+
+      function markAllAbsent() {
+        const studentContainers = document.querySelectorAll('[data-student-id]');
+        studentContainers.forEach(container => {
+          const studentId = container.getAttribute('data-student-id');
+          setAttendanceStatus(studentId, 'Absent');
+        });
+      }
+
+      function saveAttendanceMarking() {
+        const dateVal = document.getElementById('att-mark-date').value;
+        const subjVal = document.getElementById('att-mark-subject').value.trim();
+
+        const session = {
+          id: Date.now().toString(),
+          date: dateVal,
+          subject: subjVal,
+          records: {}
+        };
+
+        const studentContainers = document.querySelectorAll('[data-student-id]');
+        studentContainers.forEach(container => {
+          const studentId = container.getAttribute('data-student-id');
+          const pBtn = container.querySelector('.att-btn-p');
+          const isPresent = pBtn.classList.contains('bg-emerald-600');
+          session.records[studentId] = isPresent ? 'Present' : 'Absent';
+        });
+
+        attendanceSessions.push(session);
+        localStorage.setItem('studentHub_attendance_sessions', JSON.stringify(attendanceSessions));
+
+        showActionAlert('success', `Attendance for ${subjVal} successfully saved!`);
+        closeMarkPanel();
+        calculateAndRenderAttendance();
+      }
+
+      function closeMarkPanel() {
+        document.getElementById('att-mark-panel').classList.add('hidden');
       }
 
       function exportAttendanceCSV() {
