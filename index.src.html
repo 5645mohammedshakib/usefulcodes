@@ -293,6 +293,41 @@ tailwind.config = {
                 </div>
               </div>
             </div>
+
+            <!-- ── LIVE ACTIVE USERS CARD ── -->
+            <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                  <span class="relative flex h-2.5 w-2.5">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                  </span>
+                  <h3 class="text-sm font-bold font-display text-zinc-950 dark:text-zinc-50">Live User Activity</h3>
+                </div>
+                <button onclick="loadActiveUsersCard()" class="text-[10px] text-purple-600 dark:text-purple-400 hover:underline font-semibold flex items-center gap-1">
+                  <i data-lucide="refresh-cw" class="w-3 h-3"></i> Refresh
+                </button>
+              </div>
+              <div class="grid grid-cols-3 gap-4">
+                <div class="text-center p-3 bg-emerald-50 dark:bg-emerald-900/10 rounded-lg border border-emerald-100 dark:border-emerald-800/30">
+                  <span id="stat-online-now" class="text-2xl font-extrabold font-display text-emerald-600 dark:text-emerald-400 block">—</span>
+                  <span class="text-[10px] font-semibold text-emerald-700 dark:text-emerald-500 uppercase tracking-wider">Online Now</span>
+                  <span class="text-[9px] text-zinc-400 block mt-0.5">last 30 min</span>
+                </div>
+                <div class="text-center p-3 bg-blue-50 dark:bg-blue-900/10 rounded-lg border border-blue-100 dark:border-blue-800/30">
+                  <span id="stat-active-today" class="text-2xl font-extrabold font-display text-blue-600 dark:text-blue-400 block">—</span>
+                  <span class="text-[10px] font-semibold text-blue-700 dark:text-blue-500 uppercase tracking-wider">Active Today</span>
+                  <span class="text-[9px] text-zinc-400 block mt-0.5">last 24 hrs</span>
+                </div>
+                <div class="text-center p-3 bg-purple-50 dark:bg-purple-900/10 rounded-lg border border-purple-100 dark:border-purple-800/30">
+                  <span id="stat-total-users" class="text-2xl font-extrabold font-display text-purple-600 dark:text-purple-400 block">—</span>
+                  <span class="text-[10px] font-semibold text-purple-700 dark:text-purple-500 uppercase tracking-wider">Total Users</span>
+                  <span class="text-[9px] text-zinc-400 block mt-0.5">registered</span>
+                </div>
+              </div>
+              <div id="active-users-list" class="mt-4 space-y-1.5 max-h-32 overflow-y-auto"></div>
+            </div>
+
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <div onclick="navigateTo('timetables')" class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 hover:border-purple-500/50 cursor-pointer flex items-center justify-between transition-all">
                 <div class="flex items-center gap-3">
@@ -1966,11 +2001,65 @@ tailwind.config = {
           document.getElementById('stat-papers-sub').innerText = `${papers.length} papers uploaded`;
           document.getElementById('stat-categories-sub').innerText = `${categories.length} topics configured`;
 
+          // Active Users calculation from users data
+          renderActiveUsersCard(students);
+
           // Render Recents
           renderRecentNotes();
           renderRecentAssignments();
         } catch (err) {
           setErrorView('Dashboard fetch failed. Verify backend: ' + err.message);
+        }
+      }
+
+      function renderActiveUsersCard(usersList) {
+        const now = new Date();
+        const ms30min = 30 * 60 * 1000;
+        const ms24h  = 24 * 60 * 60 * 1000;
+
+        const nonAdmins = usersList.filter(u => u.role !== 'admin');
+        const onlineNow    = nonAdmins.filter(u => u.lastLogin && (now - new Date(u.lastLogin)) <= ms30min);
+        const activeToday  = nonAdmins.filter(u => u.lastLogin && (now - new Date(u.lastLogin)) <= ms24h);
+
+        document.getElementById('stat-online-now').innerText   = onlineNow.length;
+        document.getElementById('stat-active-today').innerText = activeToday.length;
+        document.getElementById('stat-total-users').innerText  = nonAdmins.length;
+
+        // Show list of online users
+        const listEl = document.getElementById('active-users-list');
+        if (onlineNow.length === 0) {
+          listEl.innerHTML = `<p class="text-[10px] text-zinc-400 text-center py-1">No users active in the last 30 minutes.</p>`;
+        } else {
+          listEl.innerHTML = onlineNow.map(u => {
+            const minsAgo = Math.floor((now - new Date(u.lastLogin)) / 60000);
+            const initial = u.name ? u.name[0].toUpperCase() : '?';
+            return `
+              <div class="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-100 dark:border-zinc-800/50">
+                <div class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 flex items-center justify-center text-[10px] font-bold shrink-0">${initial}</div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-[11px] font-semibold text-zinc-800 dark:text-zinc-200 truncate">${u.name || 'Unknown'}</p>
+                  <p class="text-[9px] text-zinc-400 truncate">${u.email || ''}</p>
+                </div>
+                <span class="text-[9px] text-emerald-600 dark:text-emerald-400 font-semibold shrink-0">${minsAgo === 0 ? 'Just now' : minsAgo + 'm ago'}</span>
+              </div>
+            `;
+          }).join('');
+        }
+        lucide.createIcons();
+      }
+
+      async function loadActiveUsersCard() {
+        // Re-fetch users and refresh the active users card
+        try {
+          document.getElementById('stat-online-now').innerText = '...';
+          document.getElementById('stat-active-today').innerText = '...';
+          const freshUsers = await apiRequest('/users');
+          renderActiveUsersCard(freshUsers);
+          students = freshUsers;
+          const studentCount = freshUsers.filter(s => s.role !== 'admin').length;
+          document.getElementById('stat-students').innerText = studentCount;
+        } catch(err) {
+          document.getElementById('stat-online-now').innerText = 'Err';
         }
       }
 
