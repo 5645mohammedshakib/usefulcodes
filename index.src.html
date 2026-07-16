@@ -2233,14 +2233,23 @@ tailwind.config = {
         }
       }
 
+      function parseUTCDate(dateStr) {
+        if (!dateStr) return new Date(0);
+        if (typeof dateStr !== 'string') return new Date(dateStr);
+        if (!dateStr.endsWith('Z') && !dateStr.includes('+') && dateStr.includes('T')) {
+          return new Date(dateStr + 'Z');
+        }
+        return new Date(dateStr);
+      }
+
       function renderActiveUsersCard(usersList) {
         const now = new Date();
         const ms30min = 30 * 60 * 1000;
         const ms24h  = 24 * 60 * 60 * 1000;
 
         const nonAdmins = usersList.filter(u => u.role !== 'admin');
-        const onlineNow    = nonAdmins.filter(u => u.lastLogin && (now - new Date(u.lastLogin)) <= ms30min);
-        const activeToday  = nonAdmins.filter(u => u.lastLogin && (now - new Date(u.lastLogin)) <= ms24h);
+        const onlineNow    = nonAdmins.filter(u => u.lastLogin && (now - parseUTCDate(u.lastLogin)) <= ms30min);
+        const activeToday  = nonAdmins.filter(u => u.lastLogin && (now - parseUTCDate(u.lastLogin)) <= ms24h);
 
         document.getElementById('stat-online-now').innerText   = onlineNow.length;
         document.getElementById('stat-active-today').innerText = activeToday.length;
@@ -2252,7 +2261,7 @@ tailwind.config = {
           listEl.innerHTML = `<p class="text-[10px] text-zinc-400 text-center py-1">No users active in the last 30 minutes.</p>`;
         } else {
           listEl.innerHTML = onlineNow.map(u => {
-            const minsAgo = Math.floor((now - new Date(u.lastLogin)) / 60000);
+            const minsAgo = Math.floor((now - parseUTCDate(u.lastLogin)) / 60000);
             const initial = u.name ? u.name[0].toUpperCase() : '?';
             return `
               <div class="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-100 dark:border-zinc-800/50">
