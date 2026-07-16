@@ -313,6 +313,10 @@
         <i id="icon-moon" data-lucide="moon" class="w-4 h-4"></i>
         <span id="theme-label">Dark Mode</span>
       </button>
+      <button onclick="toggleApiSource()" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all font-medium mb-1">
+        <i data-lucide="server" class="w-4 h-4 text-violet-400"></i>
+        <span id="api-toggle-label">API: Production</span>
+      </button>
       <button onclick="handleLogout()" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all font-medium">
         <i data-lucide="log-out" class="w-4 h-4"></i>Sign Out
       </button>
@@ -484,12 +488,42 @@
 <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 
 <script>
-  const API = 'https://hub-6yrl.onrender.com/api';
-  const FILE_BASE = 'https://hub-6yrl.onrender.com';
+  let API = 'https://hub-6yrl.onrender.com/api';
+  let FILE_BASE = 'https://hub-6yrl.onrender.com';
   let token=localStorage.getItem('s_token')||'';
   let currentUser=null, allNotes=[];
 
+  function initApiSource() {
+    let saved = localStorage.getItem('s_apiBaseUrl');
+    if (!saved) {
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
+        saved = 'http://localhost:5000/api';
+      } else {
+        saved = 'https://hub-6yrl.onrender.com/api';
+      }
+      localStorage.setItem('s_apiBaseUrl', saved);
+    }
+    updateApiVariables(saved);
+  }
+
+  function updateApiVariables(url) {
+    localStorage.setItem('s_apiBaseUrl', url);
+    API = url;
+    FILE_BASE = url.replace('/api', '');
+    const isLocal = url.includes('localhost') || url.includes('127.0.0.1');
+    const el = document.getElementById('api-toggle-label');
+    if(el) el.innerText = isLocal ? 'API: Localhost (Dev)' : 'API: Render (Prod)';
+  }
+
+  function toggleApiSource() {
+    let current = localStorage.getItem('s_apiBaseUrl') || 'https://hub-6yrl.onrender.com/api';
+    let next = current.includes('localhost') || current.includes('127.0.0.1') ? 'https://hub-6yrl.onrender.com/api' : 'http://localhost:5000/api';
+    updateApiVariables(next);
+    location.reload();
+  }
+
   window.addEventListener('DOMContentLoaded',()=>{
+    initApiSource();
     const dark=localStorage.getItem('s_dark')!==null?JSON.parse(localStorage.getItem('s_dark')):true;
     applyTheme(dark); token?checkAuth():showAuth(); lucide.createIcons();
   });
