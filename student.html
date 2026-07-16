@@ -484,8 +484,8 @@
 <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 
 <script>
-  const API = location.protocol === 'file:' ? 'http://localhost:5000/api' : 'https://hub-6yrl.onrender.com/api';
-  const FILE_BASE = location.protocol === 'file:' ? 'http://localhost:5000' : 'https://hub-6yrl.onrender.com';
+  const API = 'https://hub-6yrl.onrender.com/api';
+  const FILE_BASE = 'https://hub-6yrl.onrender.com';
   let token=localStorage.getItem('s_token')||'';
   let currentUser=null, allNotes=[];
 
@@ -525,6 +525,17 @@
   function showAlert(msg){const el=document.getElementById('auth-alert');el.classList.remove('hidden');el.classList.add('flex');document.getElementById('auth-alert-msg').innerText=msg;lucide.createIcons();}
   function hideAlert(){const el=document.getElementById('auth-alert');el.classList.add('hidden');el.classList.remove('flex');}
 
+  let _hbInterval=null;
+  function startHeartbeat(){
+    if(_hbInterval)clearInterval(_hbInterval);
+    sendHeartbeat();
+    _hbInterval=setInterval(sendHeartbeat,30000);
+  }
+  async function sendHeartbeat(){
+    if(!token)return;
+    try{await fetch(`${API}/heartbeat`,{method:'POST',headers:{Authorization:`Bearer ${token}`}});}catch(e){}
+  }
+
   async function checkAuth(){
     try{
       const r=await fetch(`${API}/auth/me`,{headers:{Authorization:`Bearer ${token}`}});
@@ -534,6 +545,7 @@
       document.getElementById('s-email').innerText=currentUser.email||'';
       document.getElementById('s-avatar').innerText=(currentUser.name||'S')[0].toUpperCase();
       showApp();
+      startHeartbeat();
     }catch{token='';localStorage.removeItem('s_token');showAuth();}
   }
 
@@ -563,7 +575,10 @@
     finally{btn.disabled=false;btn.innerHTML='<i data-lucide="user-plus" class="w-4 h-4"></i><span>Create Account</span>';lucide.createIcons();}
   }
 
-  function handleLogout(){token='';currentUser=null;localStorage.removeItem('s_token');showAuth();}
+  function handleLogout(){
+    if(_hbInterval){clearInterval(_hbInterval);_hbInterval=null;}
+    token='';currentUser=null;localStorage.removeItem('s_token');showAuth();
+  }
 
   const titles={home:['Welcome 👋',"Here's what's new today"],announcements:['Announcements 📢','Latest updates from institution'],notes:['Study Notes 📝','Download and read study materials'],assignments:['Assignments 📋','Your tasks and deadlines'],timetable:['Timetable 🗓️','Your weekly class schedule'],syllabus:['Syllabus 📚','Course topics and content'],papers:['Previous Papers 📄','Past exam papers for practice'],focus:['Focus Zone ⏱️','Deep work with Pomodoro timer']};
 
@@ -758,19 +773,34 @@
     }catch{box.innerHTML=errCard();}
   }
 
+  function getTimetableSlots(t) {
+    if (t.slots && t.slots.length) return t.slots;
+    if (t.entries && t.entries.length) {
+      return t.entries.map(e => ({
+        day: e.day,
+        subject: e.subject,
+        time: (e.start && e.end) ? `${e.start} - ${e.end}` : '',
+        room: e.location || ''
+      }));
+    }
+    return [];
+  }
+
   async function loadTimetable(){
     const box=document.getElementById('list-timetable');
     box.innerHTML='<div class="skeleton h-32 w-full"></div>';
     try{
       const data=await apiFetch('/timetable');
-      box.innerHTML=data.length?data.map(t=>`
+      box.innerHTML=data.length?data.map(t=>{
+        const slots = getTimetableSlots(t);
+        return `
         <div class="card p-5">
           <div class="flex items-center gap-3 mb-4">
             <div class="w-10 h-10 rounded-xl bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center shrink-0"><i data-lucide="calendar-days" class="w-5 h-5 text-teal-600 dark:text-teal-400"></i></div>
             <div><p class="font-bold text-zinc-900 dark:text-white">${esc(t.title)}</p><p class="text-xs text-zinc-400">${fmtDate(t.createdAt)}</p></div>
           </div>
-          ${t.slots&&t.slots.length?`<div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="text-left text-xs text-zinc-400 border-b border-zinc-200 dark:border-zinc-800"><th class="pb-2 pr-4">Day</th><th class="pb-2 pr-4">Subject</th><th class="pb-2 pr-4">Time</th><th class="pb-2">Room</th></tr></thead><tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">${t.slots.map(s=>`<tr><td class="py-2 pr-4 font-medium text-zinc-900 dark:text-zinc-100">${esc(s.day||'-')}</td><td class="py-2 pr-4 text-zinc-600 dark:text-zinc-400">${esc(s.subject||'-')}</td><td class="py-2 pr-4 text-zinc-600 dark:text-zinc-400">${esc(s.time||'-')}</td><td class="py-2 text-zinc-600 dark:text-zinc-400">${esc(s.room||'-')}</td></tr>`).join('')}</tbody></table></div>`:'<p class="text-sm text-zinc-400">No slots added.</p>'}
-        </div>`).join(''):empty('No timetable posted yet.');
+          ${slots.length?`<div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="text-left text-xs text-zinc-400 border-b border-zinc-200 dark:border-zinc-800"><th class="pb-2 pr-4">Day</th><th class="pb-2 pr-4">Subject</th><th class="pb-2 pr-4">Time</th><th class="pb-2">Room</th></tr></thead><tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">${slots.map(s=>`<tr><td class="py-2 pr-4 font-medium text-zinc-900 dark:text-zinc-100">${esc(s.day||'-')}</td><td class="py-2 pr-4 text-zinc-600 dark:text-zinc-400">${esc(s.subject||'-')}</td><td class="py-2 pr-4 text-zinc-600 dark:text-zinc-400">${esc(s.time||'-')}</td><td class="py-2 text-zinc-600 dark:text-zinc-400">${esc(s.room||'-')}</td></tr>`).join('')}</tbody></table></div>`:'<p class="text-sm text-zinc-400">No slots added.</p>'}
+        </div>`;}).join(''):empty('No timetable posted yet.');
       lucide.createIcons();
     }catch{box.innerHTML=errCard();}
   }
@@ -817,26 +847,19 @@
   }
 
   /* ── PDF Modal ── */
-  let _pdfObjUrl = null;
-  function _pdfShowError(url) {
-    document.getElementById('pdf-spinner').style.display = 'none';
-    document.getElementById('pdf-load-msg').innerText = 'File load nahi ho saki.';
-    const eb = document.getElementById('pdf-error-btns');
-    eb.classList.remove('hidden'); eb.classList.add('flex');
-    document.getElementById('pdf-opentab-btn').onclick = () => window.open(url, '_blank');
-    lucide.createIcons();
-  }
-  async function openPDF(url, title){
+  function openPDF(url, title){
     const modal   = document.getElementById('pdf-modal');
     const iframe  = document.getElementById('pdf-iframe');
     const loading = document.getElementById('pdf-loading');
     const spinner = document.getElementById('pdf-spinner');
     const msg     = document.getElementById('pdf-load-msg');
     const errBtns = document.getElementById('pdf-error-btns');
+    
     // Reset UI
     spinner.style.display='block'; msg.innerText='Loading PDF…';
     errBtns.classList.add('hidden'); errBtns.classList.remove('flex');
     iframe.src = '';
+    
     loading.style.display = 'flex';
     document.getElementById('pdf-modal-title').innerText = title || 'PDF Viewer';
     document.getElementById('pdf-dl-btn').setAttribute('data-url', url);
@@ -844,47 +867,43 @@
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
     lucide.createIcons();
-    // Revoke previous blob URL
-    if(_pdfObjUrl){ URL.revokeObjectURL(_pdfObjUrl); _pdfObjUrl=null; }
-    try {
-      const res = await fetch(url);
-      if(!res.ok) throw new Error(`HTTP ${res.status}`);
-      const blob = await res.blob();
-      // Accept pdf or generic binary
-      if(blob.type && !blob.type.includes('pdf') && !blob.type.includes('octet') && !blob.type.includes('application')) {
-        throw new Error('Not a file');
+    
+    // Direct source setting bypasses all CORS browser issues
+    iframe.onload = () => { loading.style.display = 'none'; };
+    iframe.src = url;
+
+    // Timeout fallback fallback in case the server fails or lacks frame support
+    setTimeout(() => {
+      if(loading.style.display !== 'none') {
+        spinner.style.display = 'none';
+        msg.innerText = 'Could not load instantly inside reader.';
+        errBtns.classList.remove('hidden'); errBtns.classList.add('flex');
+        document.getElementById('pdf-opentab-btn').onclick = () => {
+          window.open(url, '_blank');
+          closePDF();
+        };
       }
-      _pdfObjUrl = URL.createObjectURL(blob);
-      iframe.onload = () => { loading.style.display = 'none'; };
-      iframe.src = _pdfObjUrl;
-    } catch(e) {
-      _pdfShowError(url);
-    }
+    }, 5500);
   }
   function closePDF(){
     document.getElementById('pdf-modal').classList.add('hidden');
     document.getElementById('pdf-iframe').src = '';
     document.getElementById('pdf-loading').style.display = 'flex';
     document.body.style.overflow = '';
-    if(_pdfObjUrl){ URL.revokeObjectURL(_pdfObjUrl); _pdfObjUrl=null; }
   }
 
-
-  async function downloadFile(url, filename){
-    try{
-      const res  = await fetch(url);
-      if(!res.ok) throw new Error('fetch failed');
-      const blob = await res.blob();
-      const a    = document.createElement('a');
-      a.href     = URL.createObjectURL(blob);
-      a.download = filename || 'document';
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
-    } catch {
-      // CORS fallback: open in new tab so browser handles download
-      window.open(url, '_blank');
-    }
+  function downloadFile(url, filename){
+    // Append ?download=true to trigger Attachment headers on the backend automatically
+    const dlUrl = url + (url.includes('?') ? '&' : '?') + 'download=true';
+    
+    // Create direct download node link element
+    const a = document.createElement('a');
+    a.href = dlUrl;
+    a.download = filename || 'document';
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => a.remove(), 100);
   }
   // Modal download button
   document.getElementById('pdf-dl-btn').addEventListener('click', function(e){

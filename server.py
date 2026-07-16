@@ -41,8 +41,9 @@ announcements = db["announcements"]
 timetables    = db["timetables"]
 syllabi       = db["syllabi"]
 categories    = db["categories"]
+active_sessions = db["active_sessions"]
 
-# ─── Health / Keep-Alive ───────────────────────────────────────────────────────
+# ─── Health / Keep-Alive ─────────────────────────────────────────────────────────────────────
 @app.route('/')
 def root():
     return jsonify({"status": "ok", "app": "Student Hub API", "version": "1.0"})
@@ -50,6 +51,25 @@ def root():
 @app.route('/api/health')
 def health():
     return jsonify({"status": "ok", "message": "Server is alive!"})
+
+# ─── Heartbeat / Active Users ───────────────────────────────────────────────────────────
+@app.post("/api/heartbeat")
+@auth_required
+def heartbeat():
+    active_sessions.update_one(
+        {"user_id": request.user_id},
+        {"$set": {"user_id": request.user_id, "last_seen": datetime.datetime.utcnow()}},
+        upsert=True
+    )
+    return jsonify({"status": "ok"})
+
+@app.get("/api/active-users")
+@auth_required
+def get_active_users():
+    cutoff = datetime.datetime.utcnow() - datetime.timedelta(minutes=5)
+    count  = active_sessions.count_documents({"last_seen": {"$gte": cutoff}})
+    return jsonify({"count": count})
+
 
 # ─── Helpers ───────────────────────────────────────────────────────────────────
 def serialize(doc):
@@ -103,7 +123,8 @@ def save_file(file_obj) -> str | None:
 @app.route("/uploads/<path:filename>")
 def serve_upload(filename):
     try:
-        return send_from_directory(UPLOAD_DIR, filename)
+        as_attachment = request.args.get("download", "false").lower() == "true"
+        return send_from_directory(UPLOAD_DIR, filename, as_attachment=as_attachment)
     except Exception:
         return jsonify({"msg": "File not found"}), 404
 
