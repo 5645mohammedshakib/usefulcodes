@@ -817,46 +817,58 @@
   }
 
   /* ── PDF Modal ── */
-  let _pdfTimer = null;
-  function openPDF(url, title){
+  let _pdfObjUrl = null;
+  function _pdfShowError(url) {
+    document.getElementById('pdf-spinner').style.display = 'none';
+    document.getElementById('pdf-load-msg').innerText = 'File load nahi ho saki.';
+    const eb = document.getElementById('pdf-error-btns');
+    eb.classList.remove('hidden'); eb.classList.add('flex');
+    document.getElementById('pdf-opentab-btn').onclick = () => window.open(url, '_blank');
+    lucide.createIcons();
+  }
+  async function openPDF(url, title){
     const modal   = document.getElementById('pdf-modal');
     const iframe  = document.getElementById('pdf-iframe');
     const loading = document.getElementById('pdf-loading');
     const spinner = document.getElementById('pdf-spinner');
     const msg     = document.getElementById('pdf-load-msg');
     const errBtns = document.getElementById('pdf-error-btns');
-    // Reset state
+    // Reset UI
     spinner.style.display='block'; msg.innerText='Loading PDF…';
     errBtns.classList.add('hidden'); errBtns.classList.remove('flex');
+    iframe.src = '';
+    loading.style.display = 'flex';
     document.getElementById('pdf-modal-title').innerText = title || 'PDF Viewer';
     document.getElementById('pdf-dl-btn').setAttribute('data-url', url);
     document.getElementById('pdf-dl-btn').setAttribute('data-name', title || 'document');
-    document.getElementById('pdf-opentab-btn').onclick = () => window.open(url, '_blank');
-    iframe.src = '';
-    loading.style.display = 'flex';
-    iframe.onload = () => { clearTimeout(_pdfTimer); loading.style.display = 'none'; };
-    iframe.src = url;
-    // After 5s if still loading → show fallback
-    clearTimeout(_pdfTimer);
-    _pdfTimer = setTimeout(() => {
-      if(loading.style.display !== 'none'){
-        spinner.style.display='none';
-        msg.innerText='PDF load nahi ho saka.';
-        errBtns.classList.remove('hidden'); errBtns.classList.add('flex');
-        lucide.createIcons();
-      }
-    }, 5000);
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
     lucide.createIcons();
+    // Revoke previous blob URL
+    if(_pdfObjUrl){ URL.revokeObjectURL(_pdfObjUrl); _pdfObjUrl=null; }
+    try {
+      const res = await fetch(url);
+      if(!res.ok) throw new Error(`HTTP ${res.status}`);
+      const blob = await res.blob();
+      // Accept pdf or generic binary
+      if(blob.type && !blob.type.includes('pdf') && !blob.type.includes('octet') && !blob.type.includes('application')) {
+        throw new Error('Not a file');
+      }
+      _pdfObjUrl = URL.createObjectURL(blob);
+      iframe.onload = () => { loading.style.display = 'none'; };
+      iframe.src = _pdfObjUrl;
+    } catch(e) {
+      _pdfShowError(url);
+    }
   }
   function closePDF(){
-    clearTimeout(_pdfTimer);
     document.getElementById('pdf-modal').classList.add('hidden');
     document.getElementById('pdf-iframe').src = '';
     document.getElementById('pdf-loading').style.display = 'flex';
     document.body.style.overflow = '';
+    if(_pdfObjUrl){ URL.revokeObjectURL(_pdfObjUrl); _pdfObjUrl=null; }
   }
+
 
   async function downloadFile(url, filename){
     try{
