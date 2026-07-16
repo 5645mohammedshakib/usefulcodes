@@ -80,6 +80,7 @@ tailwind.config = {
     <style>
       body {
         font-family: 'Inter', sans-serif;
+        background-attachment: fixed;
       }
       .font-display {
         font-family: 'Outfit', sans-serif;
@@ -87,7 +88,57 @@ tailwind.config = {
       .font-mono {
         font-family: 'JetBrains Mono', monospace;
       }
-      /* Custom scrollbar */
+      
+      /* Glassmorphism & High-end effects */
+      .glass-card {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(228, 228, 231, 0.6);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+      }
+      .dark .glass-card {
+        background: rgba(12, 12, 15, 0.75);
+        border: 1px solid rgba(63, 63, 70, 0.45);
+        box-shadow: 0 4px 30px -2px rgba(0, 0, 0, 0.3);
+      }
+      .glass-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 36px -8px rgba(124, 58, 237, 0.12);
+        border-color: rgba(124, 58, 237, 0.35);
+      }
+      .dark .glass-card:hover {
+        box-shadow: 0 16px 36px -8px rgba(139, 92, 246, 0.25);
+        border-color: rgba(139, 92, 246, 0.4);
+      }
+      
+      /* Modern nav sidebar buttons */
+      .nav-btn {
+        position: relative;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .nav-btn::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 25%;
+        height: 50%;
+        width: 3.5px;
+        background: transparent;
+        border-radius: 0 6px 6px 0;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .nav-btn.active::before {
+        height: 60%;
+        top: 20%;
+        background: #7c3aed;
+      }
+      .dark .nav-btn.active::before {
+        background: #a855f7;
+      }
+      
+      /* Styled scrollbars */
       ::-webkit-scrollbar {
         width: 6px;
         height: 6px;
@@ -96,14 +147,51 @@ tailwind.config = {
         background: transparent;
       }
       ::-webkit-scrollbar-thumb {
-        background: #4b5563;
-        border-radius: 4px;
+        background: rgba(124, 58, 237, 0.3);
+        border-radius: 9999px;
       }
       .dark ::-webkit-scrollbar-thumb {
-        background: #374151;
+        background: rgba(139, 92, 246, 0.2);
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #6b7280;
+        background: rgba(124, 58, 237, 0.6);
+      }
+      .dark ::-webkit-scrollbar-thumb:hover {
+        background: rgba(139, 92, 246, 0.5);
+      }
+
+      /* Metric glow cards */
+      .glow-purple {
+        box-shadow: 0 4px 20px -2px rgba(124, 58, 237, 0.05);
+      }
+      .dark .glow-purple {
+        box-shadow: 0 4px 30px -2px rgba(139, 92, 246, 0.1);
+      }
+      
+      /* Beautiful custom table cards */
+      .premium-table tr {
+        transition: background-color 0.15s ease;
+      }
+      .premium-table tr:hover {
+        background-color: rgba(124, 58, 237, 0.02) !important;
+      }
+      .dark .premium-table tr:hover {
+        background-color: rgba(139, 92, 246, 0.03) !important;
+      }
+
+      /* Animated gradients for titles */
+      .gradient-title {
+        background: linear-gradient(135deg, #7c3aed, #a855f7, #6366f1);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-size: 200% 200%;
+        animation: gradAnimation 8s ease infinite;
+      }
+      @keyframes gradAnimation {
+        0%{background-position:0% 50%}
+        50%{background-position:100% 50%}
+        100%{background-position:0% 50%}
       }
     </style>
   </head>
@@ -268,28 +356,28 @@ tailwind.config = {
           </div>
           <div id="view-dashboard" class="view-section space-y-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div onclick="navigateTo('students')" class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm hover:border-purple-500/50 cursor-pointer flex items-start gap-4 transition-all">
+              <div onclick="navigateTo('students')" class="glass-card glow-purple rounded-2xl p-6 cursor-pointer flex items-start gap-4 transition-all">
                 <div class="p-3 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 rounded-lg"><i data-lucide="users" class="w-6 h-6"></i></div>
                 <div>
                   <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Students</span>
                   <h3 id="stat-students" class="text-3xl font-extrabold tracking-tight mt-1 font-display">0</h3>
                 </div>
               </div>
-              <div onclick="navigateTo('notes')" class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm hover:border-purple-500/50 cursor-pointer flex items-start gap-4 transition-all">
+              <div onclick="navigateTo('notes')" class="glass-card glow-purple rounded-2xl p-6 cursor-pointer flex items-start gap-4 transition-all">
                 <div class="p-3 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 rounded-lg"><i data-lucide="book-open" class="w-6 h-6"></i></div>
                 <div>
                   <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Study Notes</span>
                   <h3 id="stat-notes" class="text-3xl font-extrabold tracking-tight mt-1 font-display">0</h3>
                 </div>
               </div>
-              <div onclick="navigateTo('assignments')" class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm hover:border-purple-500/50 cursor-pointer flex items-start gap-4 transition-all">
+              <div onclick="navigateTo('assignments')" class="glass-card glow-purple rounded-2xl p-6 cursor-pointer flex items-start gap-4 transition-all">
                 <div class="p-3 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 rounded-lg"><i data-lucide="file-spreadsheet" class="w-6 h-6"></i></div>
                 <div>
                   <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Assignments</span>
                   <h3 id="stat-assignments" class="text-3xl font-extrabold tracking-tight mt-1 font-display">0</h3>
                 </div>
               </div>
-              <div onclick="navigateTo('announcements')" class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm hover:border-purple-500/50 cursor-pointer flex items-start gap-4 transition-all">
+              <div onclick="navigateTo('announcements')" class="glass-card glow-purple rounded-2xl p-6 cursor-pointer flex items-start gap-4 transition-all">
                 <div class="p-3 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 rounded-lg"><i data-lucide="megaphone" class="w-6 h-6"></i></div>
                 <div>
                   <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Announcements</span>
@@ -299,7 +387,7 @@ tailwind.config = {
             </div>
 
             <!-- ── LIVE ACTIVE USERS CARD ── -->
-            <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm">
+            <div class="glass-card glow-purple rounded-2xl p-6">
               <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center gap-2">
                   <span class="relative flex h-2.5 w-2.5">
@@ -333,7 +421,7 @@ tailwind.config = {
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              <div onclick="navigateTo('timetables')" class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 hover:border-purple-500/50 cursor-pointer flex items-center justify-between transition-all">
+              <div onclick="navigateTo('timetables')" class="glass-card glow-purple rounded-2xl p-5 cursor-pointer flex items-center justify-between transition-all">
                 <div class="flex items-center gap-3">
                   <div class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400"><i data-lucide="calendar" class="w-5 h-5"></i></div>
                   <div>
@@ -343,7 +431,7 @@ tailwind.config = {
                 </div>
                 <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-400"></i>
               </div>
-              <div onclick="navigateTo('papers')" class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 hover:border-purple-500/50 cursor-pointer flex items-center justify-between transition-all">
+              <div onclick="navigateTo('papers')" class="glass-card glow-purple rounded-2xl p-5 cursor-pointer flex items-center justify-between transition-all">
                 <div class="flex items-center gap-3">
                   <div class="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400"><i data-lucide="file-check" class="w-5 h-5"></i></div>
                   <div>
@@ -353,7 +441,7 @@ tailwind.config = {
                 </div>
                 <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-400"></i>
               </div>
-              <div onclick="navigateTo('categories')" class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 hover:border-purple-500/50 cursor-pointer flex items-center justify-between transition-all">
+              <div onclick="navigateTo('categories')" class="glass-card glow-purple rounded-2xl p-5 cursor-pointer flex items-center justify-between transition-all">
                 <div class="flex items-center gap-3">
                   <div class="p-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400"><i data-lucide="layers" class="w-5 h-5"></i></div>
                   <div>
@@ -365,7 +453,7 @@ tailwind.config = {
               </div>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm">
+              <div class="glass-card glow-purple rounded-2xl p-6">
                 <div class="flex justify-between items-center mb-4">
                   <h3 class="text-lg font-bold font-display text-zinc-950 dark:text-zinc-50">Recent Notes</h3>
                   <button onclick="navigateTo('notes')" class="text-xs text-purple-600 dark:text-purple-400 hover:underline font-semibold flex items-center gap-1">
@@ -376,7 +464,7 @@ tailwind.config = {
                   <p class="text-xs text-zinc-400 py-4 text-center">Loading notes...</p>
                 </div>
               </div>
-              <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm">
+              <div class="glass-card glow-purple rounded-2xl p-6">
                 <div class="flex justify-between items-center mb-4">
                   <h3 class="text-lg font-bold font-display text-zinc-950 dark:text-zinc-50">Recent Assignments</h3>
                   <button onclick="navigateTo('assignments')" class="text-xs text-purple-600 dark:text-purple-400 hover:underline font-semibold flex items-center gap-1">
@@ -399,9 +487,9 @@ tailwind.config = {
               </div>
               <div id="students-count-lbl" class="text-xs font-semibold text-zinc-500">Loading student count...</div>
             </div>
-            <div class="bg-white dark:bg-[#0c0c0f] border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
+            <div class="glass-card glow-purple rounded-2xl overflow-hidden">
               <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="premium-table w-full text-left border-collapse">
                   <thead>
                     <tr class="bg-zinc-100 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wider">
                       <th class="py-4 px-6">Name</th>
@@ -1578,12 +1666,12 @@ tailwind.config = {
 
         // Update active class in sidebar nav buttons
         document.querySelectorAll('aside nav button').forEach(btn => {
-          btn.className = "w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50";
+          btn.className = "nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-zinc-500 dark:text-zinc-400 hover:bg-zinc-150 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-50";
         });
         
         const activeNavBtn = document.getElementById(`nav-${viewName}`);
         if (activeNavBtn) {
-          activeNavBtn.className = "w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-purple-650 bg-purple-100 dark:bg-purple-900/30 dark:text-purple-400";
+          activeNavBtn.className = "nav-btn active w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all text-purple-650 bg-purple-100 dark:bg-purple-900/30 dark:text-purple-400";
         }
 
         // Set top header title
