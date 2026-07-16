@@ -77,8 +77,16 @@
       box-shadow: 0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08);
       border-radius: 1rem;
     }
-    .card { border-radius: 1rem; }
-    .dark .card { background: rgba(255,255,255,0.05); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
+    .card {
+      border-radius: 1rem;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.07);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .card:hover { border-color: rgba(168,85,247,0.35); box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(168,85,247,0.15); }
 
     /* === RAINBOW GRADIENT TEXT === */
     .rainbow-text {
@@ -281,6 +289,7 @@
       <button id="nav-timetable"     onclick="goto('timetable')"     class="nav-btn"><i data-lucide="calendar-days"  class="w-4 h-4 shrink-0"></i>Timetable</button>
       <button id="nav-syllabus"      onclick="goto('syllabus')"      class="nav-btn"><i data-lucide="book-open"      class="w-4 h-4 shrink-0"></i>Syllabus</button>
       <button id="nav-papers"        onclick="goto('papers')"        class="nav-btn"><i data-lucide="file-text"      class="w-4 h-4 shrink-0"></i>Previous Papers</button>
+      <button id="nav-focus"         onclick="goto('focus')"         class="nav-btn"><i data-lucide="timer"         class="w-4 h-4 shrink-0"></i>Focus Zone</button>
     </nav>
 
     <div class="px-4 py-4 border-t border-zinc-100 dark:border-zinc-800">
@@ -303,13 +312,13 @@
   </aside>
 
   <!-- Main -->
-  <main class="flex-1 overflow-y-auto bg-zinc-50 dark:bg-[#09090b]">
+  <main class="flex-1 overflow-y-auto" style="background:#09090b">
     <div class="max-w-5xl mx-auto px-4 py-6 space-y-6">
 
       <div class="flex items-center justify-between">
         <div>
-          <h2 id="page-title" class="text-xl font-bold text-zinc-900 dark:text-white">Welcome 👋</h2>
-          <p  id="page-sub"   class="text-sm text-zinc-500 mt-0.5">Here's what's new today</p>
+          <h2 id="page-title" class="text-xl font-bold text-white">Welcome 👋</h2>
+          <p  id="page-sub"   class="text-sm mt-0.5" style="color:rgba(255,255,255,0.5)">Here's what's new today</p>
         </div>
       </div>
 
@@ -361,12 +370,108 @@
       <!-- PAPERS -->
       <section id="view-papers" class="hidden fade-in"><div id="list-papers" class="grid md:grid-cols-2 gap-4"></div></section>
 
+      <!-- FOCUS ZONE -->
+      <section id="view-focus" class="hidden fade-in">
+        <div class="max-w-md mx-auto">
+          <!-- Mode selector -->
+          <div class="flex gap-2 mb-6 justify-center">
+            <button onclick="setMode(25,5,'🎯 Focus')"   id="mode-focus" class="flex-1 py-2 rounded-xl text-sm font-semibold border transition-all" style="background:linear-gradient(90deg,rgba(244,63,94,0.3),rgba(168,85,247,0.3));border-color:rgba(168,85,247,0.5);color:white">🎯 Focus (25m)</button>
+            <button onclick="setMode(5,0,'☕ Break')"    id="mode-short" class="flex-1 py-2 rounded-xl text-sm font-semibold border transition-all" style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.5)">☕ Short (5m)</button>
+            <button onclick="setMode(15,0,'🌙 Long')"    id="mode-long"  class="flex-1 py-2 rounded-xl text-sm font-semibold border transition-all" style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.5)">🌙 Long (15m)</button>
+          </div>
+
+          <!-- Timer card -->
+          <div class="glass rounded-3xl p-8 text-center mb-6">
+            <p id="focus-label" class="text-sm font-semibold mb-4 rainbow-text">🎯 Focus Session</p>
+            <!-- Circular ring -->
+            <div class="relative w-52 h-52 mx-auto mb-6">
+              <svg class="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/>
+                <circle id="timer-ring" cx="50" cy="50" r="46" fill="none" stroke="url(#rg)" stroke-width="6" stroke-linecap="round"
+                  stroke-dasharray="289" stroke-dashoffset="0" style="transition:stroke-dashoffset 1s linear"/>
+                <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#f43f5e"/><stop offset="100%" stop-color="#a855f7"/>
+                </linearGradient></defs>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span id="timer-display" class="text-5xl font-bold text-white font-mono">25:00</span>
+                <span id="timer-status" class="text-xs text-zinc-400 mt-1">Ready</span>
+              </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex gap-3 justify-center">
+              <button onclick="resetTimer()" class="w-12 h-12 rounded-2xl flex items-center justify-center transition-all" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12)">
+                <i data-lucide="rotate-ccw" class="w-5 h-5 text-white"></i>
+              </button>
+              <button id="start-btn" onclick="toggleTimer()" class="w-20 h-12 rounded-2xl font-bold text-white text-sm flex items-center justify-center gap-2 transition-all" style="background:linear-gradient(90deg,#f43f5e,#a855f7);box-shadow:0 4px 20px rgba(168,85,247,0.4)">
+                <i id="play-icon" data-lucide="play" class="w-4 h-4"></i><span id="play-label">Start</span>
+              </button>
+              <button onclick="skipTimer()" class="w-12 h-12 rounded-2xl flex items-center justify-center transition-all" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12)">
+                <i data-lucide="skip-forward" class="w-5 h-5 text-white"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Session count -->
+          <div class="glass rounded-2xl p-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i data-lucide="flame" class="w-5 h-5 text-orange-400"></i>
+              <span class="text-sm font-semibold text-white">Sessions Today</span>
+            </div>
+            <div class="flex gap-1.5" id="session-dots">
+              <div class="w-3 h-3 rounded-full" style="background:rgba(255,255,255,0.15)"></div>
+              <div class="w-3 h-3 rounded-full" style="background:rgba(255,255,255,0.15)"></div>
+              <div class="w-3 h-3 rounded-full" style="background:rgba(255,255,255,0.15)"></div>
+              <div class="w-3 h-3 rounded-full" style="background:rgba(255,255,255,0.15)"></div>
+            </div>
+            <span id="session-count" class="text-sm font-bold text-white">0 / 4</span>
+          </div>
+
+          <!-- Tip -->
+          <p id="focus-tip" class="text-center text-xs text-zinc-400 mt-4">💡 Stay focused for 25 minutes, then take a short break!</p>
+        </div>
+      </section>
+
     </div>
   </main>
 </div>
 
+<!-- PDF VIEWER MODAL -->
+<div id="pdf-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4" style="background:rgba(0,0,0,0.85);backdrop-filter:blur(8px)">
+  <div class="relative w-full max-w-5xl h-[90vh] flex flex-col" style="background:rgba(15,15,20,0.95);border:1px solid rgba(255,255,255,0.12);border-radius:1.25rem;box-shadow:0 24px 60px rgba(0,0,0,0.7)">
+    <!-- Modal Header -->
+    <div class="flex items-center justify-between px-5 py-4 shrink-0" style="border-bottom:1px solid rgba(255,255,255,0.1)">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,#f43f5e,#a855f7)">
+          <i data-lucide="file-text" class="w-4 h-4 text-white"></i>
+        </div>
+        <p id="pdf-modal-title" class="font-bold text-white text-base truncate max-w-sm">PDF Viewer</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <a id="pdf-dl-btn" href="#" download target="_blank" class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold text-white transition-all" style="background:linear-gradient(90deg,rgba(244,63,94,0.3),rgba(168,85,247,0.3));border:1px solid rgba(255,255,255,0.15)">
+          <i data-lucide="download" class="w-4 h-4"></i>Download
+        </a>
+        <button onclick="closePDF()" class="w-9 h-9 rounded-xl flex items-center justify-center transition-all" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1)">
+          <i data-lucide="x" class="w-4 h-4 text-white"></i>
+        </button>
+      </div>
+    </div>
+    <!-- PDF iframe -->
+    <div class="flex-1 relative">
+      <iframe id="pdf-iframe" src="" class="w-full h-full rounded-b-xl" style="border:none;background:#1a1a2e"></iframe>
+      <div id="pdf-loading" class="absolute inset-0 flex flex-col items-center justify-center gap-3" style="background:rgba(15,15,20,0.9);border-radius:0 0 1.25rem 1.25rem">
+        <div class="w-10 h-10 rounded-full border-2 border-transparent" style="border-top-color:#a855f7;animation:spin 1s linear infinite"></div>
+        <p class="text-sm text-zinc-400">Loading PDF…</p>
+      </div>
+    </div>
+  </div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
 <script>
-  const API='https://hub-6yrl.onrender.com/api';
+  const API = location.protocol === 'file:' ? 'http://localhost:5000/api' : 'https://hub-6yrl.onrender.com/api';
+  const FILE_BASE = location.protocol === 'file:' ? 'http://localhost:5000' : 'https://hub-6yrl.onrender.com';
   let token=localStorage.getItem('s_token')||'';
   let currentUser=null, allNotes=[];
 
@@ -443,7 +548,7 @@
 
   function handleLogout(){token='';currentUser=null;localStorage.removeItem('s_token');showAuth();}
 
-  const titles={home:['Welcome \uD83D\uDC4B','Here\'s what\'s new today'],announcements:['Announcements \uD83D\uDCE2','Latest updates from institution'],notes:['Study Notes \uD83D\uDCDD','Download and read study materials'],assignments:['Assignments \uD83D\uDCCB','Your tasks and deadlines'],timetable:['Timetable \uD83D\uDDD3\uFE0F','Your weekly class schedule'],syllabus:['Syllabus \uD83D\uDCDA','Course topics and content'],papers:['Previous Papers \uD83D\uDCC4','Past exam papers for practice']};
+  const titles={home:['Welcome 👋',"Here's what's new today"],announcements:['Announcements 📢','Latest updates from institution'],notes:['Study Notes 📝','Download and read study materials'],assignments:['Assignments 📋','Your tasks and deadlines'],timetable:['Timetable 🗓️','Your weekly class schedule'],syllabus:['Syllabus 📚','Course topics and content'],papers:['Previous Papers 📄','Past exam papers for practice'],focus:['Focus Zone ⏱️','Deep work with Pomodoro timer']};
 
   function goto(view){
     document.querySelectorAll('[id^="view-"]').forEach(s=>s.classList.add('hidden'));
@@ -459,6 +564,7 @@
   const loaded={};
   async function loadView(v){
     if(v==='home'){loadHome();return;}
+    if(v==='focus'){initFocus();return;}
     if(loaded[v])return;
     const map={announcements:loadAnnouncements,notes:loadNotes,assignments:loadAssignments,timetable:loadTimetable,syllabus:loadSyllabus,papers:loadPapers};
     if(map[v]){await map[v]();loaded[v]=true;}
@@ -469,6 +575,87 @@
     if(!r.ok)throw new Error('Failed');return r.json();
   }
 
+  /* ── Focus Zone ── */
+  let timerInterval=null,timerSecs=25*60,timerTotal=25*60,sessCount=0,focusRunning=false;
+  const tips=['💡 Stay focused for 25 minutes, then take a short break!','🚫 Close distractions. You got this!','🎧 Try lo-fi music for better focus.','📵 Put your phone face down.','🌊 Take deep breaths if stressed.','🏆 Each session brings you closer to your goal!'];
+
+  function initFocus(){lucide.createIcons();}
+
+  function setMode(mins,_,label){
+    clearInterval(timerInterval);focusRunning=false;
+    timerSecs=mins*60;timerTotal=mins*60;
+    updateTimerUI();
+    document.getElementById('focus-label').innerText=label+' Session';
+    document.getElementById('play-icon').setAttribute('data-lucide','play');
+    document.getElementById('play-label').innerText='Start';
+    document.getElementById('timer-status').innerText='Ready';
+    document.getElementById('timer-ring').style.strokeDashoffset='0';
+    ['mode-focus','mode-short','mode-long'].forEach(id=>{
+      const el=document.getElementById(id);
+      el.style.background='rgba(255,255,255,0.05)';el.style.borderColor='rgba(255,255,255,0.15)';el.style.color='rgba(255,255,255,0.5)';
+    });
+    const active=mins===25?'mode-focus':mins===5?'mode-short':'mode-long';
+    const a=document.getElementById(active);
+    a.style.background='linear-gradient(90deg,rgba(244,63,94,0.3),rgba(168,85,247,0.3))';
+    a.style.borderColor='rgba(168,85,247,0.5)';a.style.color='white';
+    lucide.createIcons();
+  }
+
+  function toggleTimer(){
+    if(focusRunning){
+      clearInterval(timerInterval);focusRunning=false;
+      document.getElementById('play-icon').setAttribute('data-lucide','play');
+      document.getElementById('play-label').innerText='Resume';
+      document.getElementById('timer-status').innerText='Paused';
+    }else{
+      focusRunning=true;
+      document.getElementById('play-icon').setAttribute('data-lucide','pause');
+      document.getElementById('play-label').innerText='Pause';
+      document.getElementById('timer-status').innerText='Running…';
+      timerInterval=setInterval(()=>{
+        timerSecs--;updateTimerUI();
+        if(timerSecs<=0){clearInterval(timerInterval);focusRunning=false;onTimerEnd();}
+      },1000);
+    }
+    lucide.createIcons();
+  }
+
+  function resetTimer(){
+    clearInterval(timerInterval);focusRunning=false;timerSecs=timerTotal;updateTimerUI();
+    document.getElementById('play-icon').setAttribute('data-lucide','play');
+    document.getElementById('play-label').innerText='Start';
+    document.getElementById('timer-status').innerText='Ready';
+    document.getElementById('timer-ring').style.strokeDashoffset='0';
+    lucide.createIcons();
+  }
+
+  function skipTimer(){onTimerEnd();}
+
+  function onTimerEnd(){
+    focusRunning=false;clearInterval(timerInterval);
+    if(timerTotal===25*60){
+      sessCount=Math.min(sessCount+1,4);
+      document.getElementById('session-count').innerText=sessCount+' / 4';
+      const dots=document.getElementById('session-dots').children;
+      for(let i=0;i<dots.length;i++){
+        dots[i].style.background=i<sessCount?'linear-gradient(90deg,#f43f5e,#a855f7)':'rgba(255,255,255,0.15)';
+      }
+    }
+    document.getElementById('timer-status').innerText='Done! 🎉';
+    document.getElementById('focus-tip').innerText=tips[Math.floor(Math.random()*tips.length)];
+    document.getElementById('play-icon').setAttribute('data-lucide','play');
+    document.getElementById('play-label').innerText='Start';
+    lucide.createIcons();
+    try{new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAA').play();}catch(_){}
+  }
+
+  function updateTimerUI(){
+    const m=Math.floor(timerSecs/60),s=timerSecs%60;
+    document.getElementById('timer-display').innerText=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    const pct=1-(timerSecs/timerTotal);
+    document.getElementById('timer-ring').style.strokeDashoffset=289*pct;
+  }
+
   async function loadHome(){
     try{
       const[notes,asgn,ann,papers]=await Promise.all([apiFetch('/notes'),apiFetch('/assignments'),apiFetch('/announcements'),apiFetch('/papers')]);
@@ -477,10 +664,10 @@
       document.getElementById('stat-ann').innerText=ann.length;
       document.getElementById('stat-papers').innerText=papers.length;
       document.getElementById('home-ann').innerHTML=ann.slice(0,3).map(a=>`
-        <div class="flex gap-3 p-3 bg-violet-50 dark:bg-violet-900/10 border border-violet-100 dark:border-violet-800/30 rounded-xl">
-          <div class="w-8 h-8 rounded-lg bg-violet-100 dark:bg-violet-900/40 flex items-center justify-center shrink-0 mt-0.5"><i data-lucide="megaphone" class="w-4 h-4 text-violet-600 dark:text-violet-400"></i></div>
-          <div><p class="font-semibold text-sm text-zinc-900 dark:text-white">${esc(a.title)}</p><p class="text-xs text-zinc-500 mt-0.5 line-clamp-2">${esc(a.message||'')}</p></div>
-        </div>`).join('')||'<p class="text-sm text-zinc-400 text-center py-6">No announcements yet.</p>';
+        <div class="flex gap-3 p-3 rounded-xl" style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2)">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style="background:rgba(139,92,246,0.3)"><i data-lucide="megaphone" class="w-4 h-4 text-violet-300"></i></div>
+          <div><p class="font-semibold text-sm text-white">${esc(a.title)}</p><p class="text-xs mt-0.5 line-clamp-2" style="color:rgba(255,255,255,0.5)">${esc(a.message||'')}</p></div>
+        </div>`).join('')||'<p class="text-sm text-center py-6" style="color:rgba(255,255,255,0.4)">No announcements yet.</p>';
       lucide.createIcons();
     }catch{}
   }
@@ -523,7 +710,7 @@
         ${n.description?`<p class="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-3">${esc(n.description)}</p>`:''}
         <div class="flex gap-2 mt-auto pt-2 border-t border-zinc-100 dark:border-zinc-800">
           <p class="text-xs text-zinc-400 self-center flex-1">${fmtDate(n.createdAt)}</p>
-          ${n.fileUrl?`<button class="pill-dl view-pdf-btn" data-pdf-url="https://hub-6yrl.onrender.com${n.fileUrl}" data-pdf-title="${esc(n.title)}"><i data-lucide="eye" class="w-3.5 h-3.5"></i>View PDF</button><a href="https://hub-6yrl.onrender.com${n.fileUrl}" download class="pill-dl"><i data-lucide="download" class="w-3.5 h-3.5"></i></a>`:''}
+          ${n.fileUrl?`<button onclick="openPDF('${FILE_BASE}${n.fileUrl}','${esc(n.title)}')" class="pill-dl"><i data-lucide="eye" class="w-3.5 h-3.5"></i>View PDF</button><button onclick="downloadFile('${FILE_BASE}${n.fileUrl}','${esc(n.title)}')" class="pill-dl"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</button>`:''}
         </div>
       </div>`).join(''):empty('No notes available yet.');
     lucide.createIcons();
@@ -546,7 +733,7 @@
                 ${due?`<span class="text-xs font-semibold px-2.5 py-0.5 rounded-full ${od?'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400':'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400'}">Due ${fmtDate(a.dueDate)}</span>`:''}
               </div>
               ${a.description?`<p class="text-sm text-zinc-500 mt-1">${esc(a.description)}</p>`:''}
-              ${a.fileUrl?`<a href="https://hub-6yrl.onrender.com${a.fileUrl}" target="_blank" class="pill-dl mt-3 inline-flex"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</a>`:''}
+              ${a.fileUrl?`<div class="flex gap-2 mt-3"><button onclick="openPDF('${FILE_BASE}${a.fileUrl}','${esc(a.title)}')" class="pill-dl"><i data-lucide="eye" class="w-3.5 h-3.5"></i>View PDF</button><button onclick="downloadFile('${FILE_BASE}${a.fileUrl}','${esc(a.title)}')" class="pill-dl"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</button></div>`:''}
             </div>
           </div>
         </div>`;}).join(''):empty('No assignments posted yet.');
@@ -605,7 +792,7 @@
           </div>
           <div class="flex gap-2 mt-auto pt-2 border-t border-zinc-100 dark:border-zinc-800">
             <p class="text-xs text-zinc-400 self-center flex-1">${fmtDate(p.createdAt)}</p>
-            ${p.fileUrl?`<button class="pill-dl view-pdf-btn" data-pdf-url="https://hub-6yrl.onrender.com${p.fileUrl}" data-pdf-title="${esc(p.title)}"><i data-lucide="eye" class="w-3.5 h-3.5"></i>View</button><a href="https://hub-6yrl.onrender.com${p.fileUrl}" download class="pill-dl"><i data-lucide="download" class="w-3.5 h-3.5"></i></a>`:'<span class="text-xs text-zinc-400">No file</span>'}
+            ${p.fileUrl?`<button onclick="openPDF('${FILE_BASE}${p.fileUrl}','${esc(p.title)}')" class="pill-dl"><i data-lucide="eye" class="w-3.5 h-3.5"></i>View PDF</button><button onclick="downloadFile('${FILE_BASE}${p.fileUrl}','${esc(p.title)}')" class="pill-dl"><i data-lucide="download" class="w-3.5 h-3.5"></i>Download</button>`:'<span class="text-xs text-zinc-400">No file</span>'}
           </div>
         </div>`).join(''):empty('No papers uploaded yet.');
       lucide.createIcons();
@@ -613,49 +800,57 @@
   }
 
   /* ── PDF Modal ── */
-  function openPDF(url,title){
-    document.getElementById('pdf-modal-title').innerText=title||'PDF Viewer';
-    document.getElementById('pdf-iframe').src=url;
-    document.getElementById('pdf-dl-btn').href=url;
-    document.getElementById('pdf-modal').classList.remove('hidden');
-    document.body.style.overflow='hidden';
+  function openPDF(url, title){
+    const modal   = document.getElementById('pdf-modal');
+    const iframe  = document.getElementById('pdf-iframe');
+    const loading = document.getElementById('pdf-loading');
+    document.getElementById('pdf-modal-title').innerText = title || 'PDF Viewer';
+    document.getElementById('pdf-dl-btn').setAttribute('data-url', url);
+    document.getElementById('pdf-dl-btn').setAttribute('data-name', title || 'document');
+    // Reset and show loading
+    iframe.src = '';
+    loading.style.display = 'flex';
+    // Try direct URL — Chrome/Edge render PDFs natively in iframes
+    iframe.onload  = () => { loading.style.display = 'none'; };
+    iframe.onerror = () => { loading.style.display = 'none'; };
+    iframe.src = url;
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    lucide.createIcons();
   }
   function closePDF(){
     document.getElementById('pdf-modal').classList.add('hidden');
-    document.getElementById('pdf-iframe').src='';
-    document.body.style.overflow='';
+    document.getElementById('pdf-iframe').src = '';
+    document.getElementById('pdf-loading').style.display = 'flex';
+    document.body.style.overflow = '';
   }
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')closePDF();});
-
-  document.addEventListener('click',e=>{
-    const btn=e.target.closest('.view-pdf-btn');
-    if(btn){openPDF(btn.dataset.pdfUrl,btn.dataset.pdfTitle);}
+  async function downloadFile(url, filename){
+    try{
+      const res  = await fetch(url);
+      if(!res.ok) throw new Error('fetch failed');
+      const blob = await res.blob();
+      const a    = document.createElement('a');
+      a.href     = URL.createObjectURL(blob);
+      a.download = filename || 'document';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    } catch {
+      // CORS fallback: open in new tab so browser handles download
+      window.open(url, '_blank');
+    }
+  }
+  // Modal download button
+  document.getElementById('pdf-dl-btn').addEventListener('click', function(e){
+    e.preventDefault();
+    downloadFile(this.getAttribute('data-url'), this.getAttribute('data-name'));
   });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closePDF(); });
 
   function fmtDate(d){if(!d)return '';return new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});}
-  function esc(s){const d=document.createElement('div');d.innerText=String(s||'');return d.innerHTML;}
+  function stripHtml(s){return String(s||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();}
+  function esc(s){const d=document.createElement('div');d.innerText=stripHtml(s);return d.innerHTML;}
   function empty(msg){return `<div class="col-span-2 flex flex-col items-center justify-center py-16 gap-3 text-zinc-400"><i data-lucide="inbox" class="w-10 h-10 opacity-40"></i><p class="text-sm">${msg}</p></div>`;}
   function errCard(){return `<div class="col-span-2 text-center py-12 text-sm text-red-400"><i data-lucide="wifi-off" class="w-6 h-6 mx-auto mb-2 opacity-60"></i><p>Cannot connect to server. Is it running?</p></div>`;}
 </script>
 
-<!-- PDF MODAL VIEWER -->
-<div id="pdf-modal" class="hidden fixed inset-0 z-[9999] flex flex-col" style="background:rgba(5,3,15,0.95);backdrop-filter:blur(12px)">
-  <div class="flex items-center justify-between px-5 py-3 shrink-0" style="background:rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.1)">
-    <div class="flex items-center gap-3">
-      <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:linear-gradient(135deg,#f43f5e,#a855f7)"><i data-lucide="file-text" class="w-4 h-4 text-white"></i></div>
-      <span id="pdf-modal-title" class="font-bold text-white text-sm truncate max-w-xs"></span>
-    </div>
-    <div class="flex items-center gap-2">
-      <a id="pdf-dl-btn" href="#" download class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white" style="background:linear-gradient(90deg,rgba(244,63,94,0.4),rgba(168,85,247,0.4));border:1px solid rgba(255,255,255,0.15)">
-        <i data-lucide="download" class="w-3.5 h-3.5"></i>Download
-      </a>
-      <button onclick="closePDF()" class="w-8 h-8 rounded-lg flex items-center justify-center text-white hover:bg-white/10 transition-all">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-    </div>
-  </div>
-  <iframe id="pdf-iframe" src="" class="flex-1 w-full border-0" style="background:#1a1a2e"></iframe>
-</div>
-
-</body>
-</html>
