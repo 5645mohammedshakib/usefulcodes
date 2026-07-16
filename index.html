@@ -9,8 +9,18 @@
   <meta name="theme-color" content="#7c3aed" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-title" content="Hub Admin" />
-  <script>if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js")</script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        for (let r of regs) r.unregister();
+      });
+    }
+    if ('caches' in window) {
+      caches.keys().then(keys => {
+        for (let k of keys) caches.delete(k);
+      });
+    }
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -377,7 +387,7 @@
                 </div>
               </div>
               <div class="text-right">
-                <h3 id="stat-live-users" class="text-4xl font-extrabold font-display" style="background:linear-gradient(135deg,#22c55e,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent">–</h3>
+                <h3 id="stat-live-users" class="text-4xl font-extrabold font-display" style="background:linear-gradient(135deg,#22c55e,#10b981);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">–</h3>
                 <p class="text-[10px] text-zinc-400 mt-0.5">last 5 min</p>
               </div>
             </div>
