@@ -252,11 +252,14 @@ def login():
     user = users.find_one({"$or": [{"email": eid}, {"username": eid}]})
     if not user or not bcrypt.checkpw(pwd.encode(), user["password"].encode()):
         return jsonify({"errors": [{"msg": "Invalid credentials"}]}), 400
+    
+    users.update_one({"_id": user["_id"]}, {"$set": {"lastLogin": datetime.datetime.utcnow()}})
     return jsonify({"token": make_token(str(user["_id"]))})
 
 @app.get("/api/auth/me")
 @auth_required
 def get_me():
+    users.update_one({"_id": ObjectId(request.user_id)}, {"$set": {"lastLogin": datetime.datetime.utcnow()}})
     user = users.find_one({"_id": ObjectId(request.user_id)}, {"password": 0})
     if not user:
         return jsonify({"msg": "User not found"}), 404
