@@ -273,7 +273,13 @@ def get_me():
 def get_users():
     if not is_admin(request.user_id):
         return jsonify({"msg": "Admin required"}), 403
-    all_users = [serialize(u) for u in users.find({}, {"password": 0}).sort("createdAt", DESCENDING)]
+    
+    all_users = []
+    for u in users.find({}, {"password": 0}).sort("createdAt", DESCENDING):
+        doc = serialize(u)
+        if not doc.get("lastLogin") and doc.get("createdAt"):
+            doc["lastLogin"] = doc["createdAt"]
+        all_users.append(doc)
     return jsonify(all_users)
 
 @app.delete("/api/users/<user_id>")
