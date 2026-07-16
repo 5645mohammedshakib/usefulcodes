@@ -52,6 +52,25 @@ def root():
 def health():
     return jsonify({"status": "ok", "message": "Server is alive!"})
 
+# ─── Auth Decorator ────────────────────────────────────────────────────────────
+def auth_required(f):
+    """JWT auth decorator — sets request.user_id."""
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        header = request.headers.get("Authorization") or request.headers.get("x-auth-token")
+        if not header:
+            return jsonify({"msg": "No token, authorization denied"}), 401
+        token = header.replace("Bearer ", "").strip()
+        try:
+            data = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+            request.user_id = data["user"]["id"]
+        except jwt.ExpiredSignatureError:
+            return jsonify({"msg": "Token expired"}), 401
+        except Exception:
+            return jsonify({"msg": "Token is not valid"}), 401
+        return f(*args, **kwargs)
+    return decorated
+
 # ─── Heartbeat / Active Users ───────────────────────────────────────────────────────────
 @app.post("/api/heartbeat")
 @auth_required
@@ -92,23 +111,8 @@ def make_token(user_id: str) -> str:
     }
     return jwt.encode(payload, JWT_SECRET, algorithm="HS256")
 
-def auth_required(f):
-    """JWT auth decorator — sets request.user_id."""
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        header = request.headers.get("Authorization") or request.headers.get("x-auth-token")
-        if not header:
-            return jsonify({"msg": "No token, authorization denied"}), 401
-        token = header.replace("Bearer ", "").strip()
-        try:
-            data = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
-            request.user_id = data["user"]["id"]
-        except jwt.ExpiredSignatureError:
-            return jsonify({"msg": "Token expired"}), 401
-        except Exception:
-            return jsonify({"msg": "Token is not valid"}), 401
-        return f(*args, **kwargs)
-    return decorated
+
+
 
 def save_file(file_obj) -> str | None:
     """Save uploaded file, return relative URL."""
