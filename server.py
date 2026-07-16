@@ -102,7 +102,10 @@ def save_file(file_obj) -> str | None:
 # ─── Static uploads ────────────────────────────────────────────────────────────
 @app.route("/uploads/<path:filename>")
 def serve_upload(filename):
-    return send_from_directory(UPLOAD_DIR, filename)
+    try:
+        return send_from_directory(UPLOAD_DIR, filename)
+    except Exception:
+        return jsonify({"msg": "File not found"}), 404
 
 # ─── Root ──────────────────────────────────────────────────────────────────────
 @app.get("/")

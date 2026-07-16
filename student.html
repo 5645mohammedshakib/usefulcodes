@@ -77,16 +77,24 @@
       box-shadow: 0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08);
       border-radius: 1rem;
     }
+    /* Light mode card */
     .card {
       border-radius: 1rem;
+      background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+    /* Dark mode card */
+    html.dark .card {
       background: rgba(255,255,255,0.05);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255,255,255,0.1);
       box-shadow: 0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.07);
-      transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .card:hover { border-color: rgba(168,85,247,0.35); box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(168,85,247,0.15); }
+    html.dark .card:hover { border-color: rgba(168,85,247,0.35); box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(168,85,247,0.15); }
 
     /* === RAINBOW GRADIENT TEXT === */
     .rainbow-text {
@@ -312,13 +320,13 @@
   </aside>
 
   <!-- Main -->
-  <main class="flex-1 overflow-y-auto" style="background:#09090b">
+  <main id="main-content" class="flex-1 overflow-y-auto">
     <div class="max-w-5xl mx-auto px-4 py-6 space-y-6">
 
       <div class="flex items-center justify-between">
         <div>
-          <h2 id="page-title" class="text-xl font-bold text-white">Welcome 👋</h2>
-          <p  id="page-sub"   class="text-sm mt-0.5" style="color:rgba(255,255,255,0.5)">Here's what's new today</p>
+          <h2 id="page-title" class="text-xl font-bold text-zinc-900 dark:text-white">Welcome 👋</h2>
+          <p  id="page-sub"   class="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">Here's what's new today</p>
         </div>
       </div>
 
@@ -459,10 +467,16 @@
     </div>
     <!-- PDF iframe -->
     <div class="flex-1 relative">
-      <iframe id="pdf-iframe" src="" class="w-full h-full rounded-b-xl" style="border:none;background:#1a1a2e"></iframe>
-      <div id="pdf-loading" class="absolute inset-0 flex flex-col items-center justify-center gap-3" style="background:rgba(15,15,20,0.9);border-radius:0 0 1.25rem 1.25rem">
-        <div class="w-10 h-10 rounded-full border-2 border-transparent" style="border-top-color:#a855f7;animation:spin 1s linear infinite"></div>
-        <p class="text-sm text-zinc-400">Loading PDF…</p>
+      <iframe id="pdf-iframe" src="" class="w-full h-full rounded-b-xl" style="border:none;background:#0d0d16"></iframe>
+      <div id="pdf-loading" class="absolute inset-0 flex flex-col items-center justify-center gap-3" style="background:rgba(15,15,20,0.95);border-radius:0 0 1.25rem 1.25rem">
+        <div id="pdf-spinner" class="w-10 h-10 rounded-full border-2 border-transparent" style="border-top-color:#a855f7;animation:spin 1s linear infinite"></div>
+        <p id="pdf-load-msg" class="text-sm text-zinc-400">Loading PDF…</p>
+        <div id="pdf-error-btns" class="hidden flex-col items-center gap-2 mt-1">
+          <p class="text-xs" style="color:rgba(255,255,255,0.4)">File inline mein load nahi hua.</p>
+          <button id="pdf-opentab-btn" class="pill-dl">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>New Tab mein Kholo
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -487,6 +501,9 @@
     document.getElementById('icon-moon').classList.toggle('hidden',dark);
     const lbl=document.getElementById('theme-label');
     if(lbl) lbl.innerText=dark?'Light Mode':'Dark Mode';
+    // Apply bg to main content area
+    const main=document.getElementById('main-content');
+    if(main) main.style.background = dark ? '#09090b' : '#f4f4f5';
   }
   function toggleTheme(){applyTheme(!document.documentElement.classList.contains('dark'));}
   function toggleSidebar(open){
@@ -800,30 +817,47 @@
   }
 
   /* ── PDF Modal ── */
+  let _pdfTimer = null;
   function openPDF(url, title){
     const modal   = document.getElementById('pdf-modal');
     const iframe  = document.getElementById('pdf-iframe');
     const loading = document.getElementById('pdf-loading');
+    const spinner = document.getElementById('pdf-spinner');
+    const msg     = document.getElementById('pdf-load-msg');
+    const errBtns = document.getElementById('pdf-error-btns');
+    // Reset state
+    spinner.style.display='block'; msg.innerText='Loading PDF…';
+    errBtns.classList.add('hidden'); errBtns.classList.remove('flex');
     document.getElementById('pdf-modal-title').innerText = title || 'PDF Viewer';
     document.getElementById('pdf-dl-btn').setAttribute('data-url', url);
     document.getElementById('pdf-dl-btn').setAttribute('data-name', title || 'document');
-    // Reset and show loading
+    document.getElementById('pdf-opentab-btn').onclick = () => window.open(url, '_blank');
     iframe.src = '';
     loading.style.display = 'flex';
-    // Try direct URL — Chrome/Edge render PDFs natively in iframes
-    iframe.onload  = () => { loading.style.display = 'none'; };
-    iframe.onerror = () => { loading.style.display = 'none'; };
+    iframe.onload = () => { clearTimeout(_pdfTimer); loading.style.display = 'none'; };
     iframe.src = url;
+    // After 5s if still loading → show fallback
+    clearTimeout(_pdfTimer);
+    _pdfTimer = setTimeout(() => {
+      if(loading.style.display !== 'none'){
+        spinner.style.display='none';
+        msg.innerText='PDF load nahi ho saka.';
+        errBtns.classList.remove('hidden'); errBtns.classList.add('flex');
+        lucide.createIcons();
+      }
+    }, 5000);
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
     lucide.createIcons();
   }
   function closePDF(){
+    clearTimeout(_pdfTimer);
     document.getElementById('pdf-modal').classList.add('hidden');
     document.getElementById('pdf-iframe').src = '';
     document.getElementById('pdf-loading').style.display = 'flex';
     document.body.style.overflow = '';
   }
+
   async function downloadFile(url, filename){
     try{
       const res  = await fetch(url);
