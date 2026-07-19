@@ -178,7 +178,7 @@
     .glow-purple { box-shadow: 0 0 20px rgba(168,85,247,0.3); }
     .glow-pink   { box-shadow: 0 0 20px rgba(244,63,94,0.3); }
   </style>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 </head>
 <body class="text-white min-h-screen">
 <!-- Rainbow Background -->
@@ -480,8 +480,9 @@
       </div>
     </div>
     <!-- PDF iframe -->
-    <div class="flex-1 relative">
-      <iframe id="pdf-iframe" src="" class="w-full h-full rounded-b-xl" style="border:none;background:#0d0d16"></iframe>
+    <div class="flex-1 relative overflow-hidden flex flex-col">
+      <div id="pdf-canvas-container" class="w-full h-full overflow-y-auto bg-[#0d0d16] flex flex-col items-center p-4 gap-4 rounded-b-xl" style="max-height: calc(90vh - 70px);"></div>
+      <iframe id="pdf-iframe" src="" class="hidden w-full h-full rounded-b-xl" style="border:none;background:#0d0d16"></iframe>
       <div id="pdf-loading" class="absolute inset-0 flex flex-col items-center justify-center gap-3" style="background:rgba(15,15,20,0.95);border-radius:0 0 1.25rem 1.25rem">
         <div id="pdf-spinner" class="w-10 h-10 rounded-full border-2 border-transparent" style="border-top-color:#a855f7;animation:spin 1s linear infinite"></div>
         <p id="pdf-load-msg" class="text-sm text-zinc-400">Loading PDF…</p>
@@ -891,49 +892,165 @@
   }
 
   /* ── PDF Modal ── */
-  function openPDF(url, title){
+  /* ── PDF MODAL & RENDERER SETUP (PDF.js Integration) ── */
+  
+  // 1. PDF.js Global Worker configuration setup to process PDFs in a background worker thread
+  // (Yeh background worker PDF files ko load aur process karne ke liye use hota hai takki main thread hang na ho)
+  if (typeof pdfjsLib !== 'undefined') {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+  }
+  
+  // 2. Track the active document loading task to prevent resource/memory leaks when changing documents
+  // (Jab naya PDF load hoga, to purane active task ko safely destroy/cancel karne ke liye task variable save karte hain)
+  let currentLoadingTask = null;
+
+  /**
+   * Opens the PDF viewer modal and renders the document page-by-page onto canvas nodes.
+   * (PDF Viewer modal ko open karta hai aur document ko range scrollable canvases par clean render karta hai)
+   * 
+   * @param {string} url - The backend API file endpoint (PDF URL link)
+   * @param {string} title - The name of the file to display in the header
+   */
+  async function openPDF(url, title){
     const modal   = document.getElementById('pdf-modal');
     const iframe  = document.getElementById('pdf-iframe');
+    const canvasContainer = document.getElementById('pdf-canvas-container');
     const loading = document.getElementById('pdf-loading');
     const spinner = document.getElementById('pdf-spinner');
     const msg     = document.getElementById('pdf-load-msg');
     const errBtns = document.getElementById('pdf-error-btns');
     
-    // Reset UI
-    spinner.style.display='block'; msg.innerText='Loading PDF…';
-    errBtns.classList.add('hidden'); errBtns.classList.remove('flex');
+    // 3. Reset the UI elements to their baseline loading state
+    // (Pehle se rendered pages ko clean karna aur loader/spinner ko display state me layega)
+    spinner.style.display='block'; 
+    msg.innerText='Loading PDF…';
+    errBtns.classList.add('hidden'); 
+    errBtns.classList.remove('flex');
     iframe.src = '';
+    iframe.classList.add('hidden');
+    canvasContainer.innerHTML = '';
+    canvasContainer.classList.remove('hidden');
     
+    // 4. Configure header title and action link dynamic parameters
+    // (Header me files ka static title dikhayenge aur download links populate karenge)
     loading.style.display = 'flex';
     document.getElementById('pdf-modal-title').innerText = title || 'PDF Viewer';
     document.getElementById('pdf-dl-btn').setAttribute('data-url', url);
     document.getElementById('pdf-dl-btn').setAttribute('data-name', title || 'document');
     modal.classList.remove('hidden');
+    
+    // Disable primary window scrolling when the full-page viewer modal is active
     document.body.style.overflow = 'hidden';
     lucide.createIcons();
-    
-    // Direct source setting bypasses all CORS browser issues
-    iframe.onload = () => { loading.style.display = 'none'; };
-    iframe.src = url;
 
-    // Timeout fallback fallback in case the server fails or lacks frame support
-    setTimeout(() => {
-      if(loading.style.display !== 'none') {
-        spinner.style.display = 'none';
-        msg.innerText = 'Could not load instantly inside reader.';
-        errBtns.classList.remove('hidden'); errBtns.classList.add('flex');
-        document.getElementById('pdf-opentab-btn').onclick = () => {
-          window.open(url, '_blank');
-          closePDF();
-        };
+    // 5. Safely cancel any active loading tasks before starting a new one
+    // (Agar koi doosra PDF abhi render ho raha tha, to system crashes prevent karne ke liye destroy call karenge)
+    if (currentLoadingTask) {
+      try {
+        currentLoadingTask.destroy();
+      } catch(e){}
+    }
+
+    // 6. Leverage PDF.js client-side rendering (Main logic node)
+    // (Agar CDN libraries successfully load ho gayi hain, tab canvas sequential draw flow trigger hoga)
+    if (typeof pdfjsLib !== 'undefined') {
+      try {
+        // Prepare task options (CORS fetches, credentials configuration)
+        currentLoadingTask = pdfjsLib.getDocument({
+          url: url,
+          withCredentials: false
+        });
+        
+        // Fetch raw stream and wait for document data to load
+        const pdf = await currentLoadingTask.promise;
+        loading.style.display = 'none'; // Hide loading once document metadatas resolve
+        
+        // 7. Page-by-page Rendering loop
+        // (Ek ek page process karke canvas create karna aur screen size responsive fit dynamically calculate karna)
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          
+          // Calculate scale ratio by matching the page width to the client screen width
+          const width = canvasContainer.clientWidth - 32;
+          const unscaledViewport = page.getViewport({ scale: 1 });
+          const scale = width > 0 ? (width / unscaledViewport.width) : 1.3;
+          // Constrain zoom level scaling dynamically between 1.0 and 1.5 to maintain text sharpness
+          const viewport = page.getViewport({ scale: Math.min(scale, 1.5) });
+          
+          // Create the HTML canvas viewport node
+          const canvas = document.createElement('canvas');
+          canvas.className = 'shadow-lg border border-zinc-800 rounded-md max-w-full mb-4 bg-white';
+          const context = canvas.getContext('2d');
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+          
+          canvasContainer.appendChild(canvas);
+          
+          // Draw PDF graphics content instantly on the canvas context target
+          await page.render({
+            canvasContext: context,
+            viewport: viewport
+          }).promise;
+        }
+      } catch (err) {
+        // Fallback: If PDF.js fails due to CORS, files issue, or network limit, fallback to native iframe rendering
+        console.error('PDF.js rendering failed, falling back to iframe:', err);
+        canvasContainer.classList.add('hidden');
+        iframe.classList.remove('hidden');
+        iframe.src = url;
+        iframe.onload = () => { loading.style.display = 'none'; };
+        
+        // Show timeout alerts if even the iframe takes more than 5.5 seconds to open
+        setTimeout(() => {
+          if(loading.style.display !== 'none') {
+            spinner.style.display = 'none';
+            msg.innerText = 'Could not load instantly inside reader.';
+            errBtns.classList.remove('hidden'); errBtns.classList.add('flex');
+            document.getElementById('pdf-opentab-btn').onclick = () => {
+              window.open(url, '_blank');
+              closePDF();
+            };
+          }
+        }, 5500);
       }
-    }, 5500);
+    } else {
+      // Fallback: Code executed if PDF.js library fails to load from Cloudflare CDN
+      canvasContainer.classList.add('hidden');
+      iframe.classList.remove('hidden');
+      iframe.src = url;
+      iframe.onload = () => { loading.style.display = 'none'; };
+      
+      setTimeout(() => {
+        if(loading.style.display !== 'none') {
+          spinner.style.display = 'none';
+          msg.innerText = 'Could not load instantly inside reader.';
+          errBtns.classList.remove('hidden'); errBtns.classList.add('flex');
+          document.getElementById('pdf-opentab-btn').onclick = () => {
+            window.open(url, '_blank');
+            closePDF();
+          };
+        }
+      }, 5500);
+    }
   }
+
+  /**
+   * Closes the PDF viewer modal panel and clears dynamically generated document canvas elements.
+   * (PDF modal screen ko hide karta hai aur structural states ko clear & reset karta hai)
+   */
   function closePDF(){
     document.getElementById('pdf-modal').classList.add('hidden');
     document.getElementById('pdf-iframe').src = '';
+    document.getElementById('pdf-canvas-container').innerHTML = '';
     document.getElementById('pdf-loading').style.display = 'flex';
     document.body.style.overflow = '';
+    
+    // Destroy loading task to release device RAM instantly
+    if (currentLoadingTask) {
+      try {
+        currentLoadingTask.destroy();
+      } catch(e){}
+    }
   }
 
   function downloadFile(url, filename){

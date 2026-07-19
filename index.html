@@ -146,6 +146,7 @@
       .dark ::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.25); }
       ::-webkit-scrollbar-thumb:hover { background: rgba(124,58,237,0.6); }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
   </head>
   <body class="text-zinc-950 dark:text-zinc-50 transition-colors duration-200 min-h-screen relative overflow-x-hidden">
     <!-- Animated background blobs -->
@@ -885,6 +886,45 @@
       </div>
     </div>
 
+    <!-- PDF VIEWER MODAL -->
+    <div id="pdf-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4" style="background:rgba(0,0,0,0.85);backdrop-filter:blur(8px)">
+      <div class="relative w-full max-w-5xl h-[90vh] flex flex-col" style="background:rgba(15,15,20,0.95);border:1px solid rgba(255,255,255,0.12);border-radius:1.25rem;box-shadow:0 24px 60px rgba(0,0,0,0.7)">
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between px-5 py-4 shrink-0" style="border-bottom:1px solid rgba(255,255,255,0.1)">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">
+              <i data-lucide="file-text" class="w-4 h-4 text-white"></i>
+            </div>
+            <p id="pdf-modal-title" class="font-bold text-white text-base truncate max-w-sm">PDF Viewer</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <a id="pdf-dl-btn" href="#" download target="_blank" class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold text-white transition-all" style="background:linear-gradient(90deg,rgba(124,58,237,0.3),rgba(168,85,247,0.3));border:1px solid rgba(255,255,255,0.15)">
+              <i data-lucide="download" class="w-4 h-4"></i>Download
+            </a>
+            <button onclick="closePDF()" class="w-9 h-9 rounded-xl flex items-center justify-center transition-all" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1)">
+              <i data-lucide="x" class="w-4 h-4 text-white"></i>
+            </button>
+          </div>
+        </div>
+        <!-- PDF iframe & canvases -->
+        <div class="flex-1 relative overflow-hidden flex flex-col">
+          <div id="pdf-canvas-container" class="w-full h-full overflow-y-auto bg-[#0d0d16] flex flex-col items-center p-4 gap-4 rounded-b-xl" style="max-height: calc(90vh - 70px);"></div>
+          <iframe id="pdf-iframe" src="" class="hidden w-full h-full rounded-b-xl" style="border:none;background:#0d0d16"></iframe>
+          <div id="pdf-loading" class="absolute inset-0 flex flex-col items-center justify-center gap-3" style="background:rgba(15,15,20,0.95);border-radius:0 0 1.25rem 1.25rem">
+            <div id="pdf-spinner" class="w-10 h-10 rounded-full border-2 border-transparent" style="border-top-color:#a855f7;animation:spin 1s linear infinite"></div>
+            <p id="pdf-load-msg" class="text-sm text-zinc-400">Loading PDF…</p>
+            <div id="pdf-error-btns" class="hidden flex-col items-center gap-2 mt-1">
+              <p class="text-xs" style="color:rgba(255,255,255,0.4)">File inline mein load nahi hua.</p>
+              <button id="pdf-opentab-btn" class="bg-purple-650 hover:bg-purple-750 text-white rounded px-3 py-1.5 text-xs font-semibold flex items-center gap-1">
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>New Tab mein Kholo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
     <!-- ============================================== -->
     <!-- SCRIPT SECTION -->
     <!-- ============================================== -->
@@ -1469,9 +1509,12 @@
             <td class="py-4 px-6 text-zinc-400 text-xs">${new Date(n.createdAt).toLocaleDateString()}</td>
             <td class="py-4 px-6 text-right flex items-center justify-end gap-1.5">
               ${n.fileUrl ? `
-                <a href="${n.fileUrl.startsWith('http') ? n.fileUrl : apiBaseUrl.replace('/api', '') + n.fileUrl}" target="_blank" class="p-1.5 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/20 rounded transition-colors inline-flex">
+                <button onclick="openPDF('${n.fileUrl.startsWith('http') ? n.fileUrl : apiBaseUrl.replace('/api', '') + n.fileUrl}', '${esc(n.title)}')" class="p-1.5 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/20 rounded transition-colors inline-flex" title="View PDF">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </button>
+                <button onclick="downloadFile('${n.fileUrl.startsWith('http') ? n.fileUrl : apiBaseUrl.replace('/api', '') + n.fileUrl}', '${esc(n.title)}')" class="p-1.5 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/20 rounded transition-colors inline-flex" title="Download">
                   <i data-lucide="download" class="w-4 h-4"></i>
-                </a>
+                </button>
               ` : ''}
               <button onclick="confirmDeleteNote('${n._id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors inline-flex">
                 <i data-lucide="trash-2" class="w-4 h-4"></i>
@@ -1573,9 +1616,12 @@
               </td>
               <td class="py-4 px-6 text-right flex items-center justify-end gap-1.5">
                 ${a.fileUrl ? `
-                  <a href="${a.fileUrl.startsWith('http') ? a.fileUrl : apiBaseUrl.replace('/api', '') + a.fileUrl}" target="_blank" class="p-1.5 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/20 rounded transition-colors inline-flex">
+                  <button onclick="openPDF('${a.fileUrl.startsWith('http') ? a.fileUrl : apiBaseUrl.replace('/api', '') + a.fileUrl}', '${esc(a.title)}')" class="p-1.5 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/20 rounded transition-colors inline-flex" title="View PDF">
+                    <i data-lucide="eye" class="w-4 h-4"></i>
+                  </button>
+                  <button onclick="downloadFile('${a.fileUrl.startsWith('http') ? a.fileUrl : apiBaseUrl.replace('/api', '') + a.fileUrl}', '${esc(a.title)}')" class="p-1.5 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/20 rounded transition-colors inline-flex" title="Download">
                     <i data-lucide="download" class="w-4 h-4"></i>
-                  </a>
+                  </button>
                 ` : ''}
                 <button onclick="confirmDeleteAsg('${a._id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors inline-flex">
                   <i data-lucide="trash-2" class="w-4 h-4"></i>
@@ -2034,9 +2080,12 @@
             <td class="py-4 px-6 text-zinc-400 text-xs">${new Date(p.createdAt).toLocaleDateString()}</td>
             <td class="py-4 px-6 text-right flex items-center justify-end gap-1.5">
               ${p.fileUrl ? `
-                <a href="${p.fileUrl.startsWith('http') ? p.fileUrl : apiBaseUrl.replace('/api', '') + p.fileUrl}" target="_blank" class="p-1.5 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/20 rounded transition-colors inline-flex">
+                <button onclick="openPDF('${p.fileUrl.startsWith('http') ? p.fileUrl : apiBaseUrl.replace('/api', '') + p.fileUrl}', '${esc(p.title)}')" class="p-1.5 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/20 rounded transition-colors inline-flex" title="View PDF">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </button>
+                <button onclick="downloadFile('${p.fileUrl.startsWith('http') ? p.fileUrl : apiBaseUrl.replace('/api', '') + p.fileUrl}', '${esc(p.title)}')" class="p-1.5 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/20 rounded transition-colors inline-flex" title="Download">
                   <i data-lucide="download" class="w-4 h-4"></i>
-                </a>
+                </button>
               ` : ''}
               <button onclick="confirmDeletePaper('${p._id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors inline-flex">
                 <i data-lucide="trash-2" class="w-4 h-4"></i>
@@ -2191,6 +2240,179 @@
           panel.classList.add('hidden');
         }
       }
+
+      /* ── PDF MODAL & RENDERER SETUP (PDF.js Integration) ── */
+      
+      // 1. PDF.js background worker setup to handle heavy parsing tasks logic asynchronously
+      // (Background task thread configured to processes PDF coordinates in parallel)
+      if (typeof pdfjsLib !== 'undefined') {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+      }
+      
+      // Track active documents reference to abort files properly and release device memory
+      let currentLoadingTask = null;
+
+      /**
+       * HTML escape utility function to prevent XSS vulnerability attacks in string renderings.
+       * (String inputs ko DOM elements text nodes ke help se clean aur secure karta hai)
+       */
+      function esc(str) {
+        if (!str) return '';
+        const d = document.createElement('div');
+        d.innerText = String(str).trim();
+        return d.innerHTML;
+      }
+
+      /**
+       * Renders the designated PDF file on canvases sequentially inside index.html viewer modal.
+       * (PDF documents load karke screens sizes adjust range variables se draw karega)
+       */
+      async function openPDF(url, title){
+        const modal   = document.getElementById('pdf-modal');
+        const iframe  = document.getElementById('pdf-iframe');
+        const canvasContainer = document.getElementById('pdf-canvas-container');
+        const loading = document.getElementById('pdf-loading');
+        const spinner = document.getElementById('pdf-spinner');
+        const msg     = document.getElementById('pdf-load-msg');
+        const errBtns = document.getElementById('pdf-error-btns');
+        
+        // Reset current DOM states of loading container overlays and buttons
+        spinner.style.display='block'; 
+        msg.innerText='Loading PDF…';
+        errBtns.classList.add('hidden'); 
+        errBtns.classList.remove('flex');
+        iframe.src = '';
+        iframe.classList.add('hidden');
+        canvasContainer.innerHTML = '';
+        canvasContainer.classList.remove('hidden');
+        
+        loading.style.display = 'flex';
+        document.getElementById('pdf-modal-title').innerText = title || 'PDF Viewer';
+        document.getElementById('pdf-dl-btn').setAttribute('data-url', url);
+        document.getElementById('pdf-dl-btn').setAttribute('data-name', title || 'document');
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Stop standard page scroll
+        lucide.createIcons();
+
+        // Safely destroy previous rendering streams
+        if (currentLoadingTask) {
+          try {
+            currentLoadingTask.destroy();
+          } catch(e){}
+        }
+
+        if (typeof pdfjsLib !== 'undefined') {
+          try {
+            // Load and buffer document stream data
+            currentLoadingTask = pdfjsLib.getDocument({
+              url: url,
+              withCredentials: false
+            });
+            const pdf = await currentLoadingTask.promise;
+            loading.style.display = 'none'; // Dismiss loader UI
+            
+            // Loop and draw all the pages one after the other in scroll zone
+            for (let i = 1; i <= pdf.numPages; i++) {
+              const page = await pdf.getPage(i);
+              const width = canvasContainer.clientWidth - 32;
+              const unscaledViewport = page.getViewport({ scale: 1 });
+              const scale = width > 0 ? (width / unscaledViewport.width) : 1.3;
+              const viewport = page.getViewport({ scale: Math.min(scale, 1.5) });
+              
+              const canvas = document.createElement('canvas');
+              canvas.className = 'shadow-lg border border-zinc-800 rounded-md max-w-full mb-4 bg-white';
+              const context = canvas.getContext('2d');
+              canvas.height = viewport.height;
+              canvas.width = viewport.width;
+              
+              canvasContainer.appendChild(canvas);
+              
+              // Draw elements on 2D context target
+              await page.render({
+                canvasContext: context,
+                viewport: viewport
+              }).promise;
+            }
+          } catch (err) {
+            // Fallback back to standard iframe load mechanism on rendering failures
+            console.error('PDF.js rendering failed, falling back to iframe:', err);
+            canvasContainer.classList.add('hidden');
+            iframe.classList.remove('hidden');
+            iframe.src = url;
+            iframe.onload = () => { loading.style.display = 'none'; };
+            
+            setTimeout(() => {
+              if(loading.style.display !== 'none') {
+                spinner.style.display = 'none';
+                msg.innerText = 'Could not load instantly inside reader.';
+                errBtns.classList.remove('hidden'); errBtns.classList.add('flex');
+                document.getElementById('pdf-opentab-btn').onclick = () => {
+                  window.open(url, '_blank');
+                  closePDF();
+                };
+              }
+            }, 5500);
+          }
+        } else {
+          // If library hasn't resolved from CDN fallback directly to browser plugin
+          canvasContainer.classList.add('hidden');
+          iframe.classList.remove('hidden');
+          iframe.src = url;
+          iframe.onload = () => { loading.style.display = 'none'; };
+          
+          setTimeout(() => {
+            if(loading.style.display !== 'none') {
+              spinner.style.display = 'none';
+              msg.innerText = 'Could not load instantly inside reader.';
+              errBtns.classList.remove('hidden'); errBtns.classList.add('flex');
+              document.getElementById('pdf-opentab-btn').onclick = () => {
+                window.open(url, '_blank');
+                closePDF();
+              };
+            }
+          }, 5500);
+        }
+      }
+
+      /**
+       * Closes viewer panel modal layouts and resets elements content values safely.
+       * (Modal ko screen se close block me transition dega aur dynamically generated items drop karega)
+       */
+      function closePDF(){
+        document.getElementById('pdf-modal').classList.add('hidden');
+        document.getElementById('pdf-iframe').src = '';
+        document.getElementById('pdf-canvas-container').innerHTML = '';
+        document.getElementById('pdf-loading').style.display = 'flex';
+        document.body.style.overflow = '';
+        if (currentLoadingTask) {
+          try {
+            currentLoadingTask.destroy();
+          } catch(e){}
+        }
+      }
+
+      /**
+       * Triggers a direct dynamic binary attachment download stream bypass to the system browser.
+       * (Attachment download headers force karne ke liye query param append karke redirect trigger karega)
+       */
+      function downloadFile(url, filename){
+        // Force the backend server to serve the file as an attachment type target
+        const dlUrl = url + (url.includes('?') ? '&' : '?') + 'download=true';
+        const a = document.createElement('a');
+        a.href = dlUrl;
+        a.download = filename || 'document';
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => a.remove(), 100);
+      }
+
+      // 8. Event listeners for closing actions and downloading actions
+      document.getElementById('pdf-dl-btn').addEventListener('click', function(e){
+        e.preventDefault();
+        downloadFile(this.getAttribute('data-url'), this.getAttribute('data-name'));
+      });
+      document.addEventListener('keydown', e => { if(e.key === 'Escape') closePDF(); });
     </script>
   </body>
 </html>

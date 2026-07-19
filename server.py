@@ -124,11 +124,20 @@ def save_file(file_obj) -> str | None:
     return f"/uploads/{filename}"
 
 # ─── Static uploads ────────────────────────────────────────────────────────────
+# Yeh route uploaded files (PDFs, images) ko serve karta hai
+# PDF.js library cross-origin fetch karta hai, is liye explicit CORS headers zaroori hain
 @app.route("/uploads/<path:filename>")
 def serve_upload(filename):
     try:
         as_attachment = request.args.get("download", "false").lower() == "true"
-        return send_from_directory(UPLOAD_DIR, filename, as_attachment=as_attachment)
+        response = send_from_directory(UPLOAD_DIR, filename, as_attachment=as_attachment)
+        # PDF.js ko file fetch karne ke liye CORS headers manually add karo
+        # (Flask-CORS kabhi kabhi send_from_directory responses ko miss kar deta hai)
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        response.headers["Cross-Origin-Resource-Policy"] = "cross-origin"
+        return response
     except Exception:
         return jsonify({"msg": "File not found"}), 404
 
